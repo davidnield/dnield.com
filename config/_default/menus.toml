@@ -20,7 +20,7 @@
   
     [[main]]
   name = "Contact"
-  url = "/talk"
+  url = "/contact"
   weight = 40
 
 # [[main]]
