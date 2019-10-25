@@ -1,6 +1,6 @@
-# davidnield.github.io
+# davidnield.info
 
-This repository contains the my personal website!
+This is the repository for my personal website!
 
 Built using the [Academic theme](https://sourcethemes.com/academic/) for [Hugo](https://gohugo.io/), the [blogdown package](https://bookdown.org/yihui/blogdown/) for RMarkdown, and deployed using [Netlify](netlify.com).
 
