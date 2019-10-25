@@ -2,8 +2,8 @@
 # Experience widget.
 widget = "experience"  # See https://sourcethemes.com/academic/docs/page-builder/
 headless = true  # This file represents a page section.
-active = false  # Activate this widget? true/false
-weight = 40  # Order that this section will appear.
+active = true  # Activate this widget? true/false
+weight = 20  # Order that this section will appear.
 
 title = "Experience"
 subtitle = ""
@@ -18,27 +18,49 @@ date_format = "Jan 2006"
 #   Leave `date_end` empty if it's your current employer.
 #   Begin/end multi-line descriptions with 3 quotes `"""`.
 [[experience]]
-  title = "CEO"
-  company = "GenCoin"
-  company_url = ""
-  location = "California"
-  date_start = "2017-01-01"
+  title = "Data Analyst"
+  company = "Callisto Media"
+  company_url = "callistomedia.com"
+  location = "Emeryville, California"
+  date_start = "2019-07-01"
   date_end = ""
   description = """
-  Responsibilities include:
-  
-  * Analysing
-  * Modelling
-  * Deploying
+  * Building forecasts and models
+  * Identifying book production opportunities
+  * Developing KPIs, data workflows, and infrastructure
   """
 
 [[experience]]
-  title = "Professor"
-  company = "University X"
+  title = "Graduate Student Instructor"
+  company = "University of California, Berkeley"
   company_url = ""
-  location = "California"
-  date_start = "2016-01-01"
-  date_end = "2016-12-31"
-  description = """Taught electronic engineering and researched semiconductor physics."""
+  location = "Berkeley, California"
+  date_start = "2018-08-01"
+  date_end = "2019-05-31"
+  description = """
+  * Courses taught: Crime and Democracy (56 students) and Political Psychology and Involvement (53 students)
+  * Created and presented weekly lectures, including explaining the interpretation of statistical tables and logic of different research methods to students with no statistics training"""
+  
+[[experience]]
+  title = "Politics Intern"
+  company = "FiveThirtyEight"
+  company_url = ""
+  location = "New York, New York"
+  date_start = "2016-06-01"
+  date_end = "2016-08-01"
+  description = """
+  * Produced data visualizations and wrote three articles covering the 2016 election for a large popular audience (over 10 million unique monthly visitors during 2016)
+  * Provided research support (collecting and analyzing data) for three other major projects spanned survey data, CDC data, and Twitter data"""
+  
+[[experience]]
+  title = "Editor in Chief"
+  company = "The Journal of Politics & International Affairs"
+  company_url = ""
+  location = "Columbus, Ohio"
+  date_start = "2015-01-01"
+  date_end = "2016-05-01"
+  description = """
+  * Chief executive of a student-run social science research journal that published undergraduate research from across the country (editorial staff of 15 students, over 200 research article submissions annually)
+  * Organized the Ohio State Political Science department's annual undergraduate research symposium"""
 
 +++
