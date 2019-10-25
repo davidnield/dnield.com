@@ -44,7 +44,7 @@ date_format = "Jan 2006"
 [[experience]]
   title = "Politics Intern"
   company = "FiveThirtyEight"
-  company_url = ""
+  company_url = "fivethirtyeight.com"
   location = "New York, New York"
   date_start = "2016-06-01"
   date_end = "2016-08-01"
