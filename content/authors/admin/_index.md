@@ -13,6 +13,7 @@ education:
 email: ""
 interests:
 - Design-based Causal Inference
+- Machine learning
 - Network Analysis
 - Data Visualization
 name: David Nield
@@ -23,7 +24,7 @@ role: Data Analyst
 social:
 - icon: envelope
   icon_pack: fas
-  link: '/contact'
+  link: 'mailto:nield.dr@gmail.com'
 - icon: twitter
   icon_pack: fab
   link: https://twitter.com/DRNield

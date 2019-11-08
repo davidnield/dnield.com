@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tidy Tuesday | David Nield</title>
-    <link>/categories/tidy-tuesday/</link>
-      <atom:link href="/categories/tidy-tuesday/index.xml" rel="self" type="application/rss+xml" />
-    <description>Tidy Tuesday</description>
+    <title>commuting | David Nield</title>
+    <link>/tags/commuting/</link>
+      <atom:link href="/tags/commuting/index.xml" rel="self" type="application/rss+xml" />
+    <description>commuting</description>
     <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© David Nield, 2019</copyright><lastBuildDate>Tue, 05 Nov 2019 00:00:00 +0000</lastBuildDate>
     <image>
       <url>/img/portrait.jpg</url>
-      <title>Tidy Tuesday</title>
-      <link>/categories/tidy-tuesday/</link>
+      <title>commuting</title>
+      <link>/tags/commuting/</link>
     </image>
     
     <item>

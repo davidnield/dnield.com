@@ -18,3 +18,4 @@ autolink = true
 email_form = 2
 +++
 
+You can contact me via [e-mail](mailto:nield.dr@gmail.com), [DM me on Twitter](https://twitter.com/DRNield), or via the Contact form below.
