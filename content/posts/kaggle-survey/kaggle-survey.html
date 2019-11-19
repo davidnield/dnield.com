@@ -1,0 +1,79 @@
+---
+markup: mmark
+title: "The State of Data Science in America (Part 1): Results from the Latest Kaggle ML & DS Survey"
+author: "David Nield"
+date: 2019-11-05
+categories: ["Kaggle"]
+tags: ["survey analysis", "data visualization", "data science"]
+---
+
+
+
+<p>Kaggle has released the data for their third annual <a href="https://www.kaggle.com/c/kaggle-survey-2019/overview"><em>Machine Learning and Data Science Survey</em></a>. I’ve only recently joined the Kaggle platform as I’ve transitioned from academia to private industry, so this seems to be an excellent opportunity to explore the backgrounds of my new data science peers.</p>
+<p>This is the first of the three part series exploring this data.</p>
+<p>Part 1 will explore this year’s survey results.</p>
+<p>Part 2 will bring in survey data from the first two years of this annual survey to investigate how the field has changed over the last three years in the United States.</p>
+<p>Part 3 will use modeling try to answer three burning questions I have: 1. what <em>is</em> the difference between the variety of different job titles in the Data field, 2. what factors predict annual compensation, and 3. how unique different combinations of characteristics in the field to explore how unique I am, or are you are, in the data science community.</p>
+<p>{{% alert note %}}</p>
+<p>Because I am based in the United States, as are most of the data science community with which I interact with regularly in-person or on social media, this analysis is limited to survey respondents living in the United States.</p>
+<p>{{% /alert %}}</p>
+<p>Let’s get started!</p>
+<div id="findings-from-the-2019-kaggle-ml-ds-survey" class="section level1">
+<h1>Findings from the 2019 Kaggle ML &amp; DS Survey</h1>
+<div id="demographics" class="section level2">
+<h2>Demographics</h2>
+<div id="three-quarters-of-data-professionals-are-men" class="section level3">
+<h3>Three-quarters of data professionals are men</h3>
+<p><img src="/posts/kaggle-survey/kaggle-survey_files/figure-html/gender-1.png" width="672" /></p>
+<p>I’m not surprised that the majority of data professionals are men, but I was shocked at how stark the split is. At Callisto (my company), our R&amp;D team (which includes analysts and engineers) is almost exactly evenly split, which I knew is an outlier in the Data industry, but I didn’t realize by how much.</p>
+</div>
+<div id="data-professionals-are-fairly-young" class="section level3">
+<h3>Data professionals are fairly young</h3>
+<p><img src="/posts/kaggle-survey/kaggle-survey_files/figure-html/age-1.png" width="672" /></p>
+<p>As one might expect from a field that itself is relatively young, data professionals themselves are fairly young, with the modal data professional being age 25 to 29.</p>
+<p>Be wary here, as the bin widths of these ages are changing across the x-axis. Unfortunately, this is as specific as the data get.</p>
+<p>One alternative explanation for these data is that many Kagglers are early career data professionals who use or used Kaggle to build a professional portfolio for the job market. Older data professionals may be underrepresented here.</p>
+</div>
+<div id="underrepresentation-of-women-persists-across-age" class="section level3">
+<h3>Underrepresentation of Women Persists Across Age</h3>
+<p><img src="/posts/kaggle-survey/kaggle-survey_files/figure-html/agebygender-1.png" width="672" /></p>
+<p>I expected there to be underrepresentation of women in the Data industry, but I would’ve expected the divide to be much less stark among younger cohorts of data professionals than older ones. The above plots show that this doesn’t appear to be the case.</p>
+<p>The top panel shows a representation of a contingency table, that is, the percent of respondents that identify as male or female that fall into each age category. Women are clearly underrepresented at every age.</p>
+<p>The bottom two panels break this plot into its marginals. The left panel shows the percent of data professionals of each gender that fall into each age category. It shows the same broad pattern for both men and women, with female data professionals skewing just a bit younger. The right shows the gender split of each age category. It shows that the gender split of data professionals hovers around 75% for almost every cohort except those over 60 years old. Clearly the underrepresentation of women in the data industry is not something that will go away as a result of retiring older cohorts.</p>
+</div>
+</div>
+<div id="titles-compensation-experience-and-roles" class="section level2">
+<h2>Titles, Compensation, Experience, and Roles</h2>
+<div id="my-name-is-scientist-data-scientist" class="section level3">
+<h3>“My Name is Scientist, Data Scientist”</h3>
+<p><img src="/posts/kaggle-survey/kaggle-survey_files/figure-html/jobtitle-1.png" width="672" /></p>
+<p>Another shocking finding to me was sheer amount of data scientists in the survey relative to all other roles. I have a pretty strong Bayesian prior that there aren’t 2.5x as many data scientists as there are data analysts in the data industry, so this is definitely a reality check that this survey should <em>not</em> be considered a representative survey of the industry.</p>
+<p>Additionally, the sheer number of students represented in the survey seems consistent with my hypothesis that many Kagglers may be on the platform to build up an data analysis portfolio for the job market.</p>
+</div>
+</div>
+<div id="languages-and-tools" class="section level2">
+<h2>Languages and Tools</h2>
+<div id="python-is-king" class="section level3">
+<h3>Python is King</h3>
+<p><img src="/posts/kaggle-survey/kaggle-survey_files/figure-html/languages-1.png" width="672" /></p>
+<p>Much to my chagrin as an R user, Python dominates as the most coding language used by data professional. SQL comes next, followed by R, then Java, followed by a long tail of other languages. I’m a bit surprised by the proliference of Java, I’ve always thought of the modal data professional toolkit as: SQL for querying databases, R/Python for modeling and prototyping, and C++ for production code. I’ll be curious to dig into this more.</p>
+</div>
+<div id="data-scientist-make-the-big-bucks" class="section level3">
+<h3>Data Scientist Make the Big Bucks</h3>
+<p><img src="/posts/kaggle-survey/kaggle-survey_files/figure-html/compensation-1.png" width="672" /></p>
+<p>The 2019 Kaggle ML &amp; DS Survey reports annual compensation in brackets. I’m interested in the median income of data professionals by title, but obviously taking the median of categorical data isn’t something R takes kindly to!</p>
+<p>However, since this factor is ordinal, it is possible to take an idomatic median: just arrange by the ordered factor, and take the median value. The hitch is when you have a a vector of even length and the middle two values are two different categories (e.g. $80,000-89,999 and $90,000-99,999). Strictly speaking, I prefer to just take the cutpoint between the two categories ($90,000) or an interval with the cutpoint as the center point as the value. However, for this quick and dirty exploration, I’m just going to take the lower of the two categories as the winner of the tie.</p>
+<p>The function for this implementation is below, <a href="https://stackoverflow.com/questions/7925102/idiomatic-method-of-finding-the-median-of-an-ordinal">with credit to Hong Ooi and Richie Cotton from StackOverflow.</a></p>
+<pre><code>median.ordered &lt;- function(x) {
+  levs &lt;- levels(x)
+  m &lt;- median(as.integer(x), na.rm = TRUE)
+  if(floor(m) != m) { 
+  m &lt;- floor(m)
+  }
+  ordered(m, labels = levs, levels = seq_along(levs))
+}</code></pre>
+<p>The above plot shows the median income of each job title computed in this way, preserving the ordering of job titles by their frequency in . Students and Unemployed respondents were not asked for their annual compensation, but in order to preserve the frequency ordered they are represented here.</p>
+<p>Clearly, as a Data Analyst, I’m in the wrong job! Data Analysts and Business Analysts are tied for last, with the median analysts making $80,000 to $89,999 annually, while Data Scientists make the big bucks, with the median data scientist making $125,000 to $149,999 annually.</p>
+</div>
+</div>
+</div>

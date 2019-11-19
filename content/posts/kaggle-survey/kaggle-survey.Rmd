@@ -1,5 +1,6 @@
 ---
-title: "State of the Profession: Exploring Kaggle ML & DS Survey Data"
+markup: mmark
+title: "The State of Data Science in America (Part 1): Results from the Latest Kaggle ML & DS Survey"
 author: "David Nield"
 date: 2019-11-05
 categories: ["Kaggle"]
@@ -10,14 +11,51 @@ tags: ["survey analysis", "data visualization", "data science"]
 knitr::opts_chunk$set(collapse = TRUE)
 
 require(pacman)
-p_load(tidyverse, surveydata)
+p_load(tidyverse, surveydata, gridExtra)
 
+# Theme from edrub.in
+theme_ed <- theme(
+  legend.position = "bottom",
+  panel.background = element_rect(fill = NA),
+  panel.border = element_rect(fill = NA, color = "grey75"),
+  axis.ticks = element_line(color = "grey95", size = 0.3),
+  panel.grid.major = element_line(color = "grey95", size = 0.3),
+  panel.grid.minor = element_line(color = "grey95", size = 0.3),
+  legend.key = element_blank())
 
-current <- read_csv("content/posts/kaggle-survey/kaggle-survey-2019/multiple_choice_responses.csv")
+theme_ed_present <- theme(
+  legend.position = "bottom",
+  panel.background = element_rect(fill = NA),
+  panel.border = element_rect(fill = NA, color = "grey75"),
+  axis.ticks = element_line(color = "grey95", size = 0.3),
+  panel.grid.major = element_line(color = "grey95", size = 0.3),
+  panel.grid.minor = element_line(color = "grey95", size = 0.3),
+  legend.key = element_blank(),
+  text = element_text(size = 14),
+  axis.text = element_text(size = 12))
 
-varlabels(current) <- current[1,]
+# Taking median of an ordered factor
+median.ordered <- function(x)
+{
+    levs <- levels(x)
+    m <- median(as.integer(x), na.rm = TRUE)
+    if(floor(m) != m)
+    {
+      warning("Median is between two values; using the first one")
+      m <- floor(m)
+    }
+    ordered(m, labels = levs, levels = seq_along(levs))
+}
 
-current <- current[-1,] %>% 
+# Gender Colors
+gender_cols <- c("Male" = "#00BFC4",
+                 "Female" = "#F8766D",
+                 "Prefer not to say" = "#7CAE00",
+                 "Prefer to self-describe" = "#C77CFF")
+
+current <- read_csv("2019_multiple_choice_responses.csv")
+
+current <- current %>% 
   rename(surveyduration = `Time from Start to Finish (seconds)`,
          age = Q1,
          gender = Q2,
@@ -38,7 +76,7 @@ current <- current[-1,] %>%
          role_none_of_above = Q9_Part_7,
          role_other = Q9_Part_8,
          role_other_text = Q9_OTHER_TEXT,
-         yearly_compenseation = Q10,
+         yearly_compensation = Q10,
          amt_spent_ML_cloud_products_last5years = Q11,
          datascimedia_twitterdatasciinfluencers = Q12_Part_1,
          datascimedia_hackernews = Q12_Part_2,
@@ -266,14 +304,211 @@ current <- current[-1,] %>%
          dbproduct_other_text = Q34_OTHER_TEXT
          )
 
-current %>% 
-  ggplot(aes(x = age)) +
-  geom_bar()
+varlabels(current) <- current[1,]
+
+current <- current %>% 
+  filter(!str_detect(surveyduration, "Duration"),
+         country_of_residence == "United States of America")
 
 current %>% 
-  ggplot(aes(x = gender)) +
-  geom_bar()
+  mutate(experience_data = factor(experience_data,
+                                  levels = c("I have never written code",
+                                             "< 1 years",
+                                             "1-2 years",
+                                             "3-5 years",
+                                             "5-10 years",
+                                             "10-20 years",
+                                             "20+ years"))) %>% 
+  filter(!is.na(experience_data)) %>% 
+  ggplot(aes(x = experience_data, y = (..count..)/sum(..count..))) +
+  geom_bar() +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = "Experience",
+       y = "Percent",
+       title = paste0("Question: ", varlabels(current)["experience_data"])) +
+  theme_ed
 
+current %>% 
+  mutate(experience_ml = factor(experience_ml,
+                                  levels = c("< 1 years",
+                                             "1-2 years",
+                                             "2-3 years",
+                                             "3-4 years",
+                                             "4-5 years",
+                                             "5-10 years",
+                                             "10-15 years",
+                                             "15-20 years",
+                                             "20+ years"))) %>% 
+  filter(!is.na(experience_ml)) %>% 
+  ggplot(aes(x = experience_ml, y = (..count..)/sum(..count..))) +
+  geom_bar() +
+  scale_x_discrete(drop = FALSE) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = "Experience",
+       y = "Percent",
+       title = paste0("Question: ", varlabels(current)["experience_ml"])) +
+  theme_ed
+
+```
+
+Kaggle has released the data for their third annual [*Machine Learning and Data Science Survey*](https://www.kaggle.com/c/kaggle-survey-2019/overview). I've only recently joined the Kaggle platform as I've transitioned from academia to private industry, so this seems to be an excellent opportunity to explore the backgrounds of my new data science peers.
+
+This is the first of the three part series exploring this data.
+
+Part 1 will explore this year's survey results. 
+
+Part 2 will bring in survey data from the first two years of this annual survey to investigate how the field has changed over the last three years in the United States.
+
+Part 3 will use modeling try to answer three burning questions I have: 1. what *is* the difference between the variety of different job titles in the Data field, 2. what factors predict annual compensation, and 3. how unique different combinations of characteristics in the field to explore how unique I am, or are you are, in the data science community.
+
+{{% alert note %}}
+
+Because I am based in the United States, as are most of the data science community with which I interact with regularly in-person or on social media, this analysis is limited to survey respondents living in the United States.
+
+{{% /alert %}}
+
+Let's get started!
+
+# Findings from the 2019 Kaggle ML & DS Survey
+## Demographics
+### Three-quarters of data professionals are men
+```{r gender, echo = FALSE}
+current %>% 
+  mutate(gender = fct_infreq(gender)) %>% 
+  ggplot(aes(x = gender,
+             y = (..count..)/sum(..count..),
+             fill = gender)) +
+  geom_bar() +
+  scale_y_continuous(labels = scales::percent,
+                     limits = c(0, 1)) +
+  scale_fill_manual(values = gender_cols) +
+  labs(x = "Gender",
+       y = "Percent",
+       title = "Question: What is your gender?") +
+  theme_ed +
+  theme(legend.position = "none")
+```
+
+I'm not surprised that the majority of data professionals are men, but I was shocked at how stark the split is. At Callisto (my company), our R&D team (which includes analysts and engineers) is almost exactly evenly split, which I knew is an outlier in the Data industry, but I didn't realize by how much.
+
+### Data professionals are fairly young
+```{r age, echo = FALSE}
+current %>% 
+  ggplot(aes(x = age, y = (..count..)/sum(..count..))) +
+  geom_bar() +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = "Age",
+       y = "Percent in Age Category",
+       title = paste0("Question: ", varlabels(current)["age"])) +
+  theme_ed
+```
+
+As one might expect from a field that itself is relatively young, data professionals themselves are fairly young, with the modal data professional being age 25 to 29.
+
+Be wary here, as the bin widths of these ages are changing across the x-axis. Unfortunately, this is as specific as the data get.
+
+One alternative explanation for these data is that many Kagglers are early career data professionals who use or used Kaggle to build a professional portfolio for the job market. Older data professionals may be underrepresented here.
+
+### Underrepresentation of Women Persists Across Age
+```{r agebygender, echo = FALSE}
+age_gender_marginals <- current %>% 
+  filter(gender %in% c("Male", "Female")) %>% 
+  ggplot(aes(x = age, y = (..count..)/sum(..count..),
+             fill = gender)) +
+  geom_bar(position = "dodge") +
+  scale_y_continuous(labels = scales::percent) +
+  scale_fill_manual(values = gender_cols) +
+  labs(x = "Age",
+       y = "Percent",
+       title = "Percent in Age & Gender Category") +
+  theme_ed +
+  theme(legend.position = "none")
+
+age_by_gender <- current %>% 
+  filter(gender %in% c("Male", "Female")) %>% 
+  group_by(gender, age) %>% 
+  summarise(n_genderage = n()) %>% 
+  mutate(prop = n_genderage/sum(n_genderage)) %>% 
+  ggplot(aes(x = age,
+             y = prop,
+             fill = gender)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_y_continuous(labels = scales::percent) +
+  scale_fill_manual(values = gender_cols) +
+  labs(x = "Age",
+       y = "Percent",
+       title = "Percent Gender in Age Category") +
+  theme_ed +
+  theme(axis.text.x = element_text(size = 5.5),
+        legend.position = "none")
+
+gender_by_age <- current %>% 
+  filter(gender %in% c("Male", "Female")) %>% 
+  group_by(gender, age) %>% 
+  summarise(n_genderage = n()) %>% 
+  group_by(age) %>% 
+  mutate(prop = n_genderage/sum(n_genderage)) %>% 
+  ggplot(aes(x = age,
+             y = prop,
+             fill = gender)) +
+  geom_bar(stat = "identity") +
+  scale_y_continuous(labels = scales::percent) +
+  scale_fill_manual(values = gender_cols) +
+  labs(x = "Age",
+       y = "Percent",
+       title = "Percent Age in Gender Category") +
+  theme_ed +
+  theme(axis.text.x = element_text(size = 5.5),
+        legend.position = "none")
+
+grid.arrange(age_gender_marginals,
+             age_by_gender,
+             gender_by_age,
+             ncol = 2, nrow = 2,
+             layout_matrix = rbind(c(1,1), c(2, 3)))
+```
+
+I expected there to be underrepresentation of women in the Data industry, but I would've expected the divide to be much less stark among younger cohorts of data professionals than older ones. The above plots show that this doesn't appear to be the case.
+
+The top panel shows a representation of a contingency table, that is, the percent of respondents that identify as male or female that fall into each age category. Women are clearly underrepresented at every age.
+
+The bottom two panels break this plot into its marginals. The left panel shows the percent of data professionals of each gender that fall into each age category. It shows the same broad pattern for both men and women, with female data professionals skewing just a bit younger. The right shows the gender split of each age category. It shows that the gender split of data professionals hovers around 75% for almost every cohort except those over 60 years old. Clearly the underrepresentation of women in the data industry is not something that will go away as a result of retiring older cohorts.
+
+## Titles, Compensation, Experience, and Roles
+### "My Name is Scientist, Data Scientist"
+```{r jobtitle, echo = FALSE}
+current %>% 
+  mutate(job_title = fct_infreq(job_title)) %>% 
+  filter(!is.na(job_title)) %>% 
+  ggplot(aes(x = job_title, y = (..count..)/sum(..count..))) +
+  geom_bar() +
+  scale_x_discrete(labels = c("Data \n Scientist",
+                              "Student",
+                              "Other",
+                              "Software \n Engineer",
+                              "Data \n Analyst",
+                              "Research \n Scientist",
+                              "Product/Project \n Manager",
+                              "Business \n Analyst",
+                              "Not \n Employed",
+                              "Data \n Engineer",
+                              "Statistician",
+                              "DBA/Database \n Engineer")) +
+  scale_y_continuous(labels = scales::percent,
+                     breaks = seq(0, 0.25, by = 0.05)) +
+  labs(x = "Job Title", y = "Percent",
+       title = "Question: Select the title most similar to your current role") +
+  theme_ed +
+  theme(axis.text.x = element_text(size = 6))
+```
+
+Another shocking finding to me was sheer amount of data scientists in the survey relative to all other roles. I have a pretty strong Bayesian prior that there aren't 2.5x as many data scientists as there are data analysts in the data industry, so this is definitely a reality check that this survey should *not* be considered a representative survey of the industry.
+
+Additionally, the sheer number of students represented in the survey seems consistent with my hypothesis that many Kagglers may be on the platform to build up an data analysis portfolio for the job market.
+
+## Languages and Tools
+### Python is King
+```{r languages, echo = FALSE}
 current %>% 
   select(starts_with("language"),
          -language_other_text) %>% 
@@ -283,10 +518,107 @@ current %>%
   mutate(language = str_extract(language, pattern = "(?<=language_).*"),
          language = fct_reorder(language, desc(value))) %>% 
   ggplot(aes(x = language, y = value)) +
-  geom_bar(stat = "identity")
-
-
-
-
+  geom_bar(stat = "identity") +
+  scale_x_discrete(labels = c("Python", "SQL", "R",
+                              "Java", "C++", "JavaScript",
+                              "Bash", "C", "MATLAB",
+                              "Other", "TypeScript", "None")) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(title = "Question: What programming languages do you use on a regular basis?",
+       x = "Language",
+       y = "Percent") +
+  theme_ed
 ```
 
+Much to my chagrin as an R user, Python dominates as the most coding language used by data professional. SQL comes next, followed by R, then Java, followed by a long tail of other languages. I'm a bit surprised by the proliference of Java, I've always thought of the modal data professional toolkit as: SQL for querying databases, R/Python for modeling and prototyping, and C++ for production code. I'll be curious to dig into this more.
+
+### Data Scientist Make the Big Bucks
+```{r compensation, echo = FALSE, warning = FALSE}
+current %>% 
+  filter(!is.na(job_title)) %>% 
+  mutate(job_title = fct_infreq(job_title)) %>% 
+  filter(!is.na(yearly_compensation)) %>% 
+  mutate(yearly_compensation = ordered(yearly_compensation,
+                                       levels = c("$0-999",
+                                                  "1,000-1,999",
+                                                  "2,000-2,999",
+                                                  "3,000-3,999",
+                                                  "4,000-$4,999",
+                                                  "5,000-$7,499",
+                                                  "7,500-9,999",
+                                                  "10,000-14,999",
+                                                  "15,000-$19,999",
+                                                  "20,000-24,999",
+                                                  "25,000-29,999",
+                                                  "30,000-39,999",
+                                                  "40,000-49,999",
+                                                  "50,000-59,999",
+                                                  "60,000-69,999",
+                                                  "70,000-79,999",
+                                                  "80,000-89,999",
+                                                  "90,000-99,999",
+                                                  "100,000-124,999",
+                                                  "125,000-149,999",
+                                                  "150,000-199,999",
+                                                  "200,000-249,999",
+                                                  "250,000-299,999",
+                                                  "300,000-500,000",
+                                                  "> $500,000"))) %>% 
+  group_by(job_title) %>% 
+  summarise(yearly_compensation_fct = median(yearly_compensation)) %>% 
+  mutate(yearly_compensation_dbl = case_when(
+    yearly_compensation_fct == "80,000-89,999" ~ mean(c(80000, 89999)),
+    yearly_compensation_fct == "90,000-99,999" ~ mean(c(90000, 99999)),
+    yearly_compensation_fct == "100,000-124,999" ~ mean(c(100000, 124999)),
+    yearly_compensation_fct == "125,000-149,999" ~ mean(c(125000, 149999))
+  )) %>% 
+  ggplot(aes(x = job_title,
+             y = yearly_compensation_dbl,
+             label = yearly_compensation_fct,
+             fill = yearly_compensation_dbl)) +
+  geom_bar(stat = "identity") +
+  # geom_text(vjust = -1,
+  #           size = 1.5) +
+  scale_x_discrete(drop = FALSE,
+                   labels = c("Data \n Scientist",
+                              "Student",
+                              "Other",
+                              "Software \n Engineer",
+                              "Data \n Analyst",
+                              "Research \n Scientist",
+                              "Product/Project \n Manager",
+                              "Business \n Analyst",
+                              "Not \n Employed",
+                              "Data \n Engineer",
+                              "Statistician",
+                              "DBA/Database \n Engineer")) +
+  scale_y_continuous(label = scales::dollar,
+                     limits = c(0, 150000)) +
+  scale_fill_continuous() +
+  labs(x = "Job Title", y = "Annual Compensation (in $)",
+       title = "Question: Select the title most similar to your current role (or most recent title if retired)") +
+  theme_ed +
+  theme(legend.position = "none",
+        axis.text.x = element_text(size = 5.5))
+```
+
+The 2019 Kaggle ML & DS Survey reports annual compensation in brackets. I'm interested in the median income of data professionals by title, but obviously taking the median of categorical data isn't something R takes kindly to!
+
+However, since this factor is ordinal, it is possible to take an idomatic median: just arrange by the ordered factor, and take the median value. The hitch is when you have a a vector of even length and the middle two values are two different categories (e.g. $80,000-89,999 and $90,000-99,999). Strictly speaking, I prefer to just take the cutpoint between the two categories ($90,000) or an interval with the cutpoint as the center point as the value. However, for this quick and dirty exploration, I'm just going to take the lower of the two categories as the winner of the tie.
+
+The function for this implementation is below, [with credit to Hong Ooi and Richie Cotton from StackOverflow.](https://stackoverflow.com/questions/7925102/idiomatic-method-of-finding-the-median-of-an-ordinal)
+
+```
+median.ordered <- function(x) {
+  levs <- levels(x)
+  m <- median(as.integer(x), na.rm = TRUE)
+  if(floor(m) != m) { 
+  m <- floor(m)
+  }
+  ordered(m, labels = levs, levels = seq_along(levs))
+}
+```
+
+The above plot shows the median income of each job title computed in this way, preserving the ordering of job titles by their frequency in . Students and Unemployed respondents were not asked for their annual compensation, but in order to preserve the frequency ordered they are represented here.
+
+Clearly, as a Data Analyst, I'm in the wrong job! Data Analysts and Business Analysts are tied for last, with the median analysts making $80,000 to $89,999 annually, while Data Scientists make the big bucks, with the median data scientist making $125,000 to $149,999 annually.

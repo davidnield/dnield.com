@@ -33,17 +33,12 @@
   </url>
   
   <url>
-    <loc>/tags/acs/</loc>
-    <lastmod>2019-11-05T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/categories/</loc>
     <lastmod>2019-11-05T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/tags/commuting/</loc>
+    <loc>/tags/data-science/</loc>
     <lastmod>2019-11-05T00:00:00+00:00</lastmod>
   </url>
   
@@ -53,7 +48,7 @@
   </url>
   
   <url>
-    <loc>/posts/bike-and-walking-commute-tidytuesday/bike-and-walking-commute-tidytuesday/</loc>
+    <loc>/categories/kaggle/</loc>
     <lastmod>2019-11-05T00:00:00+00:00</lastmod>
   </url>
   
@@ -63,12 +58,17 @@
   </url>
   
   <url>
+    <loc>/tags/survey-analysis/</loc>
+    <lastmod>2019-11-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/tags/</loc>
     <lastmod>2019-11-05T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/categories/tidy-tuesday/</loc>
+    <loc>/posts/kaggle-survey/kaggle-survey/</loc>
     <lastmod>2019-11-05T00:00:00+00:00</lastmod>
   </url>
   

@@ -13,18 +13,10 @@
     </image>
     
     <item>
-      <title>acs</title>
-      <link>/tags/acs/</link>
+      <title>data science</title>
+      <link>/tags/data-science/</link>
       <pubDate>Tue, 05 Nov 2019 00:00:00 +0000</pubDate>
-      <guid>/tags/acs/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>commuting</title>
-      <link>/tags/commuting/</link>
-      <pubDate>Tue, 05 Nov 2019 00:00:00 +0000</pubDate>
-      <guid>/tags/commuting/</guid>
+      <guid>/tags/data-science/</guid>
       <description></description>
     </item>
     
@@ -33,6 +25,14 @@
       <link>/tags/data-visualization/</link>
       <pubDate>Tue, 05 Nov 2019 00:00:00 +0000</pubDate>
       <guid>/tags/data-visualization/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>survey analysis</title>
+      <link>/tags/survey-analysis/</link>
+      <pubDate>Tue, 05 Nov 2019 00:00:00 +0000</pubDate>
+      <guid>/tags/survey-analysis/</guid>
       <description></description>
     </item>
     
