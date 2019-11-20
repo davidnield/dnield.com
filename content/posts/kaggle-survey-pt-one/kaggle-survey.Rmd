@@ -333,9 +333,8 @@ Because I am based in the United States, as are most of the data science communi
 
 Let's get started!
 
-# Findings from the 2019 Kaggle ML & DS Survey
-## Demographics
-### Three-quarters of data professionals are men
+# Demographics
+## Three-quarters of data professionals are men
 ```{r gender, echo = FALSE}
 current %>% 
   mutate(gender = fct_infreq(gender)) %>% 
@@ -355,7 +354,7 @@ current %>%
 
 I'm not surprised that the majority of data professionals are men, but I was shocked at how stark the split is. At Callisto (my company), our R&D team (which includes analysts and engineers) is almost exactly evenly split, which I knew is an outlier in the Data industry, but I didn't realize by how much.
 
-### Data professionals are fairly young
+## Data professionals are fairly young
 ```{r age, echo = FALSE}
 current %>% 
   ggplot(aes(x = age, y = (..count..)/sum(..count..))) +
@@ -373,7 +372,7 @@ Be wary here, as the bin widths of these ages are changing across the x-axis. Un
 
 One alternative explanation for these data is that many Kagglers are early career data professionals who use or used Kaggle to build a professional portfolio for the job market. Older data professionals may be underrepresented here.
 
-### Underrepresentation of women persists across cohort
+## Underrepresentation of women persists across cohort
 ```{r agebygender, echo = FALSE}
 age_gender_marginals <- current %>% 
   filter(gender %in% c("Male", "Female")) %>% 
@@ -438,7 +437,7 @@ The top panel shows a representation of a contingency table, that is, the percen
 
 The bottom two panels break this plot into its marginals. The left panel shows the percent of data professionals of each gender that fall into each age category. It shows the same broad pattern for both men and women, with female data professionals skewing just a bit younger. The right shows the gender split of each age category. It shows that the gender split of data professionals hovers around 75% for almost every cohort except those over 60 years old. Clearly the underrepresentation of women in the data industry is not something that will go away as a result of retiring older cohorts.
 
-### The majority of data professionals have an advanced degree
+## The majority of data professionals have an advanced degree
 ```{r education, echo = FALSE}
 current %>% 
   filter(!is.na(education)) %>% 
@@ -467,8 +466,8 @@ current %>%
 
 Unsurprisingly, data professionals are an educated bunch. Surprising to me, however, was the number of Master's degree holders and the relative sparsity of PhDs and professional degree holders. Coming from academia, I expected the data industry to be primarily comprised of: 1) non-CS Bachelor's and MBA holders building reports and dashboards, 2) CS/Engineering Bachelor's holders building and maintaining data infrastructure, and 3) PhDs who left academia due to the job market or lured by mobility and money in private industry. I did not expect to see that *half* of all data professionals are Master's holders!
 
-## Titles, Compensation, Experience, and Roles
-### "My Name is Scientist, Data Scientist"
+# Titles, Compensation, Experience, and Roles
+## "My Name is Scientist, Data Scientist"
 ```{r jobtitle, echo = FALSE}
 current %>% 
   mutate(job_title = fct_infreq(job_title)) %>% 
@@ -500,7 +499,7 @@ Another shocking finding to me was sheer amount of data scientists in the survey
 
 Additionally, the sheer number of students represented in the survey seems consistent with my hypothesis that many Kagglers may be on the platform to build up an data analysis portfolio for the job market. The percentage (3.6%) of "Not Employed" respondents seems consistent with this as well.^[Retired respondents are not counted as Not Employed here, as they were instructed to choose the most similar to the one they held most recently] I suspect the true unemployment rate for data professionals is, in reality, lower than the national unemployment rate (3.7% as of this writing), not almost identical to it.^[Some readers with an economics background may, rightfully, chime in that some frictional unemployment may actually be a sign of a healthy labor market that favors workers, as people may quit jobs knowing they'll get a better job shortly, although I would argue that this is still consistent with the point that Kagglers are on the platform, in part, as a signal to employers]
 
-### Data scientists make the big bucks
+## Data scientists make the big bucks
 ```{r compensation, echo = FALSE, warning = FALSE}
 current %>% 
   filter(!is.na(job_title)) %>% 
@@ -593,7 +592,7 @@ The above plot shows the median income of each job title computed in this way, p
 
 Clearly, as a Data Analyst, I'm in the wrong job! Data Analysts and Business Analysts are tied for last, with the median analysts making $80,000 to $89,999 annually, while Data Scientists make the big bucks, with the median data scientist making $125,000 to $149,999 annually.
 
-### Data professionals' team sizes are highly bimodal
+## Data professionals' team sizes are highly bimodal
 ```{r teamsize, echo = FALSE}
 current %>% 
   filter(!is.na(datasci_team_size)) %>% 
@@ -616,7 +615,7 @@ current %>%
 
 Almost 40% of business have data science teams of less than five while another 40% have data science teams of over twenty! That's quite the bimodality. Hard to think of an explanation about why this would be, although my intuition is that this is due to how young the field is combined with restricted 
 
-### Data professionals' most common important role is informing business decisions
+## Data professionals' most common important role is informing business decisions
 ```{r roles, echo = FALSE}
 current %>% 
   select(starts_with("role"),
@@ -648,8 +647,8 @@ I would have liked to see response options broken out into "building and/or main
 
 Nonetheless, the key finding here is that the most common important role of data professionals appears to be informing business decisions. 
 
-## Languages and Tools
-### Python is King
+# Languages and Tools
+## Python is King
 ```{r languages, echo = FALSE}
 current %>% 
   select(starts_with("language"),
@@ -680,7 +679,7 @@ I know Julia is a very young language, but I hear so much about it and it's epon
 
 As for Java, I've always thought of the modal data professional toolkit as: SQL for querying databases, R/Python for modeling and prototyping, and C++ for production code. I don't know of any data scientists using Java. I'll be curious to dig into this more.
 
-### The majority of data professionals on Kaggle are relatively new to writing code for data analysis.
+## The majority of data professionals on Kaggle are relatively new to writing code for data analysis.
 ```{r coding_experience, echo = FALSE}
 current %>% 
   mutate(experience_data = factor(experience_data,
@@ -771,7 +770,7 @@ current %>%
 
 Perhaps unsurprisingly, data scientists, research scientists, data engineers, and statisticians clock in as the most experience writing code to analyze data, while students are the least experienced. It appears that my level of coding experience is typical for my job title among Kagglers.
 
-### There's a shocking amount of experienced machine learning practioners!
+## There's a shocking amount of experienced machine learning practioners!
 
 ```{r mlexp, echo = FALSE}
 current %>% 
