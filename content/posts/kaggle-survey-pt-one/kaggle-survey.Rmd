@@ -3,6 +3,9 @@ markup: mmark
 title: "The State of Data Science in America (Part 1): Results from the Latest Kaggle ML & DS Survey"
 author: "David Nield"
 date: 2019-11-19
+output:
+  blogdown::html_page:
+    toc: true
 categories: ["Kaggle"]
 tags: ["survey analysis", "data visualization", "data science"]
 ---
