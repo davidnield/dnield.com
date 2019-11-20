@@ -770,7 +770,7 @@ current %>%
 
 Perhaps unsurprisingly, data scientists, research scientists, data engineers, and statisticians clock in as the most experience writing code to analyze data, while students are the least experienced. It appears that my level of coding experience is typical for my job title among Kagglers.
 
-## There's a shocking amount of experienced machine learning practioners!
+## There's a shocking amount of experienced machine learning practitioners!
 
 ```{r mlexp, echo = FALSE}
 current %>% 
