@@ -1,0 +1,882 @@
+---
+markup: mmark
+title: "The State of Data Science in America (Part 1): Results from the Latest Kaggle ML & DS Survey"
+author: "David Nield"
+date: 2019-11-05
+categories: ["Kaggle"]
+tags: ["survey analysis", "data visualization", "data science"]
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+
+require(pacman)
+p_load(tidyverse, surveydata, gridExtra)
+
+# Theme from edrub.in
+theme_ed <- theme(
+  legend.position = "bottom",
+  panel.background = element_rect(fill = NA),
+  panel.border = element_rect(fill = NA, color = "grey75"),
+  axis.ticks = element_line(color = "grey95", size = 0.3),
+  panel.grid.major = element_line(color = "grey95", size = 0.3),
+  panel.grid.minor = element_line(color = "grey95", size = 0.3),
+  legend.key = element_blank())
+
+theme_ed_present <- theme(
+  legend.position = "bottom",
+  panel.background = element_rect(fill = NA),
+  panel.border = element_rect(fill = NA, color = "grey75"),
+  axis.ticks = element_line(color = "grey95", size = 0.3),
+  panel.grid.major = element_line(color = "grey95", size = 0.3),
+  panel.grid.minor = element_line(color = "grey95", size = 0.3),
+  legend.key = element_blank(),
+  text = element_text(size = 14),
+  axis.text = element_text(size = 12))
+
+# Taking median of an ordered factor
+median.ordered <- function(x)
+{
+    levs <- levels(x)
+    m <- median(as.integer(x), na.rm = TRUE)
+    if(floor(m) != m)
+    {
+      warning("Median is between two values; using the first one")
+      m <- floor(m)
+    }
+    ordered(m, labels = levs, levels = seq_along(levs))
+}
+
+# Gender Colors
+gender_cols <- c("Male" = "#00BFC4",
+                 "Female" = "#F8766D",
+                 "Prefer not to say" = "#7CAE00",
+                 "Prefer to self-describe" = "#C77CFF")
+
+current <- read_csv("2019_multiple_choice_responses.csv")
+
+current <- current %>% 
+  rename(surveyduration = `Time from Start to Finish (seconds)`,
+         age = Q1,
+         gender = Q2,
+         gender_other_text = Q2_OTHER_TEXT,
+         country_of_residence = Q3,
+         education = Q4,
+         job_title = Q5,
+         job_title_other_text = Q5_OTHER_TEXT,
+         company_size = Q6,
+         datasci_team_size = Q7,
+         company_ML_incorporation = Q8,
+         role_influence_business_decisions = Q9_Part_1,
+         role_build_or_run_data_infrastructure = Q9_Part_2,
+         role_build_ML_prototypes = Q9_Part_3,
+         role_build_ML_for_production = Q9_Part_4,
+         role_improve_existing_ML_models = Q9_Part_5,
+         role_ML_research = Q9_Part_6,
+         role_none_of_above = Q9_Part_7,
+         role_other = Q9_Part_8,
+         role_other_text = Q9_OTHER_TEXT,
+         yearly_compensation = Q10,
+         amt_spent_ML_cloud_products_last5years = Q11,
+         datascimedia_twitterdatasciinfluencers = Q12_Part_1,
+         datascimedia_hackernews = Q12_Part_2,
+         datascimedia_reddit = Q12_Part_3,
+         datascimedia_kaggle = Q12_Part_4,
+         datascimedia_courseforums = Q12_Part_5,
+         datascimedia_youtube = Q12_Part_6,
+         datascimedia_podcasts = Q12_Part_7,
+         datascimedia_blogs = Q12_Part_8,
+         datascimedia_journalpubs = Q12_Part_9,
+         datascimedia_slack = Q12_Part_10,
+         datascimedia_none = Q12_Part_11,
+         datascimedia_other = Q12_Part_12,
+         datascimedia_other_text = Q12_OTHER_TEXT,
+         datascicourses_udacity = Q13_Part_1,
+         datascicourses_coursera = Q13_Part_2,
+         datascicourses_edx = Q13_Part_3,
+         datascicourses_datacamp = Q13_Part_4,
+         datascicourses_dataquest = Q13_Part_5,
+         datascicourses_kaggle = Q13_Part_6,
+         datascicourses_fastai = Q13_Part_7,
+         datascicourses_udemy = Q13_Part_8,
+         datascicourse_linkedin = Q13_Part_9,
+         datascicourses_university = Q13_Part_10,
+         datascicourses_none = Q13_Part_11,
+         datascicourses_other = Q13_Part_12,
+         datascicourses_other_text = Q13_OTHER_TEXT,
+         primarytool = Q14,
+         primarytool_basic = Q14_Part_1_TEXT,
+         primarytool_advanced = Q14_Part_2_TEXT,
+         primarytool_bi = Q14_Part_3_TEXT,
+         primarytool_devenv = Q14_Part_4_TEXT,
+         primarytool_cloud = Q14_Part_5_TEXT,
+         primarytool_other = Q14_OTHER_TEXT,
+         experience_data = Q15,
+         ide_jupyter = Q16_Part_1,
+         ide_rstudio = Q16_Part_2,
+         ide_pycharm = Q16_Part_3,
+         ide_atom = Q16_Part_4,
+         ide_matlab = Q16_Part_5,
+         ide_visualstudio = Q16_Part_6,
+         ide_spyder = Q16_Part_7,
+         ide_vim_emacs = Q16_Part_8,
+         ide_notepadpp = Q16_Part_9,
+         ide_sublimetext = Q16_Part_10,
+         ide_none = Q16_Part_11,
+         ide_other = Q16_Part_12,
+         ide_other_text = Q16_OTHER_TEXT,
+         notebook_kaggle = Q17_Part_1,
+         notebook_googlecolab = Q17_Part_2,
+         notebook_msoft_azure = Q17_Part_3,
+         notebook_googlecloud = Q17_Part_4,
+         notebook_paperspace = Q17_Part_5,
+         notebook_floydhub = Q17_Part_6,
+         notebook_binder_jupyterhub = Q17_Part_7,
+         notebook_watson_studio = Q17_Part_8,
+         notebook_codeocean = Q17_Part_9,
+         notebook_aws = Q17_Part_10,
+         notebook_none = Q17_Part_11,
+         notebook_other = Q17_Part_12,
+         notebook_other_text = Q17_OTHER_TEXT,
+         language_python = Q18_Part_1,
+         language_R = Q18_Part_2,
+         language_sql = Q18_Part_3,
+         language_C = Q18_Part_4,
+         language_Cpp = Q18_Part_5,
+         language_java = Q18_Part_6,
+         language_javascript = Q18_Part_7,
+         language_typescript = Q18_Part_8,
+         language_bash = Q18_Part_9,
+         language_matlab = Q18_Part_10,
+         language_none = Q18_Part_11,
+         language_other = Q18_Part_12,
+         language_other_text = Q18_OTHER_TEXT,
+         recommend_first_language = Q19,
+         recommend_first_language_other_text = Q19_OTHER_TEXT,
+         datavizlib_ggplot = Q20_Part_1,
+         datavizlib_matplotlib = Q20_Part_2,
+         datavizlib_altair = Q20_Part_3,
+         datavizlib_shiny = Q20_Part_4,
+         datavizlib_d3js = Q20_Part_5,
+         datavizlib_plotly = Q20_Part_6,
+         datavizlib_bokeh = Q20_Part_7,
+         datavizlib_seaborn = Q20_Part_8,
+         datavizlib_geoplotlib = Q20_Part_9,
+         datavizlib_leaflet = Q20_Part_10,
+         datavizlib_none = Q20_Part_11,
+         datavizlib_other = Q20_Part_12,
+         dataviz_other_text = Q20_OTHER_TEXT,
+         hardware_cpu = Q21_Part_1,
+         hardware_gpu = Q21_Part_2,
+         hardware_tpu = Q21_Part_3,
+         hardware_none_idk = Q21_Part_4,
+         hardware_other = Q21_Part_5,
+         hardware_other_text = Q21_OTHER_TEXT,
+         ever_used_tpu = Q22,
+         experience_ml = Q23,
+         mlalgs_regression = Q24_Part_1,
+         mlalgs_trees = Q24_Part_2,
+         mlalgs_boosting = Q24_Part_3,
+         mlalgs_bayes = Q24_Part_4,
+         mlalgs_evolutionary = Q24_Part_5,
+         mlalgs_denseneuralnets = Q24_Part_6,
+         mlalgs_cnn = Q24_Part_7,
+         mlalgs_gan = Q24_Part_8,
+         mlalgs_rnn = Q24_Part_9,
+         mlalgs_transnets = Q24_Part_10,
+         mlalgs_none = Q24_Part_11,
+         mlalgs_other = Q24_Part_12,
+         mlalgs_other_text = Q24_OTHER_TEXT,
+         mltools_aug = Q25_Part_1,
+         mltools_feateng = Q25_Part_2,
+         mltools_modelselect = Q25_Part_3,
+         mltools_archsearch = Q25_Part_4,
+         mltools_tuning = Q25_Part_5,
+         mltools_fullmlpipelines = Q25_Part_6,
+         mltools_none = Q25_Part_7,
+         mltools_other = Q25_Part_8,
+         mltools_other_text = Q25_OTHER_TEXT,
+         compvisionmethods_genpurpose = Q26_Part_1,
+         compvisionmethods_segmentation = Q26_Part_2,
+         compvisionmethods_detection = Q26_Part_3,
+         compvisionmethods_classification = Q26_Part_4,
+         compvisionmethods_generativenets = Q26_Part_5,
+         compvisionmethods_none = Q26_Part_6,
+         compvisionmethods_other = Q26_Part_7,
+         compvisionmethods_other_text = Q26_OTHER_TEXT,
+         nlpmethods_wordembedding = Q27_Part_1,
+         nlpmethods_encodersdecoders = Q27_Part_2,
+         nlpmethods_contextembedding = Q27_Part_3,
+         nlpmethods_transformermodels = Q27_Part_4,
+         nlpmethods_none = Q27_Part_5,
+         nlpmethods_other = Q27_Part_6,
+         nlpmethods_other_text = Q27_OTHER_TEXT,
+         mlframeworks_sklearn = Q28_Part_1,
+         mlframeworks_tensorflow = Q28_Part_2,
+         mlframeworks_keras = Q28_Part_3,
+         mlframeworks_randomforest = Q28_Part_4,
+         mlframeworks_xgboost = Q28_Part_5,
+         mlframeworks_pytorch = Q28_Part_6,
+         mlframeworks_caret = Q28_Part_7,
+         mlframeworks_lightgbm = Q28_Part_8,
+         mlframeworks_sparkmlib = Q28_Part_9,
+         mlframeworks_fastai = Q28_Part_10,
+         mlframeworks_none = Q28_Part_11,
+         mlframeworks_other = Q28_Part_12,
+         mlframeworks_other_text = Q28_OTHER_TEXT,
+         cloudcomputeplatform_gcp = Q29_Part_1,
+         cloudcomputeplatform_aws = Q29_Part_2,
+         cloudcomputeplatform_azure = Q29_Part_3,
+         cloudcomputeplatform_ibm = Q29_Part_4,
+         cloudcomputeplatform_alibaba = Q29_Part_5,
+         cloudcomputeplatform_salesforce = Q29_Part_6,
+         cloudcomputeplatform_oracle = Q29_Part_7,
+         cloudcomputeplatform_sap = Q29_Part_8,
+         cloudcomputeplatform_vmware = Q29_Part_9,
+         cloudcomputeplatform_redhat = Q29_Part_10,
+         cloudcomputeplatform_none = Q29_Part_11,
+         cloudcomputeplatform_other = Q29_Part_12,
+         cloudcomputeplatform_other_text = Q29_OTHER_TEXT,
+         cloudcomputeproduct_ec2 = Q30_Part_1,
+         cloudcomputeproduct_gce = Q30_Part_2,
+         cloudcomputeproduct_lambda = Q30_Part_3,
+         cloudcomputeproduct_azurevm = Q30_Part_4,
+         cloudcomputeproduct_googleappengine = Q30_Part_5,
+         cloudcomputeproduct_googlecloudfunctions = Q30_Part_6,
+         cloudcomputeproduct_awselasticbeanstalk = Q30_Part_7,
+         cloudcomputeproduct_googlekubernetes = Q30_Part_8,
+         cloudcomputeproduct_awsbatch = Q30_Part_9,
+         cloudcomputeproduct_azurecontainer = Q30_Part_10,
+         cloudcomputeproduct_none = Q30_Part_11,
+         cloudcomputeproduct_other = Q30_Part_12,
+         cloudcomputeproduct_other_text = Q30_OTHER_TEXT,
+         bigdataproduct_bigquery = Q31_Part_1,
+         bigdataproduct_redshift = Q31_Part_2,
+         bigdataproduct_databricks = Q31_Part_3,
+         bigdataproduct_elasticmapreduce = Q31_Part_4,
+         bigdataproduct_teradata = Q31_Part_5,
+         bigdataproduct_msoftanalysis = Q31_Part_6,
+         bigdataproduct_googleclouddataflow = Q31_Part_7,
+         bigdataproduct_athena = Q31_Part_8,
+         bigdataproduct_kinesis = Q31_Part_9,
+         bigdataproduct_googlecloudpubsub = Q31_Part_10,
+         bigdataproduct_none = Q31_Part_11,
+         bigdataproduct_other = Q31_Part_12,
+         bigdataproduct_other_text = Q31_OTHER_TEXT,
+         mlproduct_sas = Q32_Part_1,
+         mlproduct_cloudera = Q32_Part_2,
+         mlproduct_azuremlstudio = Q32_Part_3,
+         mlproduct_googlecloudmlengine = Q32_Part_4,
+         mlproduct_googlecloudvision = Q32_Part_5,
+         mlproduct_googlecloudspeechtotext = Q32_Part_6,
+         mlproduct_googlecloudnaturallanguage = Q32_Part_7,
+         mlproduct_rapidminer = Q32_Part_8,
+         mlproduct_googlecloudtranslation = Q32_Part_9,
+         mlproduct_sagemaker = Q32_Part_10,
+         mlproduct_none = Q32_Part_11,
+         mlproduct_other = Q32_Part_12,
+         mlproduct_other_text = Q32_OTHER_TEXT,
+         automltools_googleautoml = Q33_Part_1,
+         automltools_h20driverless = Q33_Part_2,
+         automltools_databricksautoml = Q33_Part_3,
+         automltools_datarobotautoml = Q33_Part_4,
+         automltools_tpot = Q33_Part_5,
+         automltools_autokeras = Q33_Part_6,
+         automltools_autosklearn = Q33_Part_7,
+         automltools_auto_ml = Q33_Part_8,
+         automltools_xcessiv = Q33_Part_9,
+         automltools_mlbox = Q33_Part_10,
+         automltools_none = Q33_Part_11,
+         automltools_other = Q33_Part_12,
+         automltools_other_text = Q33_OTHER_TEXT,
+         dbproduct_mysql = Q34_Part_1,
+         dbproduct_postgressql = Q34_Part_2,
+         dbproduct_sqllite = Q34_Part_3,
+         dbproduct_msoftsql = Q34_Part_4,
+         dbproduct_oracledb = Q34_Part_5,
+         dbproduct_msoftaccess = Q34_Part_6,
+         dbproduct_awsrelationaldbs = Q34_Part_7,
+         dbproduct_awsdynamodb = Q34_Part_8,
+         dbproduct_azuresqldb = Q34_Part_9,
+         dbproduct_googlecloudsql = Q34_Part_10,
+         dbproduct_none = Q34_Part_11,
+         dbproduct_other = Q34_Part_12,
+         dbproduct_other_text = Q34_OTHER_TEXT
+         )
+
+varlabels(current) <- current[1,]
+
+current <- current %>% 
+  filter(!str_detect(surveyduration, "Duration"),
+         country_of_residence == "United States of America")
+```
+
+Kaggle has released the data for their third annual [*Machine Learning and Data Science Survey*](https://www.kaggle.com/c/kaggle-survey-2019/overview). I've only recently joined the Kaggle platform as I've transitioned from academia to private industry, so this seems to be an excellent opportunity to explore the backgrounds of my new data science peers.
+
+This is the first of the three part series exploring this data.
+
+Part 1 will explore this year's survey results. 
+
+Part 2 will bring in survey data from the first two years of this annual survey to investigate how the field has changed over the last three years in the United States.
+
+Part 3 will use modeling try to answer three burning questions I have: 1. what *is* the difference between the variety of different job titles in the Data field, 2. what factors predict annual compensation, and 3. how unique different combinations of characteristics in the field to explore how unique I am, or are you are, in the data science community.
+
+{{% alert note %}}
+
+Because I am based in the United States, as are most of the data science community with which I interact with regularly in-person or on social media, this analysis is limited to survey respondents living in the United States.
+
+{{% /alert %}}
+
+Let's get started!
+
+# Findings from the 2019 Kaggle ML & DS Survey
+## Demographics
+### Three-quarters of data professionals are men
+```{r gender, echo = FALSE}
+current %>% 
+  mutate(gender = fct_infreq(gender)) %>% 
+  ggplot(aes(x = gender,
+             y = (..count..)/sum(..count..),
+             fill = gender)) +
+  geom_bar() +
+  scale_y_continuous(labels = scales::percent,
+                     limits = c(0, 1)) +
+  scale_fill_manual(values = gender_cols) +
+  labs(x = "Gender",
+       y = "Percent",
+       title = "Question: What is your gender?") +
+  theme_ed +
+  theme(legend.position = "none")
+```
+
+I'm not surprised that the majority of data professionals are men, but I was shocked at how stark the split is. At Callisto (my company), our R&D team (which includes analysts and engineers) is almost exactly evenly split, which I knew is an outlier in the Data industry, but I didn't realize by how much.
+
+### Data professionals are fairly young
+```{r age, echo = FALSE}
+current %>% 
+  ggplot(aes(x = age, y = (..count..)/sum(..count..))) +
+  geom_bar() +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = "Age",
+       y = "Percent in Age Category",
+       title = paste0("Question: ", varlabels(current)["age"])) +
+  theme_ed
+```
+
+As one might expect from a field that itself is relatively young, data professionals themselves are fairly young, with the modal data professional being age 25 to 29. I, myself, am turning 25 next month, so I'm pretty much modal here.
+
+Be wary here, as the bin widths of these ages are changing across the x-axis. Unfortunately, this is as specific as the data get.
+
+One alternative explanation for these data is that many Kagglers are early career data professionals who use or used Kaggle to build a professional portfolio for the job market. Older data professionals may be underrepresented here.
+
+### Underrepresentation of Women Persists Across Age
+```{r agebygender, echo = FALSE}
+age_gender_marginals <- current %>% 
+  filter(gender %in% c("Male", "Female")) %>% 
+  ggplot(aes(x = age, y = (..count..)/sum(..count..),
+             fill = gender)) +
+  geom_bar(position = "dodge") +
+  scale_y_continuous(labels = scales::percent) +
+  scale_fill_manual(values = gender_cols) +
+  labs(x = "Age",
+       y = "Percent",
+       title = "Percent in Age & Gender Category") +
+  theme_ed +
+  theme(legend.position = "none")
+
+age_by_gender <- current %>% 
+  filter(gender %in% c("Male", "Female")) %>% 
+  group_by(gender, age) %>% 
+  summarise(n_genderage = n()) %>% 
+  mutate(prop = n_genderage/sum(n_genderage)) %>% 
+  ggplot(aes(x = age,
+             y = prop,
+             fill = gender)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_y_continuous(labels = scales::percent) +
+  scale_fill_manual(values = gender_cols) +
+  labs(x = "Age",
+       y = "Percent",
+       title = "Percent Gender in Age Category") +
+  theme_ed +
+  theme(axis.text.x = element_text(size = 5.5),
+        legend.position = "none")
+
+gender_by_age <- current %>% 
+  filter(gender %in% c("Male", "Female")) %>% 
+  group_by(gender, age) %>% 
+  summarise(n_genderage = n()) %>% 
+  group_by(age) %>% 
+  mutate(prop = n_genderage/sum(n_genderage)) %>% 
+  ggplot(aes(x = age,
+             y = prop,
+             fill = gender)) +
+  geom_bar(stat = "identity") +
+  scale_y_continuous(labels = scales::percent) +
+  scale_fill_manual(values = gender_cols) +
+  labs(x = "Age",
+       y = "Percent",
+       title = "Percent Age in Gender Category") +
+  theme_ed +
+  theme(axis.text.x = element_text(size = 5.5),
+        legend.position = "none")
+
+grid.arrange(age_gender_marginals,
+             age_by_gender,
+             gender_by_age,
+             ncol = 2, nrow = 2,
+             layout_matrix = rbind(c(1,1), c(2, 3)))
+```
+
+I expected there to be underrepresentation of women in the Data industry, but I would've expected the divide to be much less stark among younger cohorts of data professionals than older ones. The above plots show that this doesn't appear to be the case.
+
+The top panel shows a representation of a contingency table, that is, the percent of respondents that identify as male or female that fall into each age category. Women are clearly underrepresented at every age.
+
+The bottom two panels break this plot into its marginals. The left panel shows the percent of data professionals of each gender that fall into each age category. It shows the same broad pattern for both men and women, with female data professionals skewing just a bit younger. The right shows the gender split of each age category. It shows that the gender split of data professionals hovers around 75% for almost every cohort except those over 60 years old. Clearly the underrepresentation of women in the data industry is not something that will go away as a result of retiring older cohorts.
+
+### The majority of data professionals have an advanced degree
+```{r education, echo = FALSE}
+current %>% 
+  filter(!is.na(education)) %>% 
+  mutate(education = ordered(education,
+                             levels = c("No formal education past high school",
+                                        "Some college/university study without earning a bachelor’s degree",
+                                        "Bachelor’s degree",
+                                        "Master’s degree",
+                                        "Doctoral degree",
+                                        "Professional degree",
+                                        "I prefer not to answer"))) %>% 
+  ggplot(aes(x = education, y = (..count..)/sum(..count..))) +
+  geom_bar() +
+  scale_x_discrete(labels = c("High \n School",
+                              "Some \n College",
+                              "Bachelor's \n Degree",
+                              "Master's \n Degree",
+                              "Doctoral \n Degree",
+                              "Professional \n Degree",
+                              "I prefer not \n to answer")) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = "Education", y = "Percent",
+       title = "What is the highest level of formal education that you have attained or plan \n to attain within the next 2 years?") + 
+  theme_ed
+```
+
+Unsurprisingly, data professionals are an educated bunch. Surprising to me, however, was the number of Master's degree holders and the relative sparsity of PhDs and professional degree holders. Coming from academia, I expected the data industry to be primarily comprised of: 1) non-CS Bachelor's and MBA holders building reports and dashboards, 2) CS/Engineering Bachelor's holders building and maintaining data infrastructure, and 3) PhDs who left academia due to the job market or lured by mobility and money in private industry. I did not expect to see that *half* of all data professionals are Master's holders!
+
+## Titles, Compensation, Experience, and Roles
+### "My Name is Scientist, Data Scientist"
+```{r jobtitle, echo = FALSE}
+current %>% 
+  mutate(job_title = fct_infreq(job_title)) %>% 
+  filter(!is.na(job_title)) %>% 
+  ggplot(aes(x = job_title, y = (..count..)/sum(..count..))) +
+  geom_bar() +
+  scale_x_discrete(labels = c("Data \n Scientist",
+                              "Student",
+                              "Other",
+                              "Software \n Engineer",
+                              "Data \n Analyst",
+                              "Research \n Scientist",
+                              "Product/ \n Project \n Manager",
+                              "Business \n Analyst",
+                              "Not \n Employed",
+                              "Data \n Engineer",
+                              "Statistician",
+                              "DBA/ \n Database \n Engineer")) +
+  scale_y_continuous(labels = scales::percent,
+                     breaks = seq(0, 0.25, by = 0.05)) +
+  labs(x = "Job Title", y = "Percent",
+       title = "Question: Select the title most similar to your current role") +
+  theme_ed +
+  theme(legend.position = "none",
+        axis.text.x = element_text(size = 6))
+```
+
+Another shocking finding to me was sheer amount of data scientists in the survey relative to all other roles. I have a pretty strong Bayesian prior that there aren't 2.5x as many data scientists as there are data analysts in the data industry, so this is definitely a reality check that this survey should *not* be considered a representative survey of the industry.
+
+Additionally, the sheer number of students represented in the survey seems consistent with my hypothesis that many Kagglers may be on the platform to build up an data analysis portfolio for the job market. The percentage (3.6%) of "Not Employed" respondents seems consistent with this as well.^[Retired respondents are not counted as Not Employed here, as they were instructed to choose the most similar to the one they held most recently] I suspect the true unemployment rate for data professionals is, in reality, lower than the national unemployment rate (3.7% as of this writing), not almost identical to it.^[Some readers with an economics background may, rightfully, chime in that some frictional unemployment may actually be a sign of a healthy labor market that favors workers, as people may quit jobs knowing they'll get a better job shortly, although I would argue that this is still consistent with the point that Kagglers are on the platform, in part, as a signal to employers]
+
+### Data Scientists Make the Big Bucks
+```{r compensation, echo = FALSE, warning = FALSE}
+current %>% 
+  filter(!is.na(job_title)) %>% 
+  mutate(job_title = fct_infreq(job_title)) %>% 
+  filter(!is.na(yearly_compensation)) %>% 
+  mutate(yearly_compensation = ordered(yearly_compensation,
+                                       levels = c("$0-999",
+                                                  "1,000-1,999",
+                                                  "2,000-2,999",
+                                                  "3,000-3,999",
+                                                  "4,000-$4,999",
+                                                  "5,000-$7,499",
+                                                  "7,500-9,999",
+                                                  "10,000-14,999",
+                                                  "15,000-$19,999",
+                                                  "20,000-24,999",
+                                                  "25,000-29,999",
+                                                  "30,000-39,999",
+                                                  "40,000-49,999",
+                                                  "50,000-59,999",
+                                                  "60,000-69,999",
+                                                  "70,000-79,999",
+                                                  "80,000-89,999",
+                                                  "90,000-99,999",
+                                                  "100,000-124,999",
+                                                  "125,000-149,999",
+                                                  "150,000-199,999",
+                                                  "200,000-249,999",
+                                                  "250,000-299,999",
+                                                  "300,000-500,000",
+                                                  "> $500,000"))) %>% 
+  group_by(job_title) %>% 
+  summarise(yearly_compensation_fct = median(yearly_compensation)) %>% 
+  mutate(yearly_compensation_dbl = case_when(
+    yearly_compensation_fct == "80,000-89,999" ~ mean(c(80000, 89999)),
+    yearly_compensation_fct == "90,000-99,999" ~ mean(c(90000, 99999)),
+    yearly_compensation_fct == "100,000-124,999" ~ mean(c(100000, 124999)),
+    yearly_compensation_fct == "125,000-149,999" ~ mean(c(125000, 149999))
+  )) %>% 
+  ggplot(aes(x = job_title,
+             y = yearly_compensation_dbl,
+             label = yearly_compensation_fct,
+             fill = yearly_compensation_dbl)) +
+  geom_bar(stat = "identity") +
+  # geom_text(vjust = -1,
+  #           size = 1.5) +
+  scale_x_discrete(drop = FALSE,
+                   labels = c("Data \n Scientist",
+                              "Student",
+                              "Other",
+                              "Software \n Engineer",
+                              "Data \n Analyst",
+                              "Research \n Scientist",
+                              "Product/ \n Project \n Manager",
+                              "Business \n Analyst",
+                              "Not \n Employed",
+                              "Data \n Engineer",
+                              "Statistician",
+                              "DBA/ \n Database \n Engineer")) +
+  scale_y_continuous(label = scales::dollar,
+                     limits = c(0, 150000)) +
+  scale_fill_continuous() +
+  labs(x = "Job Title", y = "Annual \n Compensation \n (in $)",
+       title = "Question: What is your current yearly compensation?") +
+  theme_ed +
+  theme(legend.position = "none",
+        axis.text.x = element_text(size = 6))
+
+
+```
+
+The 2019 Kaggle ML & DS Survey reports annual compensation in brackets. I'm interested in the median income of data professionals by title, but obviously taking the median of categorical data isn't something R takes kindly to!
+
+However, since this factor is ordinal, it is possible to take an idomatic median: just arrange by the ordered factor, and take the median value. The hitch is when you have a a vector of even length and the middle two values are two different categories (e.g. $80,000-89,999 and $90,000-99,999). Strictly speaking, I prefer to just take the cutpoint between the two categories ($90,000) or an interval with the cutpoint as the center point as the value. However, for this quick and dirty exploration, I'm just going to take the lower of the two categories as the winner of the tie.
+
+The function for this implementation is below, [with credit to Hong Ooi and Richie Cotton from StackOverflow.](https://stackoverflow.com/questions/7925102/idiomatic-method-of-finding-the-median-of-an-ordinal)
+
+```
+median.ordered <- function(x) {
+  levs <- levels(x)
+  m <- median(as.integer(x), na.rm = TRUE)
+  if(floor(m) != m) { 
+  m <- floor(m)
+  }
+  ordered(m, labels = levs, levels = seq_along(levs))
+}
+```
+
+The above plot shows the median income of each job title computed in this way, preserving the ordering of job titles by their frequency in . Students and Unemployed respondents were not asked for their annual compensation, but in order to preserve the frequency ordered they are represented here.
+
+Clearly, as a Data Analyst, I'm in the wrong job! Data Analysts and Business Analysts are tied for last, with the median analysts making $80,000 to $89,999 annually, while Data Scientists make the big bucks, with the median data scientist making $125,000 to $149,999 annually.
+
+### Data professionals' team sizes are highly bimodal
+```{r teamsize, echo = FALSE}
+current %>% 
+  filter(!is.na(datasci_team_size)) %>% 
+  mutate(datasci_team_size = ordered(datasci_team_size,
+                                     levels = c("0",
+                                                "1-2",
+                                                "3-4",
+                                                "5-9",
+                                                "10-14",
+                                                "15-19",
+                                                "20+"))) %>% 
+  ggplot(aes(x = datasci_team_size, y = (..count..)/sum(..count..))) +
+  geom_bar() +
+  scale_y_continuous(labels = scales::percent,
+                     limits = c(0, 0.4)) +
+  labs(title = "Q: Approximately how many individuals are responsible for data science \n workloads at your place of business?",
+       x = "Team Size", y = "Percent") +
+  theme_ed
+```
+
+Almost 40% of business have data science teams of less than five while another 40% have data science teams of over twenty! That's quite the bimodality. Hard to think of an explanation about why this would be, although my intuition is that this is due to how young the field is combined with restricted 
+
+### Data professionals' most common important role is informing business decisions
+```{r roles, echo = FALSE}
+current %>% 
+  select(starts_with("role"),
+         -role_other_text) %>% 
+  mutate_all(~case_when(!is.na(.) ~ 1)) %>%
+  summarise_all(~sum(., na.rm = TRUE)/n()) %>% 
+  gather(key = "role") %>% 
+  mutate(role = str_extract(role, pattern = "(?<=role_).*"),
+         role = fct_reorder(role, desc(value))) %>% 
+  ggplot(aes(x = role, y = value)) +
+  geom_bar(stat = "identity") +
+  scale_x_discrete(labels = c("Influence \n Business \n Decisions",
+                              "Build \n ML \n Prototypes",
+                              "Improve \n Existing \n ML \n Models",
+                              "Build or \n Run Data \n Infrastructure",
+                              "ML \n Research",
+                              "None of \n Above",
+                              "Other")) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(title = "Q: Select any activities that make up an important part of your role at work",
+       x = "Role",
+       y = "Percent") +
+  theme_ed
+```
+
+I'm a bit disappointed in the possible multiple-choice answers here. Machine learning spans three of the five possible roles, however building, improving, and researching machine learning models, I would argue, is something that more generalist data professionals engage in, even when they have the skills, meanwhile "influence business decisions" and "build or run data infrastructure" are so broad as to be almost uninformative, while the distinction between "building" and "improving" ML models seems much less useful than knowing the type of models being used (predictive or forecasting models vs classification models vs generative models).
+
+I would have liked to see response options broken out into "building and/or maintaining periodic reports or dashboards", "experimental design", "forecasting", etc.
+
+Nonetheless, the key finding here is that the most common important role of data professionals appears to be informing business decisions. 
+
+## Languages and Tools
+### Python is King
+```{r languages, echo = FALSE}
+current %>% 
+  select(starts_with("language"),
+         -language_other_text) %>% 
+  mutate_all(~case_when(!is.na(.) ~ 1)) %>%
+  summarise_all(~sum(., na.rm = TRUE)/n()) %>% 
+  gather(key = "language") %>% 
+  mutate(language = str_extract(language, pattern = "(?<=language_).*"),
+         language = fct_reorder(language, desc(value))) %>% 
+  ggplot(aes(x = language, y = value)) +
+  geom_bar(stat = "identity") +
+  scale_x_discrete(labels = c("Python", "SQL", "R",
+                              "Java", "C++", "JavaScript",
+                              "Bash", "C", "MATLAB",
+                              "Other", "TypeScript", "None")) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(title = "Question: What programming languages do you use on a regular basis?",
+       x = "Language",
+       y = "Percent") +
+  theme_ed
+```
+
+Much to my chagrin as an R user, Python dominates as the most coding language used by data professional. SQL comes next, followed by R, then Java, followed by a long tail of other languages.
+
+Two things surprise me here: 1) the complete lack of Julia users and 2) the proliference of Java.
+
+I know Julia is a very young language, but I hear so much about it and it's eponymous with JuPytR so I expected to see more users.
+
+As for Java, I've always thought of the modal data professional toolkit as: SQL for querying databases, R/Python for modeling and prototyping, and C++ for production code. I don't know of any data scientists using Java. I'll be curious to dig into this more.
+
+### The majority of data professionals on Kaggle are relatively new to writing code for data analysis.
+```{r coding_experience, echo = FALSE}
+current %>% 
+  mutate(experience_data = factor(experience_data,
+                                  levels = c("I have never written code",
+                                             "< 1 years",
+                                             "1-2 years",
+                                             "3-5 years",
+                                             "5-10 years",
+                                             "10-20 years",
+                                             "20+ years"))) %>% 
+  filter(!is.na(experience_data)) %>% 
+  ggplot(aes(x = experience_data, y = (..count..)/sum(..count..))) +
+  geom_bar() +
+  scale_x_discrete(labels = c("I have never \n written code",
+                              "< 1 years",
+                              "1-2 years",
+                              "3-5 years",
+                              "5-10 years",
+                              "10-20 years",
+                              "20+ years")) +
+  scale_y_continuous(labels = scales::percent,
+                     breaks = seq(0, 0.25, by = 0.05)) +
+  labs(x = "Experience",
+       y = "Percent",
+       title = "Question: How long have you been writing code to analyze data") +
+  theme_ed
+```
+
+The majority of data professionals have less than five years of experience writing code for data analysis, which is consistent with the broadly young age distribution of data professionals. Like with age, my four years experience writing code for analysis make me pretty modal here as well.
+
+I'm curious about the typical experience levels of the job titles earlier. Let's taking the same idiomatic median we used earlier to compute median income to see what the median experience category is for each job title. 
+
+```{r codingexpbytitle, echo = FALSE}
+current %>% 
+  filter(!is.na(job_title)) %>% 
+  mutate(job_title = fct_infreq(job_title)) %>% 
+  filter(!is.na(experience_data)) %>% 
+  mutate(experience_data = ordered(experience_data,
+                                   levels = c("I have never written code",
+                                              "< 1 years",
+                                              "1-2 years",
+                                              "3-5 years",
+                                              "5-10 years",
+                                              "10-20 years",
+                                              "20+ years"))) %>% 
+  group_by(job_title) %>% 
+  summarise(experience_data_fct = median(experience_data)) %>% 
+  mutate(
+    experience_data_dbl = case_when(
+      experience_data_fct == "1-2 years" ~ mean(c(1, 2)),
+      experience_data_fct == "3-5 years" ~ mean(c(3, 5)),
+      experience_data_fct == "5-10 years" ~ mean(c(5, 10))
+    ),
+    experience_data_fct = case_when(
+      experience_data_fct == "1-2 years" ~ "1-2",
+      experience_data_fct == "3-5 years" ~ "3-5",
+      experience_data_fct == "5-10 years" ~ "5-10"
+    )
+  ) %>% 
+  ggplot(aes(x = job_title,
+             y = experience_data_dbl,
+             label = experience_data_fct,
+             fill = experience_data_dbl)) +
+  geom_bar(stat = "identity") +
+  geom_text(vjust = -1) +
+  scale_x_discrete(drop = FALSE,
+                   labels = c("Data \n Scientist",
+                              "Student",
+                              "Other",
+                              "Software \n Engineer",
+                              "Data \n Analyst",
+                              "Research \n Scientist",
+                              "Product/ \n Project \n Manager",
+                              "Business \n Analyst",
+                              "Not \n Employed",
+                              "Data \n Engineer",
+                              "Statistician",
+                              "DBA/ \n Database \n Engineer")) +
+  scale_y_continuous(limits = c(0, 8)) +
+  scale_fill_continuous() +
+  labs(x = "Job Title", y = "Experience Coding Data Analysis (Years)",
+       title = "Question: How long have you been writing code to analyze data") +
+  theme_ed +
+  theme(legend.position = "none",
+        axis.text.x = element_text(size = 6),
+        axis.text.y = element_blank())
+```
+
+Perhaps unsurprisingly, data scientists, research scientists, data engineers, and statisticians clock in as the most experience writing code to analyze data, while students are the least experienced. It appears that my level of coding experience is typical for my job title among Kagglers.
+
+### There's a shocking amount of experienced machine learning practioners!
+
+```{r mlexp, echo = FALSE}
+current %>% 
+  mutate(experience_ml = factor(experience_ml,
+                                  levels = c("< 1 years",
+                                             "1-2 years",
+                                             "2-3 years",
+                                             "3-4 years",
+                                             "4-5 years",
+                                             "5-10 years",
+                                             "10-15 years",
+                                             "15-20 years",
+                                             "20+ years"))) %>% 
+  filter(!is.na(experience_ml)) %>% 
+  ggplot(aes(x = experience_ml, y = (..count..)/sum(..count..))) +
+  geom_bar() +
+  scale_x_discrete(drop = FALSE) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = "Experience",
+       y = "Percent",
+       title = paste0("Question: ", varlabels(current)["experience_ml"])) +
+  theme_ed
+```
+
+First, it should be noted that this question was only asked of those that said they had experience coding data analysis. I should note that I *believe* that the "< 1 years" category includes data professionals with less than a year of ML experience with those with none. Kaggle offered the survey schema and question wording for this survey, but did not provide a list of all of the possible responses to each multiple-choice question. In previous years of this survey, "I have never studied machine learning but plan to learn in the future" was an offered response option. However, not a single response among the over 17,000 respondents in the 2019 survey indicates no experience, which seems unlikely to happen if no experience was an option.^[Even if it's true that every single respondent has some experience with machine learning, even a miniscule amount of measurement error should result in at least one response indicating none] It seems more likely that "less than 1 years experience" captures both respondents with no experience and those with less than some number of months experience.
+
+Nonetheless, even discounting this to the maximum extent possible (that all < 1 year responses indicate zero experience), the amount of ML experience in the community surprised me quite a bit.
+
+First of all, there's no reason ex-ante that data analysis should entail fitting a model to data. Plenty of (I'd argue most) excellent analysis can be done through simple graphs and tables so there's no strong reason to need it.
+
+Secondly, I would be surprised if every single Kaggler has the training (formal or informal) necessary for the application and interpretation of even simple machine learning models such as linear regression, nevermind more complex "black box" models like neural networks and support vector machines.
+
+Thirdly, the very definition of what counts as "machine learning" is contentious. Does linear regression even count? My gut says no, only the related linear model selection algorithms like MARS, lasso, and ridge regression count, but linear regression is considered to be a machine learning algorithm by many others^[including Hastie et al in *Elements of Statistical Learning*, one of the many bibles on the topic] and is listed as a machine learning algorithm in this survey. By my own definition, I only have 2 years of machine learning experience, but if linear regression counts then I have 4 years experience, which, according this data, makes me a veteran!
+
+Luckily, another question asks respondents which machine learning algorithms they use on a regular basis, helping us to dig into this a bit more.
+
+```{r mlalgs, echo = FALSE}
+current %>% 
+  select(starts_with("mlalgs"),
+         -mlalgs_other_text) %>% 
+  mutate_all(~case_when(!is.na(.) ~ 1)) %>%
+  summarise_all(~sum(., na.rm = TRUE)/n()) %>% 
+  gather(key = "mlalgs") %>% 
+  mutate(mlalgs = str_extract(mlalgs, pattern = "(?<=mlalgs_).*"),
+         mlalgs = fct_reorder(mlalgs, desc(value))) %>% 
+  ggplot(aes(x = mlalgs, y = value)) +
+  geom_bar(stat = "identity") +
+  scale_x_discrete(labels = c("Linear/ \n Logistic \n Regression",
+                              "Decision \n Trees or \n Random \n Forests",
+                              "Gradient \n Boosting \n Machines",
+                              "Convolutional \n Neural \n Networks",
+                              "Bayesian \n Approaches",
+                              "Dense \n Neural \n Networks",
+                              "Recurrent \n Neural \n Networks",
+                              "None",
+                              "Transformer \n Networks",
+                              "Evolutionary \n Approaches",
+                              "Generative \n Adversarial \n Networks",
+                              "Other")) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(title = "Q: Which of the following ML algorithms do you use on a regular basis?",
+       x = "Algorithm",
+       y = "Percent") +
+  theme_ed +
+  theme(axis.text.x = element_text(size = 6))
+```
+
+As expected, linear and logistic regression top the charts as the algorithms used on a regular basis by the most data professionals. Still, I'm surprised by how popular decision tree models and gradient boosting machines are. Perhaps a testament to how easy out-of-the-box versions of these algorithms have become to deploy due to the maturity of packages like sklearn, xgboost, caret, ranger, randomForest, among others. 
+
+The ecology of machine learning platforms has developed to the degree that the practioners dilemma seems to be deciding *which* of the numerous high quality frameworks and packages to use.
+
+Luckily, we have data on this as well!
+
+```{r mlframeworks, echo = FALSE}
+current %>% 
+  select(starts_with("mlframeworks"),
+         -mlframeworks_other_text) %>% 
+  mutate_all(~case_when(!is.na(.) ~ 1)) %>%
+  summarise_all(~sum(., na.rm = TRUE)/n()) %>% 
+  gather(key = "mlframeworks") %>% 
+  mutate(mlframeworks = str_extract(mlframeworks, pattern = "(?<=mlframeworks_).*"),
+         mlframeworks = fct_reorder(mlframeworks, desc(value))) %>% 
+  ggplot(aes(x = mlframeworks, y = value)) +
+  geom_bar(stat = "identity") +
+  scale_x_discrete(labels = c("sklearn",
+                              "TensorFlow",
+                              "Keras",
+                              "randomForest",
+                              "XGBoost",
+                              "PyTorch",
+                              "None",
+                              "caret",
+                              "LightGBM",
+                              "SparkMLlib",
+                              "fastai",
+                              "Other")) +
+  scale_y_continuous(labels = scales::percent) +
+  labs(title = "Q: Which of the following machine learning frameworks do you use on a regular basis?",
+       x = "Framework",
+       y = "Percent") +
+  theme_ed +
+  theme(axis.text.x = element_text(size = 6.5))
+```
+
+With Python dominance comes sklearn dominance. Luckily for R users, TensorFlow and Keras remain the dominant framework for building neural networks. I expect PyTorch to continue to grow, but if it ever overtakes TensorFlow, I expect R implementations and interfaces to have matured by then.
+
+I also expect that the [*tidymodels*](https://www.tidyverse.org/blog/2018/08/tidymodels-0-0-1/) framework, developed by Max Kuhn, the author of "caret", and other authors in the tidyverse...-verse to succeed *caret* to begin emerging as a leading machine learning framework for R users in 2020 as the ecosystem continues to mature.
+
+# That's all, folks!
+As mentioned before, Part 2 of this series will be a comparing the results of this survey to the results of the two prior annual Kaggle surveys to see how the industry has changed over the last three years.
+
+Expect that post whenever I get around to cleaning those (far larger, in terms of questionnaire length) survey datasets.
