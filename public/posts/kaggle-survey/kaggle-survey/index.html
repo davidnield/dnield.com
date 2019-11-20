@@ -409,7 +409,7 @@ Part 2 will bring in survey data from the first two years of this annual survey 
 <div id="data-professionals-are-fairly-young" class="section level3">
 <h3>Data professionals are fairly young</h3>
 <p><img src="/posts/kaggle-survey/kaggle-survey_files/figure-html/age-1.png" width="672" /></p>
-<p>As one might expect from a field that itself is relatively young, data professionals themselves are fairly young, with the modal data professional being age 25 to 29.</p>
+<p>As one might expect from a field that itself is relatively young, data professionals themselves are fairly young, with the modal data professional being age 25 to 29. I, myself, am turning 25 next month, so I’m pretty much modal here.</p>
 <p>Be wary here, as the bin widths of these ages are changing across the x-axis. Unfortunately, this is as specific as the data get.</p>
 <p>One alternative explanation for these data is that many Kagglers are early career data professionals who use or used Kaggle to build a professional portfolio for the job market. Older data professionals may be underrepresented here.</p>
 </div>
@@ -420,6 +420,11 @@ Part 2 will bring in survey data from the first two years of this annual survey 
 <p>The top panel shows a representation of a contingency table, that is, the percent of respondents that identify as male or female that fall into each age category. Women are clearly underrepresented at every age.</p>
 <p>The bottom two panels break this plot into its marginals. The left panel shows the percent of data professionals of each gender that fall into each age category. It shows the same broad pattern for both men and women, with female data professionals skewing just a bit younger. The right shows the gender split of each age category. It shows that the gender split of data professionals hovers around 75% for almost every cohort except those over 60 years old. Clearly the underrepresentation of women in the data industry is not something that will go away as a result of retiring older cohorts.</p>
 </div>
+<div id="the-majority-of-data-professionals-have-an-advanced-degree" class="section level3">
+<h3>The majority of data professionals have an advanced degree</h3>
+<p><img src="/posts/kaggle-survey/kaggle-survey_files/figure-html/education-1.png" width="672" /></p>
+<p>Unsurprisingly, data professionals are an educated bunch. Surprising to me, however, was the number of Master’s degree holders and the relative sparsity of PhDs and professional degree holders. Coming from academia, I expected the data industry to be primarily comprised of: 1) non-CS Bachelor’s and MBA holders building reports and dashboards, 2) CS/Engineering Bachelor’s holders building and maintaining data infrastructure, and 3) PhDs who left academia due to the job market or lured by mobility and money in private industry. I did not expect to see that <em>half</em> of all data professionals are Master’s holders!</p>
+</div>
 </div>
 <div id="titles-compensation-experience-and-roles" class="section level2">
 <h2>Titles, Compensation, Experience, and Roles</h2>
@@ -427,18 +432,10 @@ Part 2 will bring in survey data from the first two years of this annual survey 
 <h3>“My Name is Scientist, Data Scientist”</h3>
 <p><img src="/posts/kaggle-survey/kaggle-survey_files/figure-html/jobtitle-1.png" width="672" /></p>
 <p>Another shocking finding to me was sheer amount of data scientists in the survey relative to all other roles. I have a pretty strong Bayesian prior that there aren’t 2.5x as many data scientists as there are data analysts in the data industry, so this is definitely a reality check that this survey should <em>not</em> be considered a representative survey of the industry.</p>
-<p>Additionally, the sheer number of students represented in the survey seems consistent with my hypothesis that many Kagglers may be on the platform to build up an data analysis portfolio for the job market.</p>
+<p>Additionally, the sheer number of students represented in the survey seems consistent with my hypothesis that many Kagglers may be on the platform to build up an data analysis portfolio for the job market. The percentage (3.6%) of “Not Employed” respondents seems consistent with this as well.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> I suspect the true unemployment rate for data professionals is, in reality, lower than the national unemployment rate (3.7% as of this writing), not almost identical to it.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
 </div>
-</div>
-<div id="languages-and-tools" class="section level2">
-<h2>Languages and Tools</h2>
-<div id="python-is-king" class="section level3">
-<h3>Python is King</h3>
-<p><img src="/posts/kaggle-survey/kaggle-survey_files/figure-html/languages-1.png" width="672" /></p>
-<p>Much to my chagrin as an R user, Python dominates as the most coding language used by data professional. SQL comes next, followed by R, then Java, followed by a long tail of other languages. I’m a bit surprised by the proliference of Java, I’ve always thought of the modal data professional toolkit as: SQL for querying databases, R/Python for modeling and prototyping, and C++ for production code. I’ll be curious to dig into this more.</p>
-</div>
-<div id="data-scientist-make-the-big-bucks" class="section level3">
-<h3>Data Scientist Make the Big Bucks</h3>
+<div id="data-scientists-make-the-big-bucks" class="section level3">
+<h3>Data Scientists Make the Big Bucks</h3>
 <p><img src="/posts/kaggle-survey/kaggle-survey_files/figure-html/compensation-1.png" width="672" /></p>
 <p>The 2019 Kaggle ML &amp; DS Survey reports annual compensation in brackets. I’m interested in the median income of data professionals by title, but obviously taking the median of categorical data isn’t something R takes kindly to!</p>
 <p>However, since this factor is ordinal, it is possible to take an idomatic median: just arrange by the ordered factor, and take the median value. The hitch is when you have a a vector of even length and the middle two values are two different categories (e.g. $80,000-89,999 and $90,000-99,999). Strictly speaking, I prefer to just take the cutpoint between the two categories ($90,000) or an interval with the cutpoint as the center point as the value. However, for this quick and dirty exploration, I’m just going to take the lower of the two categories as the winner of the tie.</p>
@@ -454,7 +451,69 @@ Part 2 will bring in survey data from the first two years of this annual survey 
 <p>The above plot shows the median income of each job title computed in this way, preserving the ordering of job titles by their frequency in . Students and Unemployed respondents were not asked for their annual compensation, but in order to preserve the frequency ordered they are represented here.</p>
 <p>Clearly, as a Data Analyst, I’m in the wrong job! Data Analysts and Business Analysts are tied for last, with the median analysts making $80,000 to $89,999 annually, while Data Scientists make the big bucks, with the median data scientist making $125,000 to $149,999 annually.</p>
 </div>
+<div id="data-professionals-team-sizes-are-highly-bimodal" class="section level3">
+<h3>Data professionals’ team sizes are highly bimodal</h3>
+<p><img src="/posts/kaggle-survey/kaggle-survey_files/figure-html/teamsize-1.png" width="672" /></p>
+<p>Almost 40% of business have data science teams of less than five while another 40% have data science teams of over twenty! That’s quite the bimodality. Hard to think of an explanation about why this would be, although my intuition is that this is due to how young the field is combined with restricted</p>
 </div>
+<div id="data-professionals-most-common-important-role-is-informing-business-decisions" class="section level3">
+<h3>Data professionals’ most common important role is informing business decisions</h3>
+<p><img src="/posts/kaggle-survey/kaggle-survey_files/figure-html/roles-1.png" width="672" /></p>
+<p>I’m a bit disappointed in the possible multiple-choice answers here. Machine learning spans three of the five possible roles, however building, improving, and researching machine learning models, I would argue, is something that more generalist data professionals engage in, even when they have the skills, meanwhile “influence business decisions” and “build or run data infrastructure” are so broad as to be almost uninformative, while the distinction between “building” and “improving” ML models seems much less useful than knowing the type of models being used (predictive or forecasting models vs classification models vs generative models).</p>
+<p>I would have liked to see response options broken out into “building and/or maintaining periodic reports or dashboards”, “experimental design”, “forecasting”, etc.</p>
+<p>Nonetheless, the key finding here is that the most common important role of data professionals appears to be informing business decisions.</p>
+</div>
+</div>
+<div id="languages-and-tools" class="section level2">
+<h2>Languages and Tools</h2>
+<div id="python-is-king" class="section level3">
+<h3>Python is King</h3>
+<p><img src="/posts/kaggle-survey/kaggle-survey_files/figure-html/languages-1.png" width="672" /></p>
+<p>Much to my chagrin as an R user, Python dominates as the most coding language used by data professional. SQL comes next, followed by R, then Java, followed by a long tail of other languages.</p>
+<p>Two things surprise me here: 1) the complete lack of Julia users and 2) the proliference of Java.</p>
+<p>I know Julia is a very young language, but I hear so much about it and it’s eponymous with JuPytR so I expected to see more users.</p>
+<p>As for Java, I’ve always thought of the modal data professional toolkit as: SQL for querying databases, R/Python for modeling and prototyping, and C++ for production code. I don’t know of any data scientists using Java. I’ll be curious to dig into this more.</p>
+</div>
+<div id="the-majority-of-data-professionals-on-kaggle-are-relatively-new-to-writing-code-for-data-analysis." class="section level3">
+<h3>The majority of data professionals on Kaggle are relatively new to writing code for data analysis.</h3>
+<p><img src="/posts/kaggle-survey/kaggle-survey_files/figure-html/coding_experience-1.png" width="672" /></p>
+<p>The majority of data professionals have less than five years of experience writing code for data analysis, which is consistent with the broadly young age distribution of data professionals. Like with age, my four years experience writing code for analysis make me pretty modal here as well.</p>
+<p>I’m curious about the typical experience levels of the job titles earlier. Let’s taking the same idiomatic median we used earlier to compute median income to see what the median experience category is for each job title.</p>
+<p><img src="/posts/kaggle-survey/kaggle-survey_files/figure-html/codingexpbytitle-1.png" width="672" /></p>
+<p>Perhaps unsurprisingly, data scientists, research scientists, data engineers, and statisticians clock in as the most experience writing code to analyze data, while students are the least experienced. It appears that my level of coding experience is typical for my job title among Kagglers.</p>
+</div>
+<div id="theres-a-shocking-amount-of-experienced-machine-learning-practioners" class="section level3">
+<h3>There’s a shocking amount of experienced machine learning practioners!</h3>
+<p><img src="/posts/kaggle-survey/kaggle-survey_files/figure-html/mlexp-1.png" width="672" /></p>
+<p>First, it should be noted that this question was only asked of those that said they had experience coding data analysis. I should note that I <em>believe</em> that the “&lt; 1 years” category includes data professionals with less than a year of ML experience with those with none. Kaggle offered the survey schema and question wording for this survey, but did not provide a list of all of the possible responses to each multiple-choice question. In previous years of this survey, “I have never studied machine learning but plan to learn in the future” was an offered response option. However, not a single response among the over 17,000 respondents in the 2019 survey indicates no experience, which seems unlikely to happen if no experience was an option.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> It seems more likely that “less than 1 years experience” captures both respondents with no experience and those with less than some number of months experience.</p>
+<p>Nonetheless, even discounting this to the maximum extent possible (that all &lt; 1 year responses indicate zero experience), the amount of ML experience in the community surprised me quite a bit.</p>
+<p>First of all, there’s no reason ex-ante that data analysis should entail fitting a model to data. Plenty of (I’d argue most) excellent analysis can be done through simple graphs and tables so there’s no strong reason to need it.</p>
+<p>Secondly, I would be surprised if every single Kaggler has the training (formal or informal) necessary for the application and interpretation of even simple machine learning models such as linear regression, nevermind more complex “black box” models like neural networks and support vector machines.</p>
+<p>Thirdly, the very definition of what counts as “machine learning” is contentious. Does linear regression even count? My gut says no, only the related linear model selection algorithms like MARS, lasso, and ridge regression count, but linear regression is considered to be a machine learning algorithm by many others<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> and is listed as a machine learning algorithm in this survey. By my own definition, I only have 2 years of machine learning experience, but if linear regression counts then I have 4 years experience, which, according this data, makes me a veteran!</p>
+<p>Luckily, another question asks respondents which machine learning algorithms they use on a regular basis, helping us to dig into this a bit more.</p>
+<p><img src="/posts/kaggle-survey/kaggle-survey_files/figure-html/mlalgs-1.png" width="672" /></p>
+<p>As expected, linear and logistic regression top the charts as the algorithms used on a regular basis by the most data professionals. Still, I’m surprised by how popular decision tree models and gradient boosting machines are. Perhaps a testament to how easy out-of-the-box versions of these algorithms have become to deploy due to the maturity of packages like sklearn, xgboost, caret, ranger, randomForest, among others.</p>
+<p>The ecology of machine learning platforms has developed to the degree that the practioners dilemma seems to be deciding <em>which</em> of the numerous high quality frameworks and packages to use.</p>
+<p>Luckily, we have data on this as well!</p>
+<p><img src="/posts/kaggle-survey/kaggle-survey_files/figure-html/mlframeworks-1.png" width="672" /></p>
+<p>With Python dominance comes sklearn dominance. Luckily for R users, TensorFlow and Keras remain the dominant framework for building neural networks. I expect PyTorch to continue to grow, but if it ever overtakes TensorFlow, I expect R implementations and interfaces to have matured by then.</p>
+<p>I also expect that the <a href="https://www.tidyverse.org/blog/2018/08/tidymodels-0-0-1/"><em>tidymodels</em></a> framework, developed by Max Kuhn, the author of “caret”, and other authors in the tidyverse…-verse to succeed <em>caret</em> to begin emerging as a leading machine learning framework for R users in 2020 as the ecosystem continues to mature.</p>
+</div>
+</div>
+</div>
+<div id="thats-all-folks" class="section level1">
+<h1>That’s all, folks!</h1>
+<p>As mentioned before, Part 2 of this series will be a comparing the results of this survey to the results of the two prior annual Kaggle surveys to see how the industry has changed over the last three years.</p>
+<p>Expect that post whenever I get around to cleaning those (far larger, in terms of questionnaire length) survey datasets.</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Retired respondents are not counted as Not Employed here, as they were instructed to choose the most similar to the one they held most recently<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>Some readers with an economics background may, rightfully, chime in that some frictional unemployment may actually be a sign of a healthy labor market that favors workers, as people may quit jobs knowing they’ll get a better job shortly, although I would argue that this is still consistent with the point that Kagglers are on the platform, in part, as a signal to employers<a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p>Even if it’s true that every single respondent has some experience with machine learning, even a miniscule amount of measurement error should result in at least one response indicating none<a href="#fnref3" class="footnote-back">↩</a></p></li>
+<li id="fn4"><p>including Hastie et al in <em>Elements of Statistical Learning</em>, one of the many bibles on the topic<a href="#fnref4" class="footnote-back">↩</a></p></li>
+</ol>
 </div></p>
 
     </div>
