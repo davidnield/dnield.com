@@ -1,6 +1,7 @@
 ---
 markup: mmark
-title: "The State of Data Science in America (Part 1): Results from the Latest Kaggle ML & DS Survey"
+title: "The State of Data Science (Part 1)"
+summary: "Results from the latest Kaggle Machine Learning & Data Science Survey (n = 19,717 respondents!)"
 author: "David Nield"
 date: 2019-11-19
 output:
@@ -326,7 +327,7 @@ Part 3 will use modeling try to answer three burning questions I have: 1. what *
 
 {{% alert note %}}
 
-Because I am based in the United States, as are most of the data science community with which I interact with regularly in-person or on social media, this analysis is limited to survey respondents living in the United States.
+Because I am based in the United States, as are most of the data science community with which I interact with regularly in-person or on social media, this analysis is limited to the 3085 survey respondents living in the United States.
 
 {{% /alert %}}
 
