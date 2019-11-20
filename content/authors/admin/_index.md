@@ -12,10 +12,10 @@ education:
     year: 2017
 email: ""
 interests:
-- Design-based Causal Inference
+- Design-based causal inference
 - Machine learning
-- Network Analysis
-- Data Visualization
+- Network analysis
+- Data visualization
 name: David Nield
 organizations:
 - name: Callisto Media
