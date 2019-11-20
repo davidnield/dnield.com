@@ -373,7 +373,7 @@ Be wary here, as the bin widths of these ages are changing across the x-axis. Un
 
 One alternative explanation for these data is that many Kagglers are early career data professionals who use or used Kaggle to build a professional portfolio for the job market. Older data professionals may be underrepresented here.
 
-### Underrepresentation of Women Persists Across Age
+### Underrepresentation of women persists across cohort
 ```{r agebygender, echo = FALSE}
 age_gender_marginals <- current %>% 
   filter(gender %in% c("Male", "Female")) %>% 
@@ -500,7 +500,7 @@ Another shocking finding to me was sheer amount of data scientists in the survey
 
 Additionally, the sheer number of students represented in the survey seems consistent with my hypothesis that many Kagglers may be on the platform to build up an data analysis portfolio for the job market. The percentage (3.6%) of "Not Employed" respondents seems consistent with this as well.^[Retired respondents are not counted as Not Employed here, as they were instructed to choose the most similar to the one they held most recently] I suspect the true unemployment rate for data professionals is, in reality, lower than the national unemployment rate (3.7% as of this writing), not almost identical to it.^[Some readers with an economics background may, rightfully, chime in that some frictional unemployment may actually be a sign of a healthy labor market that favors workers, as people may quit jobs knowing they'll get a better job shortly, although I would argue that this is still consistent with the point that Kagglers are on the platform, in part, as a signal to employers]
 
-### Data Scientists Make the Big Bucks
+### Data scientists make the big bucks
 ```{r compensation, echo = FALSE, warning = FALSE}
 current %>% 
   filter(!is.na(job_title)) %>% 
