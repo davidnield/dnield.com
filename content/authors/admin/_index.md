@@ -40,6 +40,6 @@ user_groups:
 - Visitors
 ---
 
-I am a data analyst at Callisto Media, a data-driven book publishing company based in the San Francisco Bay Area. I identify product opportunities and develop forecasts, KPIs, research workflows, and data infrastructure.
+I am a data analyst at Callisto Media, a data-driven book publishing company based in the San Francisco Bay Area. I identify product opportunities and develop predictive models, KPIs, research workflows, and data infrastructure.
 
 Previously, I was a PhD student in Political Science at the University of California, Berkeley, where I conducted research on topics ranging from "small world" network dynamics, campaign finance networks, and prejudice against Muslim-Americans.
