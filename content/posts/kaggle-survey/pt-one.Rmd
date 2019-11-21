@@ -103,7 +103,7 @@ current <- current %>%
          datascicourses_kaggle = Q13_Part_6,
          datascicourses_fastai = Q13_Part_7,
          datascicourses_udemy = Q13_Part_8,
-         datascicourse_linkedin = Q13_Part_9,
+         datascicourses_linkedin = Q13_Part_9,
          datascicourses_university = Q13_Part_10,
          datascicourses_none = Q13_Part_11,
          datascicourses_other = Q13_Part_12,
@@ -313,6 +313,8 @@ varlabels(current) <- current[1,]
 current <- current %>% 
   filter(!str_detect(surveyduration, "Duration"),
          country_of_residence == "United States of America")
+
+# write_csv(current, "2019_cleaned.csv")
 ```
 
 Kaggle has released the data for their third annual [*Machine Learning and Data Science Survey*](https://www.kaggle.com/c/kaggle-survey-2019/overview). I've only recently joined the Kaggle platform as I've transitioned from academia to private industry, so this seems to be an excellent opportunity to explore the backgrounds of my new data science peers.
@@ -671,13 +673,11 @@ current %>%
   theme_ed
 ```
 
+Unfortunately, Julia wasn't offered as an option on this survey, and I'm not sure why. It was asked about in previous iterations of this survey, and Julia has continued to mature as a language.
+
 Much to my chagrin as an R user, Python dominates as the most coding language used by data professional. SQL comes next, followed by R, then Java, followed by a long tail of other languages.
 
-Two things surprise me here: 1) the complete lack of Julia users and 2) the proliference of Java.
-
-I know Julia is a very young language, but I hear so much about it and it's eponymous with JuPytR so I expected to see more users.
-
-As for Java, I've always thought of the modal data professional toolkit as: SQL for querying databases, R/Python for modeling and prototyping, and C++ for production code. I don't know of any data scientists using Java. I'll be curious to dig into this more.
+I'm surprised by the proliference of Java. I've always thought of the modal data professional toolkit as: SQL for querying databases, R/Python for modeling and prototyping, and C++ for production code. I don't know of any data scientists using Java. I'll be curious to dig into this more.
 
 ## The majority of data professionals on Kaggle are relatively new to writing code for data analysis.
 ```{r coding_experience, echo = FALSE}
