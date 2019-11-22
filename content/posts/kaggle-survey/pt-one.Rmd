@@ -57,9 +57,7 @@ gender_cols <- c("Male" = "#00BFC4",
                  "Prefer not to say" = "#7CAE00",
                  "Prefer to self-describe" = "#C77CFF")
 
-current <- read_csv("2019_multiple_choice_responses.csv")
-
-current <- current %>% 
+current <- read_csv("2019_multiple_choice_responses.csv") %>% 
   rename(surveyduration = `Time from Start to Finish (seconds)`,
          age = Q1,
          gender = Q2,
@@ -675,7 +673,7 @@ current %>%
 
 Unfortunately, Julia wasn't offered as an option on this survey, and I'm not sure why. It was asked about in previous iterations of this survey, and Julia has continued to mature as a language.
 
-Much to my chagrin as an R user, Python dominates as the most coding language used by data professional. SQL comes next, followed by R, then Java, followed by a long tail of other languages.
+Much to my chagrin as an R user, Python dominates as the most coding language used by data professionals. SQL comes next, followed by R, then Java, followed by a long tail of other languages.
 
 I'm surprised by the proliference of Java. I've always thought of the modal data professional toolkit as: SQL for querying databases, R/Python for modeling and prototyping, and C++ for production code. I don't know of any data scientists using Java. I'll be curious to dig into this more.
 

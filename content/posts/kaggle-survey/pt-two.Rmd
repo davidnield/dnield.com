@@ -59,16 +59,7 @@ gender_cols <- c("Male" = "#00BFC4",
 
 current <- read_csv("2019_cleaned.csv")
 
-oya <- read_csv("2018_multipleChoiceResponses.csv")
-
-varlabels(oya) <- oya[1,]
-
-varlabels(oya)["Q11_Part_1"]
-
-names(current)
-names(oya)
-
-oya <- oya %>% 
+oya <- read_csv("2018_multipleChoiceResponses.csv") %>% 
   select(-contains("_OTHER_TEXT")) %>% 
   rename(surveyduration = `Time from Start to Finish (seconds)`,
          gender = Q1,
@@ -89,11 +80,11 @@ oya <- oya %>%
          role_none_of_above = Q11_Part_6,
          role_other = Q11_Part_7,
          primarytool = Q12_MULTIPLE_CHOICE,
-         primarytool_basic = Q12_Part_1,
-         primarytool_advanced = Q12_Part_2,
-         primarytool_bi = Q12_Part_3,
-         primarytool_devenv = Q12_Part_4,
-         primarytool_cloud = Q12_Part_5,
+         primarytool_basic = Q12_Part_1_TEXT,
+         primarytool_advanced = Q12_Part_2_TEXT,
+         primarytool_bi = Q12_Part_3_TEXT,
+         primarytool_devenv = Q12_Part_4_TEXT,
+         primarytool_cloud = Q12_Part_5_TEXT,
          ide_jupyter = Q13_Part_1,
          ide_rstudio = Q13_Part_2,
          ide_pycharm = Q13_Part_3,
@@ -331,7 +322,6 @@ oya <- oya %>%
          analysisshare_modelbuilding = Q34_Part_4,
          analysisshare_modelimplementation = Q34_Part_5,
          analysisshare_communicatinginsights = Q34_Part_6,
-         analysisshare_other = Q34_Part_7,
          trainingshare_selftaught = Q35_Part_1,
          trainingshare_onlinecourse = Q35_Part_2,
          trainingshare_work = Q35_Part_3,
@@ -388,6 +378,77 @@ oya <- oya %>%
          share_explore_unfair_bias = Q43,
          unfairbiasdifficulty_collection_analysis_disconnect = Q44_Part_1,
          unfairbiasdifficulty_identifying_targeted_group = Q44_Part_2,
-         
-         )
+         unfairbiasdifficulty_data_quantity_targeted_group = Q44_Part_3,
+         unfairbiasdifficulty_identifying_eval_metrics = Q44_Part_4,
+         unfairbiasdifficulty_never_found_difficult = Q44_Part_5,
+         unfairbiasdifficulty_never_performed_task = Q44_Part_6,
+         whenexploremodel_important_production_model = Q45_Part_1,
+         whenexploremodel_production_implementation = Q45_Part_2,
+         whenexploremodel_evaluating_model_for_production = Q45_Part_3,
+         whenexploremodel_model_designed_for_insights = Q45_Part_4,
+         whenexploremodel_first_exploring_model_dataset = Q45_Part_5,
+         whenexploremodel_do_not_explore_interpret_model = Q45_Part_6,
+         share_explore_model_insights = Q46,
+         modelinterpretationmetrics_individual_coefficients = Q47_Part_1,
+         modelinterpretationmetrics_feature_correlations = Q47_Part_2,
+         modelinterpretationmetrics_feature_importance = Q47_Part_3,
+         modelinterpretationmetrics_decision_boundaries = Q47_Part_4,
+         modelinterpretationmetrics_partial_dependence_plots = Q47_Part_5,
+         modelinterpretationmetrics_dimension_reduction = Q47_Part_6,
+         modelinterpretationmetrics_attention_mapping = Q47_Part_7,
+         modelinterpretationmetrics_plot_predicted_vs_actual = Q47_Part_8,
+         modelinterpretationmetrics_print_decision_tree = Q47_Part_9,
+         modelinterpretationmetrics_sensitivity_analysis = Q47_Part_10,
+         modelinterpretationmetrics_lime_functions = Q47_Part_11,
+         modelinterpretationmetrics_eli5_functions = Q47_Part_12,
+         modelinterpretationmetrics_shap_functions = Q47_Part_13,
+         modelinterpretationmetrics_none = Q47_Part_14,
+         modelinterpretationmetrics_other = Q47_Part_15,
+         modelinterpretationmetrics_other_text = Q47_Part_16,
+         consider_ml_methods_black_boxes = Q48,
+         reproducabilitytools_github_code = Q49_Part_1,
+         reproducabilitytools_github_code_and_data = Q49_Part_2,
+         reproducabilitytools_hosted_service = Q49_Part_3,
+         reproducabilitytools_containers = Q49_Part_4,
+         reproducabilitytools_virtual_machines = Q49_Part_5,
+         reproducabilitytools_document_code = Q49_Part_6,
+         reproducabilitytools_readable_code = Q49_Part_7,
+         reproducabilitytools_define_random_seeds = Q49_Part_8,
+         reproducabilitytools_relative_file_paths = Q49_Part_9,
+         reproducabilitytools_dependency_text_file = Q49_Part_10,
+         reproducabilitytools_none = Q49_Part_11,
+         reproducabilitytools_other = Q49_Part_12,
+         reproducabilitybarriers_expensive = Q50_Part_1,
+         reproducabilitybarriers_timeconsuming = Q50_Part_2,
+         reproducabilitybarriers_tootechnical = Q50_Part_3,
+         reproducabilitybarriers_afraidoftheft = Q50_Part_4,
+         reproducabilitybarriers_noincentive = Q50_Part_5,
+         reproducabilitybarriers_neverconsideredit = Q50_Part_6,
+         reproducabilitybarriers_noneofabove = Q50_Part_7,
+         reproducabilitybarriers_other = Q50_Part_8)
+
+varlabels(oya) <- oya[1,]
+
+oya <- oya %>% 
+  filter(!str_detect(surveyduration, "Duration"),
+         country_of_residence == "United States of America")
+
+tya <- read_csv("2017_multipleChoiceResponses.csv")
+
+tya %>% 
+  rename(gender = GenderSelect,
+         country_of_residence = Country,
+         age = Age,
+         employment_status = EmploymentStatus,
+         student_status = StudentStatus,
+         job_title = CurrentJobTitleSelect,
+         employer_industry = EmployerIndustry,
+         recommended_first_language = LanguageRecommendationSelect,
+         publicdatasource = PublicDatasetsSelect,
+         learningplatform = LearningPlatformSelect,
+         datascimedia = BlogsPodcastsNewslettersSelect,
+         datascicourses = CoursePlatformSelect,
+         education = FormalEducation,
+         major = MajorSelect) %>% 
+  filter(country_of_residence == "United States")
 ```
