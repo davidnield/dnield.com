@@ -3,6 +3,8 @@ title: "announcement-network"
 author: "David Nield"
 date: "11/22/2019"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
@@ -11,106 +13,56 @@ knitr::opts_chunk$set(echo = TRUE)
 require(pacman)
 p_load(rtweet, tidyverse)
 
-dn <- lookup_users("dn")
+dn <- lookup_users("DRNield")
 
 dn_flw <- get_followers("DRNield",
                        n = dn$followers_count,
                        retryonratelimit = TRUE)
 
+
 dn_flw_data <- lookup_users(dn_flw$user_id)
 
-announcement_rters <- get_retweeters(status_id = '1197682377159393283')
+dn_flw_under5k <- dn_flw_data %>% 
+  filter(followers_count <= 5000)
 
-announcement_rters_data <- lookup_users(announcement_rters$user_id)
+dn_flw_flw <- lst()
 
-# announcement_likes <- get_favorites(dn_flw$user_id,
-#                                     n = 20)
-# 
-# dn_flw_flw_15 <- dn_flw$user_id[1:15] %>% 
-#   map(~ get_followers(.))
-# 
-# Sys.sleep(60 * 15)
-# 
-# dn_flw_flw_30 <- dn_flw$user_id[16:30] %>% 
-#   map(~ get_followers(.))
-# 
-# Sys.sleep(60 * 15)
-# 
-# dn_flw_flw_45 <- dn_flw$user_id[31:45] %>% 
-#   map(~ get_followers(.))
-# 
-# Sys.sleep(60 * 15)
+lims <- tibble(start = seq(1, 333, by = 15),
+            end = c(seq(15, 333, by = 15), 333))
 
-dn_flw_flw_60 <- dn_flw$user_id[46:60] %>% 
-  map(~ get_followers(.))
+for (i in 1:nrow(lims)) {
+  results <- dn_flw$user_id[lims$start[i]:lims$end[i]] %>%
+    map(~ get_followers(.))
+  
+  dn_flw_flw <- c(dn_flw_flw, results)
+  
+  Sys.sleep(60 * 16)
+}
 
-Sys.sleep(60 * 15)
+edgelist <- c(lst('2830195082' = dn_flw),
+              dn_flw_flw) %>% 
+  enframe() %>% 
+  unnest() %>% 
+  rename(user = name,
+         follower = user_id)
 
-# dn_flw_flw_75 <- dn_flw$user_id[61:75] %>% 
-#   map(~ get_followers(.))
-# 
-# Sys.sleep(60 * 15)
+rate_limit() %>% 
+   arrange(reset)
 
-dn_flw_flw_90 <- dn_flw$user_id[76:90] %>% 
-  map(~ get_followers(.))
+dn_flw_flw_data_1 <- lookup_users(unique_users[1:90000])
 
-Sys.sleep(60 * 15)
+Sys.sleep(60 * 16)
 
-# dn_flw_flw_100 <- dn_flw$user_id[91:100] %>% 
-#   map(~ get_followers(.))
-# 
-# Sys.sleep(60 * 15)
+dn_flw_flw_data_2 <- unique_users[90001:180000]
 
-dn_flw_flw_115 <- dn_flw$user_id[101:115] %>% 
-  map(~ get_followers(.))
+Sys.sleep(60 * 16)
 
-Sys.sleep(60 * 15)
+dn_flw_flw_data_3 <- unique_users[180001:270000]
 
-dn_flw_flw_130 <- dn_flw$user_id[116:130] %>% 
-  map(~ get_followers(.))
+Sys.sleep(60 * 16)
 
-Sys.sleep(60 * 15)
-
-dn_flw_flw_145 <- dn_flw$user_id[131:145] %>% 
-  map(~ get_followers(.))
-
-Sys.sleep(60 * 15)
-
-dn_flw_flw_160 <- dn_flw$user_id[146:160] %>% 
-  map(~ get_followers(.))
-
-Sys.sleep(60 * 15)
-
-dn_flw_flw_175 <- dn_flw$user_id[161:175] %>% 
-  map(~ get_followers(.))
-
-Sys.sleep(60 * 15)
-
-dn_flw_flw_190 <- dn_flw$user_id[176:190] %>% 
-  map(~ get_followers(.))
-
-Sys.sleep(60 * 15)
-
-dn_flw_flw_205 <- dn_flw$user_id[191:205] %>% 
-  map(~ get_followers(.))
-
-Sys.sleep(60 * 15)
-
-dn_flw_flw_220 <- dn_flw$user_id[191:220] %>% 
-  map(~ get_followers(.))
-
-Sys.sleep(60 * 15)
-
-dn_flw_flw_230 <- dn_flw$user_id[221:230] %>% 
-  map(~ get_followers(.))
+dn_flw_flw_data_4 <- unique_users[270001:293060]
 
 
-save.image("twitterdata.RData")
 
-
-dn_flw_data %>% 
-  select(screen_name, followers_count) %>% 
-  View()
-  select(followers_count) %>% 
-  arrange(desc(followers_count))
 ```
