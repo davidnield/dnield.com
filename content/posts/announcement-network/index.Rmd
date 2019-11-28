@@ -63,6 +63,7 @@ Sys.sleep(60 * 16)
 
 dn_flw_flw_data_4 <- unique_users[270001:293060]
 
+write_rds(dn_flw_flw, "under5kfollowers.rds")
 
 
 ```
