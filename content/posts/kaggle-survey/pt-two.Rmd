@@ -61,7 +61,7 @@ current <- read_csv("2019_cleaned.csv")
 
 oya <- read_csv("2018_multipleChoiceResponses.csv") %>% 
   select(-contains("_OTHER_TEXT")) %>% 
-  rename(surveyduration = `Time from Start to Finish (seconds)`,
+  transmute(surveyduration = `Time from Start to Finish (seconds)`,
          gender = Q1,
          age = Q2,
          country_of_residence = Q3,
@@ -435,20 +435,62 @@ oya <- oya %>%
 
 tya <- read_csv("2017_multipleChoiceResponses.csv")
 
+tya <- tya %>% 
+  filter(Country == "United States",
+         CompensationCurrency == "USD" | is.na(CompensationCurrency)) %>% 
+  transmute(
+    id = as.character(1:nrow(.)),
+    gender = GenderSelect,
+    country_of_residence = Country,
+    compensation_currency = CompensationCurrency,
+    age = Age,
+    employment_status = EmploymentStatus,
+    student_status = StudentStatus,
+    job_title = CurrentJobTitleSelect,
+    employer_industry = EmployerIndustry,
+    recommended_first_language = LanguageRecommendationSelect,
+    publicdatasource = PublicDatasetsSelect,
+    learningplatform = LearningPlatformSelect,
+    datascimedia = BlogsPodcastsNewslettersSelect,
+    datascicourses = CoursePlatformSelect,
+    education = FormalEducation,
+    major = MajorSelect,
+    yearly_compensation = CompensationAmount,
+    work_tools = WorkToolsSelect)
+
 tya %>% 
-  rename(gender = GenderSelect,
-         country_of_residence = Country,
-         age = Age,
-         employment_status = EmploymentStatus,
-         student_status = StudentStatus,
-         job_title = CurrentJobTitleSelect,
-         employer_industry = EmployerIndustry,
-         recommended_first_language = LanguageRecommendationSelect,
-         publicdatasource = PublicDatasetsSelect,
-         learningplatform = LearningPlatformSelect,
-         datascimedia = BlogsPodcastsNewslettersSelect,
-         datascicourses = CoursePlatformSelect,
-         education = FormalEducation,
-         major = MajorSelect) %>% 
-  filter(country_of_residence == "United States")
+      select(id, work_tools) %>% 
+      mutate(work_tools = str_split(work_tools, pattern = ",")) %>% 
+      unnest() %>%
+      table() %>% 
+      as_tibble() %>% 
+  spread(work_tools, n)
+
+tya %>% 
+  left_join(
+    tya %>% 
+      select(id, work_tools) %>% 
+      mutate(work_tools = str_split(work_tools, pattern = ",")) %>% 
+      unnest() %>%
+      table() %>% 
+      as_tibble() %>% 
+      spread(work_tools, n)
+  ) %>% 
+  mutate(language_R = R,
+         language_python = Python,
+         language_sql = SQL,
+         language_java = Java,
+         language_c_cpp = `C/C++`,
+         language_matlab = `MATLAB/Octave`
+         )
+
+current %>% 
+  select(starts_with("language_")) %>% 
+  names()
+
+oya %>% 
+  select(starts_with("language_")) %>% 
+  names()
+
+names(oya)
 ```
