@@ -124,6 +124,7 @@
 &lt;li&gt;&lt;a href=&#34;#languages&#34;&gt;Languages&lt;/a&gt;&lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;#pythons-meteoric-rise&#34;&gt;Python’s meteoric rise&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#wrapping-up&#34;&gt;Wrapping up&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/div&gt;
 
@@ -192,6 +193,10 @@
 &lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-two_files/figure-html/languages-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;About two-thirds of data professionals who program today are using Python, this is a 50% increase relative to the proportion using Python in 2017. Likewise, SQL use has increased 30% during the same time, while R use has remained fairly stable at about 33% and all other languages stable at about 10%.&lt;/p&gt;
 &lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;wrapping-up&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Wrapping up&lt;/h1&gt;
+&lt;p&gt;So there you have it.&lt;/p&gt;
 &lt;/div&gt;&lt;/p&gt;
 </description>
     </item>

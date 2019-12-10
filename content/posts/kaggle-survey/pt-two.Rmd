@@ -679,9 +679,11 @@ tsdata %>%
   mutate(prop = n/sum(n)) %>% 
   ungroup() %>% 
   ggplot(aes(x = year, y = prop, fill = gender)) +
-  geom_bar(position = 'stack', stat = 'identity') +
+  geom_bar(position = 'stack', stat = 'identity',
+           width = 0.5) +
   scale_y_continuous(label = scales::percent) +
-  labs(x = 'Year',
+  labs(title = "Gender composition of data professionals by year",
+       x = 'Year',
        y = 'Percent',
        fill = 'Gender') +
   theme_ed
@@ -701,7 +703,8 @@ tsdata %>%
   geom_line() +
   geom_label() +
   scale_y_continuous(label = scales::percent) +
-  labs(x = "Year",
+  labs(title = "Age composition of data professionals by year",
+       x = "Year",
        y = "Percent") +
   theme_ed +
   theme(legend.position = "")
@@ -724,7 +727,8 @@ tsdata %>%
   geom_label() +
   scale_y_continuous(label = scales::percent) +
   scale_color_brewer(palette = 'Set1') +
-  labs(x = "Year",
+  labs(title = "Highest educational attainment of data professionals by year",
+       x = "Year",
        y = "Percent") +
   theme_ed +
   theme(legend.position = "")
@@ -746,7 +750,8 @@ tsdata %>%
   geom_line() +
   geom_label() +
   scale_y_continuous(label = scales::percent) +
-  labs(x = "Year",
+  labs(title = "Job title composition of data professionals by year",
+       x = "Year",
        y = "Percent") +
   theme_ed +
   theme(legend.position = "")
@@ -779,7 +784,8 @@ tsdata %>%
   geom_label_repel(min.segment.length = 1e10, direction = 'y', box.padding = 0, seed = 2) +
   scale_y_continuous(label = scales::dollar,
                      limits = c(50000, 150000)) +
-  labs(x = "Year",
+  labs(title = "Typical annual compensation of data professionals by title and year",
+       x = "Year",
        y = "Median Income") +
   theme_ed +
   theme(legend.position = "")
@@ -826,10 +832,14 @@ tsdata %>%
                    nudge_x = 0.2) +
   scale_y_continuous(label = scales::percent,
                      limits = c(0, 0.80)) +
-  labs(x = "Year",
+  labs(title = "Percent of data professionals who code that use the language at work, by year",
+       x = "Year",
        y = "Percent") +
   theme_ed +
   theme(legend.position = "")
 ```
 
 About two-thirds of data professionals who program today are using Python, this is a 50% increase relative to the proportion using Python in 2017. Likewise, SQL use has increased 30% during the same time, while R use has remained fairly stable at about 33% and all other languages stable at about 10%.
+
+# Wrapping up
+So there you have it. 
