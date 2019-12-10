@@ -5,7 +5,7 @@
     <link>/tags/</link>
       <atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     <description>Tags</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© David Nield, 2019</copyright><lastBuildDate>Tue, 19 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© David Nield, 2019</copyright><lastBuildDate>Tue, 10 Dec 2019 00:00:00 +0000</lastBuildDate>
     <image>
       <url>/img/portrait.jpg</url>
       <title>Tags</title>
@@ -15,7 +15,7 @@
     <item>
       <title>data science</title>
       <link>/tags/data-science/</link>
-      <pubDate>Tue, 19 Nov 2019 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 10 Dec 2019 00:00:00 +0000</pubDate>
       <guid>/tags/data-science/</guid>
       <description></description>
     </item>
@@ -23,7 +23,7 @@
     <item>
       <title>data visualization</title>
       <link>/tags/data-visualization/</link>
-      <pubDate>Tue, 19 Nov 2019 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 10 Dec 2019 00:00:00 +0000</pubDate>
       <guid>/tags/data-visualization/</guid>
       <description></description>
     </item>
@@ -31,7 +31,7 @@
     <item>
       <title>survey analysis</title>
       <link>/tags/survey-analysis/</link>
-      <pubDate>Tue, 19 Nov 2019 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 10 Dec 2019 00:00:00 +0000</pubDate>
       <guid>/tags/survey-analysis/</guid>
       <description></description>
     </item>

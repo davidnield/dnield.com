@@ -5,7 +5,7 @@
     <link>/categories/</link>
       <atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
     <description>Categories</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© David Nield, 2019</copyright><lastBuildDate>Tue, 19 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© David Nield, 2019</copyright><lastBuildDate>Tue, 10 Dec 2019 00:00:00 +0000</lastBuildDate>
     <image>
       <url>/img/portrait.jpg</url>
       <title>Categories</title>
@@ -15,7 +15,7 @@
     <item>
       <title>Kaggle</title>
       <link>/categories/kaggle/</link>
-      <pubDate>Tue, 19 Nov 2019 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 10 Dec 2019 00:00:00 +0000</pubDate>
       <guid>/categories/kaggle/</guid>
       <description></description>
     </item>

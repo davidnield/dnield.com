@@ -5,12 +5,103 @@
     <link>/tags/survey-analysis/</link>
       <atom:link href="/tags/survey-analysis/index.xml" rel="self" type="application/rss+xml" />
     <description>survey analysis</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© David Nield, 2019</copyright><lastBuildDate>Tue, 19 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© David Nield, 2019</copyright><lastBuildDate>Tue, 10 Dec 2019 00:00:00 +0000</lastBuildDate>
     <image>
       <url>/img/portrait.jpg</url>
       <title>survey analysis</title>
       <link>/tags/survey-analysis/</link>
     </image>
+    
+    <item>
+      <title>The State of Data Science (Part 2)</title>
+      <link>/posts/kaggle-survey/pt-two/</link>
+      <pubDate>Tue, 10 Dec 2019 00:00:00 +0000</pubDate>
+      <guid>/posts/kaggle-survey/pt-two/</guid>
+      <description>&lt;div id=&#34;TOC&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#demographics&#34;&gt;Demographics&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#the-data-field-today-is-as-disproportionately-male-as-its-ever-been.&#34;&gt;The data field today is as disproportionately male as its ever been.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#no-clear-trend-in-age-composition&#34;&gt;No clear trend in age composition&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#the-increasingly-educated-data-workforce&#34;&gt;The increasingly educated data workforce&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#titles-and-compensation&#34;&gt;Titles and Compensation&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#the-ascendency-of-the-data-scientist-title&#34;&gt;The ascendency of the “data scientist” title&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#data-scientists-compensation-has-increased-even-as-the-title-has-become-more-widespread&#34;&gt;Data scientists’ compensation has increased even as the title has become more widespread&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#languages&#34;&gt;Languages&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#pythons-meteoric-rise&#34;&gt;Python’s meteoric rise&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Kaggle has released the data for their third annual &lt;a href=&#34;https://www.kaggle.com/c/kaggle-survey-2019/overview&#34;&gt;&lt;em&gt;Machine Learning and Data Science Survey&lt;/em&gt;&lt;/a&gt;. I’ve only recently joined the Kaggle platform as I’ve transitioned from academia to private industry, so this seems to be an excellent opportunity to explore the backgrounds of my new data science peers.&lt;/p&gt;
+&lt;p&gt;This is the second of the three part series exploring this data.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://dnield.com/posts/kaggle-survey/pt-one/&#34;&gt;Part 1&lt;/a&gt; explored this year’s survey results.&lt;/p&gt;
+&lt;p&gt;Part 2, this post, brings in survey data from the first two years of this annual survey to investigate how the field has changed over the last three years in the United States.&lt;/p&gt;
+&lt;p&gt;Part 3 will use modeling try to answer three burning questions I have: 1. what &lt;em&gt;is&lt;/em&gt; the difference between the variety of different job titles in the Data field, 2. what factors predict annual compensation, and 3. how unique different combinations of characteristics in the field to explore how unique I am, or are you are, in the data science community.&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;alert alert-note&#34;&gt;
+  &lt;div&gt;
+    &lt;p&gt;&lt;/p&gt;
+&lt;p&gt;Because I am based in the United States, as are most of the data science community with which I interact with regularly in-person or on social media, this analysis is limited to respondents living in the United States.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/p&gt;
+&lt;p&gt;Let’s get started!&lt;/p&gt;
+&lt;div id=&#34;demographics&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Demographics&lt;/h1&gt;
+&lt;div id=&#34;the-data-field-today-is-as-disproportionately-male-as-its-ever-been.&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;The data field today is as disproportionately male as its ever been.&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-two_files/figure-html/gender-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Perhaps unsurprising given how disportionately male we found the field to be in &lt;a href=&#34;https://dnield.com/posts/kaggle-survey/pt-one/&#34;&gt;part 1&lt;/a&gt;, but there appears to be no trend towards increasing gender diversity among data professionals.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;no-clear-trend-in-age-composition&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;No clear trend in age composition&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-two_files/figure-html/age-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Survey data doesn’t seem to show a clear trend in the age composition of data professionals. This isn’t to say that the composition is stable or unchanging. As always, it should be noted that this survey is a not a random sample of data professionals, but a voluntary response sample survey of Kaggle users, so the composition may change widely based on how Kaggle chooses to promote the survey.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;the-increasingly-educated-data-workforce&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;The increasingly educated data workforce&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-two_files/figure-html/education-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The plot above shows the highest education attainment of respondents to all three years’ surveys. The number of data professionals holding a Master’s degree shocked me in part 1, but the data show that this has been an ongoing trend, while the percent of data professionals holding professional degrees, or only some college education or a high school diploma is near zero. Whether this trend towards a more educated data workforce is due to former Bachelor’s holders seeking and attaining higher education or due to new hires disporportionately coming out of grad school is unclear.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;titles-and-compensation&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Titles and Compensation&lt;/h1&gt;
+&lt;div id=&#34;the-ascendency-of-the-data-scientist-title&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;The ascendency of the “data scientist” title&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-two_files/figure-html/jobtitles-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The proportion of data professionals on Kaggle with the job title “data scientist” has increased 30% relative to 2017: from 30% to 40%. And this doesn’t seem to be simple title changing from former “data analysts”, who also have increased as a proportion of employed Kaggle respondents.&lt;/p&gt;
+&lt;p&gt;The greatest decline in relative share of the data workforce are among engineers (which include all titles with “engineer” in their title, from data engineers to SWEs) and researchers (which include all titles with “research” in their title, with the exception of research assistants, which were excluded because these positions are typically not careers).&lt;/p&gt;
+&lt;p&gt;More difficult to see here is the relative decline in the “Statistician” title, which started at a barely registerable 3.3%, but has since fallen to 2.4%.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;data-scientists-compensation-has-increased-even-as-the-title-has-become-more-widespread&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Data scientists’ compensation has increased even as the title has become more widespread&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-two_files/figure-html/income-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The above plot reports the typical (median) compensation of respondents with each job title. The responses are an ordinal factor so the data is an idomatic median: arrange by the ordered factor, and take the median value. Given a vector of even length and the middle two values are two different categories (e.g. $80,000-89,999 and $90,000-99,999), the lower value will be used.&lt;/p&gt;
+&lt;p&gt;The function for this implementation is below, &lt;a href=&#34;https://stackoverflow.com/questions/7925102/idiomatic-method-of-finding-the-median-of-an-ordinal&#34;&gt;with credit to Hong Ooi and Richie Cotton from StackOverflow.&lt;/a&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;median.ordered &amp;lt;- function(x) {
+  levs &amp;lt;- levels(x)
+  m &amp;lt;- median(as.integer(x), na.rm = TRUE)
+  if(floor(m) != m) {
+  m &amp;lt;- floor(m)
+  }
+  ordered(m, labels = levs, levels = seq_along(levs))
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;On the whole, the wages of data professionals appear to be on the rise! The median compensation for respondents of every job title except for Engineers appears to be higher in 2019 than it was in 2017 (and median Engineer compensation remaining steady at a very respectable $100,000 to $125,000). Data scientists in particular have broken away to typically make $125,000 to $150,000.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;languages&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Languages&lt;/h1&gt;
+&lt;div id=&#34;pythons-meteoric-rise&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Python’s meteoric rise&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-two_files/figure-html/languages-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;About two-thirds of data professionals who program today are using Python, this is a 50% increase relative to the proportion using Python in 2017. Likewise, SQL use has increased 30% during the same time, while R use has remained fairly stable at about 33% and all other languages stable at about 10%.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>The State of Data Science (Part 1)</title>
@@ -168,97 +259,6 @@
 &lt;li id=&#34;fn3&#34;&gt;&lt;p&gt;Even if it’s true that every single respondent has some experience with machine learning, even a miniscule amount of measurement error should result in at least one response indicating none&lt;a href=&#34;#fnref3&#34; class=&#34;footnote-back&#34;&gt;↩&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
 &lt;li id=&#34;fn4&#34;&gt;&lt;p&gt;including Hastie et al in &lt;em&gt;Elements of Statistical Learning&lt;/em&gt;, one of the many bibles on the topic&lt;a href=&#34;#fnref4&#34; class=&#34;footnote-back&#34;&gt;↩&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>The State of Data Science (Part 2)</title>
-      <link>/posts/kaggle-survey/pt-two/</link>
-      <pubDate>Tue, 19 Nov 2019 00:00:00 +0000</pubDate>
-      <guid>/posts/kaggle-survey/pt-two/</guid>
-      <description>&lt;div id=&#34;TOC&#34;&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#demographics&#34;&gt;Demographics&lt;/a&gt;&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#the-data-field-today-is-as-disproportionately-male-as-its-ever-been.&#34;&gt;The data field today is as disproportionately male as its ever been.&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#no-clear-trend-in-age-composition&#34;&gt;No clear trend in age composition&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#the-increasingly-educated-data-workforce&#34;&gt;The increasingly educated data workforce&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#titles-and-compensation&#34;&gt;Titles and Compensation&lt;/a&gt;&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#the-ascendency-of-the-data-scientist-title&#34;&gt;The ascendency of the “data scientist” title&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#data-scientists-compensation-has-increased-even-as-the-title-has-become-more-widespread&#34;&gt;Data scientists’ compensation has increased even as the title has become more widespread&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#languages&#34;&gt;Languages&lt;/a&gt;&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#pythons-meteoric-rise&#34;&gt;Python’s meteoric rise&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Kaggle has released the data for their third annual &lt;a href=&#34;https://www.kaggle.com/c/kaggle-survey-2019/overview&#34;&gt;&lt;em&gt;Machine Learning and Data Science Survey&lt;/em&gt;&lt;/a&gt;. I’ve only recently joined the Kaggle platform as I’ve transitioned from academia to private industry, so this seems to be an excellent opportunity to explore the backgrounds of my new data science peers.&lt;/p&gt;
-&lt;p&gt;This is the second of the three part series exploring this data.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://dnield.com/posts/kaggle-survey/pt-one/&#34;&gt;Part 1&lt;/a&gt; explored this year’s survey results.&lt;/p&gt;
-&lt;p&gt;Part 2, this post, brings in survey data from the first two years of this annual survey to investigate how the field has changed over the last three years in the United States.&lt;/p&gt;
-&lt;p&gt;Part 3 will use modeling try to answer three burning questions I have: 1. what &lt;em&gt;is&lt;/em&gt; the difference between the variety of different job titles in the Data field, 2. what factors predict annual compensation, and 3. how unique different combinations of characteristics in the field to explore how unique I am, or are you are, in the data science community.&lt;/p&gt;
-&lt;p&gt;&lt;div class=&#34;alert alert-note&#34;&gt;
-  &lt;div&gt;
-    &lt;p&gt;&lt;/p&gt;
-&lt;p&gt;Because I am based in the United States, as are most of the data science community with which I interact with regularly in-person or on social media, this analysis is limited to respondents living in the United States.&lt;/p&gt;
-&lt;p&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;/div&gt;
-&lt;/div&gt;
-&lt;/p&gt;
-&lt;p&gt;Let’s get started!&lt;/p&gt;
-&lt;div id=&#34;demographics&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;Demographics&lt;/h1&gt;
-&lt;div id=&#34;the-data-field-today-is-as-disproportionately-male-as-its-ever-been.&#34; class=&#34;section level2&#34;&gt;
-&lt;h2&gt;The data field today is as disproportionately male as its ever been.&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-two_files/figure-html/gender-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;Perhaps unsurprising given how disportionately male we found the field to be in &lt;a href=&#34;https://dnield.com/posts/kaggle-survey/pt-one/&#34;&gt;part 1&lt;/a&gt;, but there appears to be no trend towards increasing gender diversity among data professionals.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div id=&#34;no-clear-trend-in-age-composition&#34; class=&#34;section level2&#34;&gt;
-&lt;h2&gt;No clear trend in age composition&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-two_files/figure-html/age-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;Survey data doesn’t seem to show a clear trend in the age composition of data professionals. This isn’t to say that the composition is stable or unchanging. As always, it should be noted that this survey is a not a random sample of data professionals, but a voluntary response sample survey of Kaggle users, so the composition may change widely based on how Kaggle chooses to promote the survey.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div id=&#34;the-increasingly-educated-data-workforce&#34; class=&#34;section level2&#34;&gt;
-&lt;h2&gt;The increasingly educated data workforce&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-two_files/figure-html/education-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;The plot above shows the highest education attainment of respondents to all three years’ surveys. The number of data professionals holding a Master’s degree shocked me in part 1, but the data show that this has been an ongoing trend, while the percent of data professionals holding professional degrees, or only some college education or a high school diploma is near zero. Whether this trend towards a more educated data workforce is due to former Bachelor’s holders seeking and attaining higher education or due to new hires disporportionately coming out of grad school is unclear.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;titles-and-compensation&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;Titles and Compensation&lt;/h1&gt;
-&lt;div id=&#34;the-ascendency-of-the-data-scientist-title&#34; class=&#34;section level2&#34;&gt;
-&lt;h2&gt;The ascendency of the “data scientist” title&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-two_files/figure-html/jobtitles-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;The proportion of data professionals on Kaggle with the job title “data scientist” has increased 30% relative to 2017: from 30% to 40%. And this doesn’t seem to be simple title changing from former “data analysts”, who also have increased as a proportion of employed Kaggle respondents.&lt;/p&gt;
-&lt;p&gt;The greatest decline in relative share of the data workforce are among engineers (which include all titles with “engineer” in their title, from data engineers to SWEs) and researchers (which include all titles with “research” in their title, with the exception of research assistants, which were excluded because these positions are typically not careers).&lt;/p&gt;
-&lt;p&gt;More difficult to see here is the relative decline in the “Statistician” title, which started at a barely registerable 3.3%, but has since fallen to 2.4%.&lt;/p&gt;
-&lt;/div&gt;
-&lt;div id=&#34;data-scientists-compensation-has-increased-even-as-the-title-has-become-more-widespread&#34; class=&#34;section level2&#34;&gt;
-&lt;h2&gt;Data scientists’ compensation has increased even as the title has become more widespread&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-two_files/figure-html/income-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;The above plot reports the typical (median) compensation of respondents with each job title. The responses are an ordinal factor so the data is an idomatic median: arrange by the ordered factor, and take the median value. Given a vector of even length and the middle two values are two different categories (e.g. $80,000-89,999 and $90,000-99,999), the lower value will be used.&lt;/p&gt;
-&lt;p&gt;The function for this implementation is below, &lt;a href=&#34;https://stackoverflow.com/questions/7925102/idiomatic-method-of-finding-the-median-of-an-ordinal&#34;&gt;with credit to Hong Ooi and Richie Cotton from StackOverflow.&lt;/a&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;median.ordered &amp;lt;- function(x) {
-  levs &amp;lt;- levels(x)
-  m &amp;lt;- median(as.integer(x), na.rm = TRUE)
-  if(floor(m) != m) {
-  m &amp;lt;- floor(m)
-  }
-  ordered(m, labels = levs, levels = seq_along(levs))
-}&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;On the whole, the wages of data professionals appear to be on the rise! The median compensation for respondents of every job title except for Engineers appears to be higher in 2019 than it was in 2017 (and median Engineer compensation remaining steady at a very respectable $100,000 to $125,000). Data scientists in particular have broken away to typically make $125,000 to $150,000.&lt;/p&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div id=&#34;languages&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;Languages&lt;/h1&gt;
-&lt;div id=&#34;pythons-meteoric-rise&#34; class=&#34;section level2&#34;&gt;
-&lt;h2&gt;Python’s meteoric rise&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-two_files/figure-html/languages-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;About two-thirds of data professionals who program today are using Python, this is a 50% increase relative to the proportion using Python in 2017. Likewise, SQL use has increased 30% during the same time, while R use has remained fairly stable at about 33% and all other languages stable at about 10%.&lt;/p&gt;
-&lt;/div&gt;
 &lt;/div&gt;&lt;/p&gt;
 </description>
     </item>
