@@ -15,7 +15,7 @@ tags: ["survey analysis", "data visualization", "data science"]
 knitr::opts_chunk$set(collapse = TRUE)
 
 require(pacman)
-p_load(tidyverse, surveydata, gridExtra)
+p_load(tidyverse, surveydata, gridExtra, ggrepel)
 
 # Theme from edrub.in
 theme_ed <- theme(
@@ -174,7 +174,8 @@ tya <- read_csv("2017_multipleChoiceResponses.csv") %>%
     country_of_residence = Country,
     compensation_currency = CompensationCurrency,
     age = Age,
-    job_title = CurrentJobTitleSelect,
+    job_title = case_when(StudentStatus == "Yes" ~ "Student",
+                          TRUE ~ CurrentJobTitleSelect),
     recommended_first_language = LanguageRecommendationSelect,
     education = FormalEducation,
     yearly_compensation = CompensationAmount,
@@ -228,16 +229,44 @@ tya <- read_csv("2017_multipleChoiceResponses.csv") %>%
          year = '2017') %>% 
   select(vars)
 
+common_titles <- c("Business Analyst", "Data Analyst", "Data Scientist", "Engineer", "Researcher", "Statistician")
 
 tsdata <- current %>% 
   bind_rows(oya) %>% 
-  bind_rows(tya)
+  bind_rows(tya) %>%
+  mutate(
+    job_title = case_when(
+      job_title == "Research Assistant" ~ NA_character_,
+      str_detect(job_title, "Engineer") ~ "Engineer",
+      str_detect(job_title, "Research") ~ "Researcher",
+      job_title %in% common_titles ~ job_title,
+      TRUE ~ NA_character_
+    ),
+    yearly_compensation = ordered(yearly_compensation,
+                                  levels = c('0 - 10,000',
+                                             '10,000 - 20,000',
+                                             '20,000 - 30,000',
+                                             '30,000 - 40,000',
+                                             '40,000 - 50,000',
+                                             '50,000 - 60,000',
+                                             '60,000 - 70,000',
+                                             '70,000 - 80,000',
+                                             '80,000 - 90,000',
+                                             '90,000 - 100,000',
+                                             '100,000 - 125,000',
+                                             '125,000 - 150,000',
+                                             '150,000 - 200,000',
+                                             '200,000 - 250,000',
+                                             '250,000 - 300,000',
+                                             '300,000 - 500,000',
+                                             '500,000+'))
+  )
 
+# Age Group Percentage by Year
 tsdata %>% 
   group_by(year) %>% 
   count(age) %>% 
-  mutate(test = sum(n),
-         prop = n/sum(n)) %>% 
+  mutate(prop = n/sum(n)) %>% 
   ungroup() %>% 
   ggplot(aes(x = year, y = prop, color = age, group = age, label = age)) +
   geom_line() +
@@ -248,7 +277,82 @@ tsdata %>%
   theme_ed +
   theme(legend.position = "")
 
+# Job Title Percentage by Year
+tsdata %>% 
+  group_by(year) %>% 
+  count(job_title) %>% 
+  mutate(prop = n/sum(n)) %>% 
+  ungroup() %>% 
+  filter(!is.na(job_title)) %>% 
+  ggplot(aes(x = year, y = prop, color = job_title, group = job_title, label = job_title)) +
+  geom_line() +
+  geom_label() +
+  scale_y_continuous(label = scales::percent) +
+  labs(x = "Year",
+       y = "Percent") +
+  theme_ed +
+  theme(legend.position = "")
 
+#
+
+
+tsdata %>% 
+  group_by(year, job_title) %>% 
+  summarise(income = median(yearly_compensation)) %>% 
+  ungroup() %>% 
+  mutate(income_dbl = case_when(
+    income == '50,000 - 60,000' ~ mean(50000, 60000),
+    income == '60,000 - 70,000' ~ mean(60000, 70000),
+    income == '70,000 - 80,000' ~ mean(70000, 80000),
+    income == '80,000 - 90,000' ~ mean(80000, 90000),
+    income == '90,000 - 100,000' ~ mean(90000, 10000),
+    income == '100,000 - 125,000' ~ mean(100000, 125000),
+    income == '125,000 - 150,000' ~ mean(125000, 150000)
+  )) %>% 
+  filter(!is.na(job_title)) %>% 
+  ggplot(aes(x = year, y = income_dbl, label = job_title, group = job_title, color = job_title)) +
+  geom_line() +
+  geom_label_repel(min.segment.length = 1e10, direction = 'y', box.padding = 0, seed = 2) +
+  scale_y_continuous(label = scales::dollar) +
+  labs(x = "Year",
+       y = "Median Income") +
+  theme_ed +
+  theme(legend.position = "")
+
+tsdata %>% 
+  filter(gender %in% c("Male", "Female")) %>% 
+  group_by(year) %>% 
+  count(gender) %>% 
+  mutate(prop = n/sum(n)) %>% 
+  ungroup() %>% 
+  ggplot(aes(x = year, y = prop, fill = gender)) +
+  geom_bar(position = 'stack', stat = 'identity') +
+  scale_y_continuous(label = scales::percent) +
+  labs(x = 'Year',
+       y = 'Percent',
+       fill = 'Gender') +
+  theme_ed
+
+tsdata %>% 
+  select(year, starts_with("language")) %>% 
+  group_by(year) %>% 
+  summarise_all(~sum(., na.rm = TRUE)/n()) %>% 
+  gather(language, prop, -year) %>% 
+  mutate(language = str_extract(language, pattern = "(?<=language_).*"),
+         language = case_when(language == 'python' ~ 'Python',
+                              language == 'sql' ~ 'SQL',
+                              language == 'java' ~ 'Java',
+                              language == 'c_cpp' ~ 'C/C++',
+                              language == 'matlab' ~ 'MATLAB',
+                              language == 'R' ~ 'R')) %>% 
+  ggplot(aes(x = year, y = prop, group = language, label = language, color = language)) +
+  geom_line() +
+  geom_label_repel(min.segment.length = 1, direction = 'y', box.padding = 0.1, seed = 42) +
+  scale_y_continuous(label = scales::percent) +
+  labs(x = "Year",
+       y = "Percent") +
+  theme_ed +
+  theme(legend.position = "")
 
 ```
 
