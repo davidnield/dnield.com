@@ -94,7 +94,7 @@
 &lt;h2&gt;Data scientists make the big bucks&lt;/h2&gt;
 &lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-one_files/figure-html/compensation-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;The 2019 Kaggle ML &amp;amp; DS Survey reports annual compensation in brackets. I’m interested in the median income of data professionals by title, but obviously taking the median of categorical data isn’t something R takes kindly to!&lt;/p&gt;
-&lt;p&gt;However, since this factor is ordinal, it is possible to take an idomatic median: just arrange by the ordered factor, and take the median value. The hitch is when you have a a vector of even length and the middle two values are two different categories (e.g. $80,000-89,999 and $90,000-99,999). Strictly speaking, I prefer to just take the cutpoint between the two categories ($90,000) or an interval with the cutpoint as the center point as the value. However, for this quick and dirty exploration, I’m just going to take the lower of the two categories as the winner of the tie.&lt;/p&gt;
+&lt;p&gt;However, since this factor is ordinal, it is possible to take an idomatic median: just arrange by the ordered factor, and take the median value. The hitch is when you have a vector of even length and the middle two values are two different categories (e.g. $80,000-89,999 and $90,000-99,999). Strictly speaking, I prefer to just take the cutpoint between the two categories ($90,000) or an interval with the cutpoint as the center point as the value. However, for this quick and dirty exploration, I’m just going to take the lower of the two categories as the winner of the tie.&lt;/p&gt;
 &lt;p&gt;The function for this implementation is below, &lt;a href=&#34;https://stackoverflow.com/questions/7925102/idiomatic-method-of-finding-the-median-of-an-ordinal&#34;&gt;with credit to Hong Ooi and Richie Cotton from StackOverflow.&lt;/a&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;median.ordered &amp;lt;- function(x) {
   levs &amp;lt;- levels(x)
@@ -104,7 +104,7 @@
   }
   ordered(m, labels = levs, levels = seq_along(levs))
 }&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;The above plot shows the median income of each job title computed in this way, preserving the ordering of job titles by their frequency in . Students and Unemployed respondents were not asked for their annual compensation, but in order to preserve the frequency ordered they are represented here.&lt;/p&gt;
+&lt;p&gt;The above plot shows the median income of each job title computed in this way, preserving the ordering of job titles by their frequency in the previous plot. Students and Unemployed respondents were not asked for their annual compensation, but in order to preserve the frequency order they are represented here.&lt;/p&gt;
 &lt;p&gt;Clearly, as a Data Analyst, I’m in the wrong job! Data Analysts and Business Analysts are tied for last, with the median analysts making $80,000 to $89,999 annually, while Data Scientists make the big bucks, with the median data scientist making $125,000 to $149,999 annually.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;data-professionals-team-sizes-are-highly-bimodal&#34; class=&#34;section level2&#34;&gt;
@@ -125,10 +125,9 @@
 &lt;div id=&#34;python-is-king&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Python is King&lt;/h2&gt;
 &lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-one_files/figure-html/languages-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;Much to my chagrin as an R user, Python dominates as the most coding language used by data professional. SQL comes next, followed by R, then Java, followed by a long tail of other languages.&lt;/p&gt;
-&lt;p&gt;Two things surprise me here: 1) the complete lack of Julia users and 2) the proliference of Java.&lt;/p&gt;
-&lt;p&gt;I know Julia is a very young language, but I hear so much about it and it’s eponymous with JuPytR so I expected to see more users.&lt;/p&gt;
-&lt;p&gt;As for Java, I’ve always thought of the modal data professional toolkit as: SQL for querying databases, R/Python for modeling and prototyping, and C++ for production code. I don’t know of any data scientists using Java. I’ll be curious to dig into this more.&lt;/p&gt;
+&lt;p&gt;Unfortunately, Julia wasn’t offered as an option on this survey, and I’m not sure why. It was asked about in previous iterations of this survey, and Julia has continued to mature as a language.&lt;/p&gt;
+&lt;p&gt;Much to my chagrin as an R user, Python dominates as the most coding language used by data professionals. SQL comes next, followed by R, then Java, followed by a long tail of other languages.&lt;/p&gt;
+&lt;p&gt;I’m surprised by the proliference of Java. I’ve always thought of the modal data professional toolkit as: SQL for querying databases, R/Python for modeling and prototyping, and C++ for production code. I don’t know of any data scientists using Java. I’ll be curious to dig into this more.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;the-majority-of-data-professionals-on-kaggle-are-relatively-new-to-writing-code-for-data-analysis.&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;The majority of data professionals on Kaggle are relatively new to writing code for data analysis.&lt;/h2&gt;
@@ -170,6 +169,547 @@
 &lt;li id=&#34;fn4&#34;&gt;&lt;p&gt;including Hastie et al in &lt;em&gt;Elements of Statistical Learning&lt;/em&gt;, one of the many bibles on the topic&lt;a href=&#34;#fnref4&#34; class=&#34;footnote-back&#34;&gt;↩&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>The State of Data Science (Part 2)</title>
+      <link>/posts/kaggle-survey/pt-two/</link>
+      <pubDate>Tue, 19 Nov 2019 00:00:00 +0000</pubDate>
+      <guid>/posts/kaggle-survey/pt-two/</guid>
+      <description>&lt;div id=&#34;TOC&#34;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#demographics&#34;&gt;Demographics&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#the-data-field-today-is-as-disproportionately-male-as-its-ever-been.&#34;&gt;The data field today is as disproportionately male as its ever been.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#no-clear-trend-in-age-composition&#34;&gt;No clear trend in age composition&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#the-increasingly-educated-data-workforce&#34;&gt;The increasingly educated data workforce&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#titles-and-compensation&#34;&gt;Titles and Compensation&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#the-ascendency-of-the-data-scientist-title&#34;&gt;The ascendency of the “data scientist” title&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#data-scientists-compensation-has-increased-even-as-the-title-has-become-more-widespread&#34;&gt;Data scientists’ compensation has increased even as the title has become more widespread&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#languages&#34;&gt;Languages&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#pythons-meteoric-rise&#34;&gt;Python’s meteoric rise&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Kaggle has released the data for their third annual &lt;a href=&#34;https://www.kaggle.com/c/kaggle-survey-2019/overview&#34;&gt;&lt;em&gt;Machine Learning and Data Science Survey&lt;/em&gt;&lt;/a&gt;. I’ve only recently joined the Kaggle platform as I’ve transitioned from academia to private industry, so this seems to be an excellent opportunity to explore the backgrounds of my new data science peers.&lt;/p&gt;
+&lt;p&gt;This is the second of the three part series exploring this data.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://dnield.com/posts/kaggle-survey/pt-one/&#34;&gt;Part 1&lt;/a&gt; explored this year’s survey results.&lt;/p&gt;
+&lt;p&gt;Part 2, this post, brings in survey data from the first two years of this annual survey to investigate how the field has changed over the last three years in the United States.&lt;/p&gt;
+&lt;p&gt;Part 3 will use modeling try to answer three burning questions I have: 1. what &lt;em&gt;is&lt;/em&gt; the difference between the variety of different job titles in the Data field, 2. what factors predict annual compensation, and 3. how unique different combinations of characteristics in the field to explore how unique I am, or are you are, in the data science community.&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;alert alert-note&#34;&gt;
+  &lt;div&gt;
+    &lt;p&gt;&lt;/p&gt;
+&lt;p&gt;Because I am based in the United States, as are most of the data science community with which I interact with regularly in-person or on social media, this analysis is limited to respondents living in the United States.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;/p&gt;
+&lt;p&gt;Let’s get started!&lt;/p&gt;
+&lt;div id=&#34;demographics&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Demographics&lt;/h1&gt;
+&lt;div id=&#34;the-data-field-today-is-as-disproportionately-male-as-its-ever-been.&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;The data field today is as disproportionately male as its ever been.&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-two_files/figure-html/gender-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Perhaps unsurprising given how disportionately male we found the field to be in &lt;a href=&#34;https://dnield.com/posts/kaggle-survey/pt-one/&#34;&gt;part 1&lt;/a&gt;, but there appears to be no trend towards increasing gender diversity among data professionals.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;no-clear-trend-in-age-composition&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;No clear trend in age composition&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-two_files/figure-html/age-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Survey data doesn’t seem to show a clear trend in the age composition of data professionals. This isn’t to say that the composition is stable or unchanging. As always, it should be noted that this survey is a not a random sample of data professionals, but a voluntary response sample survey of Kaggle users, so the composition may change widely based on how Kaggle chooses to promote the survey.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;the-increasingly-educated-data-workforce&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;The increasingly educated data workforce&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-two_files/figure-html/education-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The plot above shows the highest education attainment of respondents to all three years’ surveys. The number of data professionals holding a Master’s degree shocked me in part 1, but the data show that this has been an ongoing trend, while the percent of data professionals holding professional degrees, or only some college education or a high school diploma is near zero. Whether this trend towards a more educated data workforce is due to former Bachelor’s holders seeking and attaining higher education or due to new hires disporportionately coming out of grad school is unclear.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;titles-and-compensation&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Titles and Compensation&lt;/h1&gt;
+&lt;div id=&#34;the-ascendency-of-the-data-scientist-title&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;The ascendency of the “data scientist” title&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-two_files/figure-html/jobtitles-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The proportion of data professionals on Kaggle with the job title “data scientist” has increased 30% relative to 2017: from 30% to 40%. And this doesn’t seem to be simple title changing from former “data analysts”, who also have increased as a proportion of employed Kaggle respondents.&lt;/p&gt;
+&lt;p&gt;The greatest decline in relative share of the data workforce are among engineers (which include all titles with “engineer” in their title, from data engineers to SWEs) and researchers (which include all titles with “research” in their title, with the exception of research assistants, which were excluded because these positions are typically not careers).&lt;/p&gt;
+&lt;p&gt;More difficult to see here is the relative decline in the “Statistician” title, which started at a barely registerable 3.3%, but has since fallen to 2.4%.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;data-scientists-compensation-has-increased-even-as-the-title-has-become-more-widespread&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Data scientists’ compensation has increased even as the title has become more widespread&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-two_files/figure-html/income-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;The above plot reports the typical (median) compensation of respondents with each job title. The responses are an ordinal factor so the data is an idomatic median: arrange by the ordered factor, and take the median value. Given a vector of even length and the middle two values are two different categories (e.g. $80,000-89,999 and $90,000-99,999), the lower value will be used.&lt;/p&gt;
+&lt;p&gt;The function for this implementation is below, &lt;a href=&#34;https://stackoverflow.com/questions/7925102/idiomatic-method-of-finding-the-median-of-an-ordinal&#34;&gt;with credit to Hong Ooi and Richie Cotton from StackOverflow.&lt;/a&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;median.ordered &amp;lt;- function(x) {
+  levs &amp;lt;- levels(x)
+  m &amp;lt;- median(as.integer(x), na.rm = TRUE)
+  if(floor(m) != m) {
+  m &amp;lt;- floor(m)
+  }
+  ordered(m, labels = levs, levels = seq_along(levs))
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;On the whole, the wages of data professionals appear to be on the rise! The median compensation for respondents of every job title except for Engineers appears to be higher in 2019 than it was in 2017 (and median Engineer compensation remaining steady at a very respectable $100,000 to $125,000). Data scientists in particular have broken away to typically make $125,000 to $150,000.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;languages&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Languages&lt;/h1&gt;
+&lt;div id=&#34;pythons-meteoric-rise&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Python’s meteoric rise&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-two_files/figure-html/languages-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;About two-thirds of data professionals who program today are using Python, this is a 50% increase relative to the proportion using Python in 2017. Likewise, SQL use has increased 30% during the same time, while R use has remained fairly stable at about 33% and all other languages stable at about 10%.&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>The State of Data Science (Part 3)</title>
+      <link>/posts/kaggle-survey/pt-three/</link>
+      <pubDate>Tue, 19 Nov 2019 00:00:00 +0000</pubDate>
+      <guid>/posts/kaggle-survey/pt-three/</guid>
+      <description>&lt;p&gt;Today let’s settle the question: what is a data scientist exactly?&lt;/p&gt;
+&lt;p&gt;To settle that question, we’re essentially going to answer a related question: who is a data scientist? To do this, I’m going to train a classification model on our survey data from part 1 to figure out what are the traits that predict whether a respondent is a data scientist as opposed to some other category.&lt;/p&gt;
+&lt;p&gt;I’ll leave the nitty gritty details and code for the data cleaning and feature engineering at the end for everyone interested.&lt;/p&gt;
+&lt;p&gt;The first data cleaning step was to rename all of the variable names from “Q1”, “Q2”, etc. to something more descriptive and useful. This was done manually and was pretty tedious, but it’ll turn out to be useful not just for documentation purposes but also for feature engineering down the road.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;require(pacman)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Loading required package: pacman&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;p_load(tidyverse, caret)
+
+kaggle &amp;lt;- read_csv(&amp;quot;2019_multiple_choice_responses.csv&amp;quot;) %&amp;gt;% 
+  rename(surveyduration = `Time from Start to Finish (seconds)`,
+         age = Q1,
+         gender = Q2,
+         gender_other_text = Q2_OTHER_TEXT,
+         country_of_residence = Q3,
+         education = Q4,
+         job_title = Q5,
+         job_title_other_text = Q5_OTHER_TEXT,
+         company_size = Q6,
+         datasci_team_size = Q7,
+         company_ML_incorporation = Q8,
+         role_influence_business_decisions = Q9_Part_1,
+         role_build_or_run_data_infrastructure = Q9_Part_2,
+         role_build_ML_prototypes = Q9_Part_3,
+         role_build_ML_for_production = Q9_Part_4,
+         role_improve_existing_ML_models = Q9_Part_5,
+         role_ML_research = Q9_Part_6,
+         role_none_of_above = Q9_Part_7,
+         role_other = Q9_Part_8,
+         role_other_text = Q9_OTHER_TEXT,
+         yearly_compensation = Q10,
+         amt_spent_ML_cloud_products_last5years = Q11,
+         datascimedia_twitterdatasciinfluencers = Q12_Part_1,
+         datascimedia_hackernews = Q12_Part_2,
+         datascimedia_reddit = Q12_Part_3,
+         datascimedia_kaggle = Q12_Part_4,
+         datascimedia_courseforums = Q12_Part_5,
+         datascimedia_youtube = Q12_Part_6,
+         datascimedia_podcasts = Q12_Part_7,
+         datascimedia_blogs = Q12_Part_8,
+         datascimedia_journalpubs = Q12_Part_9,
+         datascimedia_slack = Q12_Part_10,
+         datascimedia_none = Q12_Part_11,
+         datascimedia_other = Q12_Part_12,
+         datascimedia_other_text = Q12_OTHER_TEXT,
+         datascicourses_udacity = Q13_Part_1,
+         datascicourses_coursera = Q13_Part_2,
+         datascicourses_edx = Q13_Part_3,
+         datascicourses_datacamp = Q13_Part_4,
+         datascicourses_dataquest = Q13_Part_5,
+         datascicourses_kaggle = Q13_Part_6,
+         datascicourses_fastai = Q13_Part_7,
+         datascicourses_udemy = Q13_Part_8,
+         datascicourses_linkedin = Q13_Part_9,
+         datascicourses_university = Q13_Part_10,
+         datascicourses_none = Q13_Part_11,
+         datascicourses_other = Q13_Part_12,
+         datascicourses_other_text = Q13_OTHER_TEXT,
+         primarytool = Q14,
+         primarytool_basic = Q14_Part_1_TEXT,
+         primarytool_advanced = Q14_Part_2_TEXT,
+         primarytool_bi = Q14_Part_3_TEXT,
+         primarytool_devenv = Q14_Part_4_TEXT,
+         primarytool_cloud = Q14_Part_5_TEXT,
+         primarytool_other = Q14_OTHER_TEXT,
+         experience_data = Q15,
+         ide_jupyter = Q16_Part_1,
+         ide_rstudio = Q16_Part_2,
+         ide_pycharm = Q16_Part_3,
+         ide_atom = Q16_Part_4,
+         ide_matlab = Q16_Part_5,
+         ide_visualstudio = Q16_Part_6,
+         ide_spyder = Q16_Part_7,
+         ide_vim_emacs = Q16_Part_8,
+         ide_notepadpp = Q16_Part_9,
+         ide_sublimetext = Q16_Part_10,
+         ide_none = Q16_Part_11,
+         ide_other = Q16_Part_12,
+         ide_other_text = Q16_OTHER_TEXT,
+         notebook_kaggle = Q17_Part_1,
+         notebook_googlecolab = Q17_Part_2,
+         notebook_msoft_azure = Q17_Part_3,
+         notebook_googlecloud = Q17_Part_4,
+         notebook_paperspace = Q17_Part_5,
+         notebook_floydhub = Q17_Part_6,
+         notebook_binder_jupyterhub = Q17_Part_7,
+         notebook_watson_studio = Q17_Part_8,
+         notebook_codeocean = Q17_Part_9,
+         notebook_aws = Q17_Part_10,
+         notebook_none = Q17_Part_11,
+         notebook_other = Q17_Part_12,
+         notebook_other_text = Q17_OTHER_TEXT,
+         language_python = Q18_Part_1,
+         language_R = Q18_Part_2,
+         language_sql = Q18_Part_3,
+         language_C = Q18_Part_4,
+         language_Cpp = Q18_Part_5,
+         language_java = Q18_Part_6,
+         language_javascript = Q18_Part_7,
+         language_typescript = Q18_Part_8,
+         language_bash = Q18_Part_9,
+         language_matlab = Q18_Part_10,
+         language_none = Q18_Part_11,
+         language_other = Q18_Part_12,
+         language_other_text = Q18_OTHER_TEXT,
+         recommend_first_language = Q19,
+         recommend_first_language_other_text = Q19_OTHER_TEXT,
+         datavizlib_ggplot = Q20_Part_1,
+         datavizlib_matplotlib = Q20_Part_2,
+         datavizlib_altair = Q20_Part_3,
+         datavizlib_shiny = Q20_Part_4,
+         datavizlib_d3js = Q20_Part_5,
+         datavizlib_plotly = Q20_Part_6,
+         datavizlib_bokeh = Q20_Part_7,
+         datavizlib_seaborn = Q20_Part_8,
+         datavizlib_geoplotlib = Q20_Part_9,
+         datavizlib_leaflet = Q20_Part_10,
+         datavizlib_none = Q20_Part_11,
+         datavizlib_other = Q20_Part_12,
+         dataviz_other_text = Q20_OTHER_TEXT,
+         hardware_cpu = Q21_Part_1,
+         hardware_gpu = Q21_Part_2,
+         hardware_tpu = Q21_Part_3,
+         hardware_none_idk = Q21_Part_4,
+         hardware_other = Q21_Part_5,
+         hardware_other_text = Q21_OTHER_TEXT,
+         ever_used_tpu = Q22,
+         experience_ml = Q23,
+         mlalgs_regression = Q24_Part_1,
+         mlalgs_trees = Q24_Part_2,
+         mlalgs_boosting = Q24_Part_3,
+         mlalgs_bayes = Q24_Part_4,
+         mlalgs_evolutionary = Q24_Part_5,
+         mlalgs_denseneuralnets = Q24_Part_6,
+         mlalgs_cnn = Q24_Part_7,
+         mlalgs_gan = Q24_Part_8,
+         mlalgs_rnn = Q24_Part_9,
+         mlalgs_transnets = Q24_Part_10,
+         mlalgs_none = Q24_Part_11,
+         mlalgs_other = Q24_Part_12,
+         mlalgs_other_text = Q24_OTHER_TEXT,
+         mltools_aug = Q25_Part_1,
+         mltools_feateng = Q25_Part_2,
+         mltools_modelselect = Q25_Part_3,
+         mltools_archsearch = Q25_Part_4,
+         mltools_tuning = Q25_Part_5,
+         mltools_fullmlpipelines = Q25_Part_6,
+         mltools_none = Q25_Part_7,
+         mltools_other = Q25_Part_8,
+         mltools_other_text = Q25_OTHER_TEXT,
+         compvisionmethods_genpurpose = Q26_Part_1,
+         compvisionmethods_segmentation = Q26_Part_2,
+         compvisionmethods_detection = Q26_Part_3,
+         compvisionmethods_classification = Q26_Part_4,
+         compvisionmethods_generativenets = Q26_Part_5,
+         compvisionmethods_none = Q26_Part_6,
+         compvisionmethods_other = Q26_Part_7,
+         compvisionmethods_other_text = Q26_OTHER_TEXT,
+         nlpmethods_wordembedding = Q27_Part_1,
+         nlpmethods_encodersdecoders = Q27_Part_2,
+         nlpmethods_contextembedding = Q27_Part_3,
+         nlpmethods_transformermodels = Q27_Part_4,
+         nlpmethods_none = Q27_Part_5,
+         nlpmethods_other = Q27_Part_6,
+         nlpmethods_other_text = Q27_OTHER_TEXT,
+         mlframeworks_sklearn = Q28_Part_1,
+         mlframeworks_tensorflow = Q28_Part_2,
+         mlframeworks_keras = Q28_Part_3,
+         mlframeworks_randomforest = Q28_Part_4,
+         mlframeworks_xgboost = Q28_Part_5,
+         mlframeworks_pytorch = Q28_Part_6,
+         mlframeworks_caret = Q28_Part_7,
+         mlframeworks_lightgbm = Q28_Part_8,
+         mlframeworks_sparkmlib = Q28_Part_9,
+         mlframeworks_fastai = Q28_Part_10,
+         mlframeworks_none = Q28_Part_11,
+         mlframeworks_other = Q28_Part_12,
+         mlframeworks_other_text = Q28_OTHER_TEXT,
+         cloudcomputeplatform_gcp = Q29_Part_1,
+         cloudcomputeplatform_aws = Q29_Part_2,
+         cloudcomputeplatform_azure = Q29_Part_3,
+         cloudcomputeplatform_ibm = Q29_Part_4,
+         cloudcomputeplatform_alibaba = Q29_Part_5,
+         cloudcomputeplatform_salesforce = Q29_Part_6,
+         cloudcomputeplatform_oracle = Q29_Part_7,
+         cloudcomputeplatform_sap = Q29_Part_8,
+         cloudcomputeplatform_vmware = Q29_Part_9,
+         cloudcomputeplatform_redhat = Q29_Part_10,
+         cloudcomputeplatform_none = Q29_Part_11,
+         cloudcomputeplatform_other = Q29_Part_12,
+         cloudcomputeplatform_other_text = Q29_OTHER_TEXT,
+         cloudcomputeproduct_ec2 = Q30_Part_1,
+         cloudcomputeproduct_gce = Q30_Part_2,
+         cloudcomputeproduct_lambda = Q30_Part_3,
+         cloudcomputeproduct_azurevm = Q30_Part_4,
+         cloudcomputeproduct_googleappengine = Q30_Part_5,
+         cloudcomputeproduct_googlecloudfunctions = Q30_Part_6,
+         cloudcomputeproduct_awselasticbeanstalk = Q30_Part_7,
+         cloudcomputeproduct_googlekubernetes = Q30_Part_8,
+         cloudcomputeproduct_awsbatch = Q30_Part_9,
+         cloudcomputeproduct_azurecontainer = Q30_Part_10,
+         cloudcomputeproduct_none = Q30_Part_11,
+         cloudcomputeproduct_other = Q30_Part_12,
+         cloudcomputeproduct_other_text = Q30_OTHER_TEXT,
+         bigdataproduct_bigquery = Q31_Part_1,
+         bigdataproduct_redshift = Q31_Part_2,
+         bigdataproduct_databricks = Q31_Part_3,
+         bigdataproduct_elasticmapreduce = Q31_Part_4,
+         bigdataproduct_teradata = Q31_Part_5,
+         bigdataproduct_msoftanalysis = Q31_Part_6,
+         bigdataproduct_googleclouddataflow = Q31_Part_7,
+         bigdataproduct_athena = Q31_Part_8,
+         bigdataproduct_kinesis = Q31_Part_9,
+         bigdataproduct_googlecloudpubsub = Q31_Part_10,
+         bigdataproduct_none = Q31_Part_11,
+         bigdataproduct_other = Q31_Part_12,
+         bigdataproduct_other_text = Q31_OTHER_TEXT,
+         mlproduct_sas = Q32_Part_1,
+         mlproduct_cloudera = Q32_Part_2,
+         mlproduct_azuremlstudio = Q32_Part_3,
+         mlproduct_googlecloudmlengine = Q32_Part_4,
+         mlproduct_googlecloudvision = Q32_Part_5,
+         mlproduct_googlecloudspeechtotext = Q32_Part_6,
+         mlproduct_googlecloudnaturallanguage = Q32_Part_7,
+         mlproduct_rapidminer = Q32_Part_8,
+         mlproduct_googlecloudtranslation = Q32_Part_9,
+         mlproduct_sagemaker = Q32_Part_10,
+         mlproduct_none = Q32_Part_11,
+         mlproduct_other = Q32_Part_12,
+         mlproduct_other_text = Q32_OTHER_TEXT,
+         automltools_googleautoml = Q33_Part_1,
+         automltools_h20driverless = Q33_Part_2,
+         automltools_databricksautoml = Q33_Part_3,
+         automltools_datarobotautoml = Q33_Part_4,
+         automltools_tpot = Q33_Part_5,
+         automltools_autokeras = Q33_Part_6,
+         automltools_autosklearn = Q33_Part_7,
+         automltools_auto_ml = Q33_Part_8,
+         automltools_xcessiv = Q33_Part_9,
+         automltools_mlbox = Q33_Part_10,
+         automltools_none = Q33_Part_11,
+         automltools_other = Q33_Part_12,
+         automltools_other_text = Q33_OTHER_TEXT,
+         dbproduct_mysql = Q34_Part_1,
+         dbproduct_postgressql = Q34_Part_2,
+         dbproduct_sqllite = Q34_Part_3,
+         dbproduct_msoftsql = Q34_Part_4,
+         dbproduct_oracledb = Q34_Part_5,
+         dbproduct_msoftaccess = Q34_Part_6,
+         dbproduct_awsrelationaldbs = Q34_Part_7,
+         dbproduct_awsdynamodb = Q34_Part_8,
+         dbproduct_azuresqldb = Q34_Part_9,
+         dbproduct_googlecloudsql = Q34_Part_10,
+         dbproduct_none = Q34_Part_11,
+         dbproduct_other = Q34_Part_12,
+         dbproduct_other_text = Q34_OTHER_TEXT
+         )&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Parsed with column specification:
+## cols(
+##   .default = col_character()
+## )&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## See spec(...) for full column specifications.&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You can see that we have an incredible amount of variables here, 246 to be exact.&lt;/p&gt;
+&lt;p&gt;But there weren’t 246 questions on the survey: these variables are in a wide format with respect to the “Check all the apply” questions, which I grouped together by using the same prefix (e.g. “role_”) for variables associated with the same question.&lt;/p&gt;
+&lt;p&gt;Let’s take a glimpse at the data.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;kaggle&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 19,718 x 246
+##    surveyduration age   gender gender_other_te… country_of_resi… education
+##    &amp;lt;chr&amp;gt;          &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt;  &amp;lt;chr&amp;gt;            &amp;lt;chr&amp;gt;            &amp;lt;chr&amp;gt;    
+##  1 Duration (in … What… What … What is your ge… In which countr… What is …
+##  2 510            22-24 Male   -1               France           Master’s…
+##  3 423            40-44 Male   -1               India            Professi…
+##  4 83             55-59 Female -1               Germany          Professi…
+##  5 391            40-44 Male   -1               Australia        Master’s…
+##  6 392            22-24 Male   -1               India            Bachelor…
+##  7 470            50-54 Male   -1               France           Master’s…
+##  8 529            22-24 Male   -1               India            Master’s…
+##  9 624            22-24 Female -1               United States o… Bachelor…
+## 10 214            22-24 Male   -1               United States o… Bachelor…
+## # … with 19,708 more rows, and 240 more variables: job_title &amp;lt;chr&amp;gt;,
+## #   job_title_other_text &amp;lt;chr&amp;gt;, company_size &amp;lt;chr&amp;gt;,
+## #   datasci_team_size &amp;lt;chr&amp;gt;, company_ML_incorporation &amp;lt;chr&amp;gt;,
+## #   role_influence_business_decisions &amp;lt;chr&amp;gt;,
+## #   role_build_or_run_data_infrastructure &amp;lt;chr&amp;gt;,
+## #   role_build_ML_prototypes &amp;lt;chr&amp;gt;, role_build_ML_for_production &amp;lt;chr&amp;gt;,
+## #   role_improve_existing_ML_models &amp;lt;chr&amp;gt;, role_ML_research &amp;lt;chr&amp;gt;,
+## #   role_none_of_above &amp;lt;chr&amp;gt;, role_other &amp;lt;chr&amp;gt;, role_other_text &amp;lt;chr&amp;gt;,
+## #   yearly_compensation &amp;lt;chr&amp;gt;,
+## #   amt_spent_ML_cloud_products_last5years &amp;lt;chr&amp;gt;,
+## #   datascimedia_twitterdatasciinfluencers &amp;lt;chr&amp;gt;,
+## #   datascimedia_hackernews &amp;lt;chr&amp;gt;, datascimedia_reddit &amp;lt;chr&amp;gt;,
+## #   datascimedia_kaggle &amp;lt;chr&amp;gt;, datascimedia_courseforums &amp;lt;chr&amp;gt;,
+## #   datascimedia_youtube &amp;lt;chr&amp;gt;, datascimedia_podcasts &amp;lt;chr&amp;gt;,
+## #   datascimedia_blogs &amp;lt;chr&amp;gt;, datascimedia_journalpubs &amp;lt;chr&amp;gt;,
+## #   datascimedia_slack &amp;lt;chr&amp;gt;, datascimedia_none &amp;lt;chr&amp;gt;,
+## #   datascimedia_other &amp;lt;chr&amp;gt;, datascimedia_other_text &amp;lt;chr&amp;gt;,
+## #   datascicourses_udacity &amp;lt;chr&amp;gt;, datascicourses_coursera &amp;lt;chr&amp;gt;,
+## #   datascicourses_edx &amp;lt;chr&amp;gt;, datascicourses_datacamp &amp;lt;chr&amp;gt;,
+## #   datascicourses_dataquest &amp;lt;chr&amp;gt;, datascicourses_kaggle &amp;lt;chr&amp;gt;,
+## #   datascicourses_fastai &amp;lt;chr&amp;gt;, datascicourses_udemy &amp;lt;chr&amp;gt;,
+## #   datascicourses_linkedin &amp;lt;chr&amp;gt;, datascicourses_university &amp;lt;chr&amp;gt;,
+## #   datascicourses_none &amp;lt;chr&amp;gt;, datascicourses_other &amp;lt;chr&amp;gt;,
+## #   datascicourses_other_text &amp;lt;chr&amp;gt;, primarytool &amp;lt;chr&amp;gt;,
+## #   primarytool_basic &amp;lt;chr&amp;gt;, primarytool_advanced &amp;lt;chr&amp;gt;,
+## #   primarytool_bi &amp;lt;chr&amp;gt;, primarytool_devenv &amp;lt;chr&amp;gt;,
+## #   primarytool_cloud &amp;lt;chr&amp;gt;, primarytool_other &amp;lt;chr&amp;gt;,
+## #   experience_data &amp;lt;chr&amp;gt;, ide_jupyter &amp;lt;chr&amp;gt;, ide_rstudio &amp;lt;chr&amp;gt;,
+## #   ide_pycharm &amp;lt;chr&amp;gt;, ide_atom &amp;lt;chr&amp;gt;, ide_matlab &amp;lt;chr&amp;gt;,
+## #   ide_visualstudio &amp;lt;chr&amp;gt;, ide_spyder &amp;lt;chr&amp;gt;, ide_vim_emacs &amp;lt;chr&amp;gt;,
+## #   ide_notepadpp &amp;lt;chr&amp;gt;, ide_sublimetext &amp;lt;chr&amp;gt;, ide_none &amp;lt;chr&amp;gt;,
+## #   ide_other &amp;lt;chr&amp;gt;, ide_other_text &amp;lt;chr&amp;gt;, notebook_kaggle &amp;lt;chr&amp;gt;,
+## #   notebook_googlecolab &amp;lt;chr&amp;gt;, notebook_msoft_azure &amp;lt;chr&amp;gt;,
+## #   notebook_googlecloud &amp;lt;chr&amp;gt;, notebook_paperspace &amp;lt;chr&amp;gt;,
+## #   notebook_floydhub &amp;lt;chr&amp;gt;, notebook_binder_jupyterhub &amp;lt;chr&amp;gt;,
+## #   notebook_watson_studio &amp;lt;chr&amp;gt;, notebook_codeocean &amp;lt;chr&amp;gt;,
+## #   notebook_aws &amp;lt;chr&amp;gt;, notebook_none &amp;lt;chr&amp;gt;, notebook_other &amp;lt;chr&amp;gt;,
+## #   notebook_other_text &amp;lt;chr&amp;gt;, language_python &amp;lt;chr&amp;gt;, language_R &amp;lt;chr&amp;gt;,
+## #   language_sql &amp;lt;chr&amp;gt;, language_C &amp;lt;chr&amp;gt;, language_Cpp &amp;lt;chr&amp;gt;,
+## #   language_java &amp;lt;chr&amp;gt;, language_javascript &amp;lt;chr&amp;gt;,
+## #   language_typescript &amp;lt;chr&amp;gt;, language_bash &amp;lt;chr&amp;gt;, language_matlab &amp;lt;chr&amp;gt;,
+## #   language_none &amp;lt;chr&amp;gt;, language_other &amp;lt;chr&amp;gt;, language_other_text &amp;lt;chr&amp;gt;,
+## #   recommend_first_language &amp;lt;chr&amp;gt;,
+## #   recommend_first_language_other_text &amp;lt;chr&amp;gt;, datavizlib_ggplot &amp;lt;chr&amp;gt;,
+## #   datavizlib_matplotlib &amp;lt;chr&amp;gt;, datavizlib_altair &amp;lt;chr&amp;gt;,
+## #   datavizlib_shiny &amp;lt;chr&amp;gt;, datavizlib_d3js &amp;lt;chr&amp;gt;,
+## #   datavizlib_plotly &amp;lt;chr&amp;gt;, datavizlib_bokeh &amp;lt;chr&amp;gt;,
+## #   datavizlib_seaborn &amp;lt;chr&amp;gt;, datavizlib_geoplotlib &amp;lt;chr&amp;gt;, …&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Here we see that the first row contains the text of the question, not responses. Let’s drop that. We could use &lt;code&gt;kaggle[-1,]&lt;/code&gt; but I’m not a fan of dropping rows via indexing, just in case the line gets accidentally run more than once and the top row keeps getting shaved off. Let’s make a more explicit filter based on text in the first row to drop it. While we’re at it, let’s filter to Americans to be consistent with Part 1 of this series.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;kaggle &amp;lt;- kaggle %&amp;gt;% 
+  filter(!str_detect(surveyduration, &amp;quot;Duration&amp;quot;),
+         country_of_residence == &amp;quot;United States of America&amp;quot;)
+
+kaggle&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## # A tibble: 3,085 x 246
+##    surveyduration age   gender gender_other_te… country_of_resi… education
+##    &amp;lt;chr&amp;gt;          &amp;lt;chr&amp;gt; &amp;lt;chr&amp;gt;  &amp;lt;chr&amp;gt;            &amp;lt;chr&amp;gt;            &amp;lt;chr&amp;gt;    
+##  1 624            22-24 Female -1               United States o… Bachelor…
+##  2 214            22-24 Male   -1               United States o… Bachelor…
+##  3 372            30-34 Male   -1               United States o… Master’s…
+##  4 485            50-54 Female -1               United States o… Master’s…
+##  5 979            35-39 Male   -1               United States o… Bachelor…
+##  6 518            25-29 Male   -1               United States o… Doctoral…
+##  7 402            30-34 Female -1               United States o… Master’s…
+##  8 1341           30-34 Female -1               United States o… Doctoral…
+##  9 682            35-39 Male   -1               United States o… Bachelor…
+## 10 443            30-34 Male   -1               United States o… Master’s…
+## # … with 3,075 more rows, and 240 more variables: job_title &amp;lt;chr&amp;gt;,
+## #   job_title_other_text &amp;lt;chr&amp;gt;, company_size &amp;lt;chr&amp;gt;,
+## #   datasci_team_size &amp;lt;chr&amp;gt;, company_ML_incorporation &amp;lt;chr&amp;gt;,
+## #   role_influence_business_decisions &amp;lt;chr&amp;gt;,
+## #   role_build_or_run_data_infrastructure &amp;lt;chr&amp;gt;,
+## #   role_build_ML_prototypes &amp;lt;chr&amp;gt;, role_build_ML_for_production &amp;lt;chr&amp;gt;,
+## #   role_improve_existing_ML_models &amp;lt;chr&amp;gt;, role_ML_research &amp;lt;chr&amp;gt;,
+## #   role_none_of_above &amp;lt;chr&amp;gt;, role_other &amp;lt;chr&amp;gt;, role_other_text &amp;lt;chr&amp;gt;,
+## #   yearly_compensation &amp;lt;chr&amp;gt;,
+## #   amt_spent_ML_cloud_products_last5years &amp;lt;chr&amp;gt;,
+## #   datascimedia_twitterdatasciinfluencers &amp;lt;chr&amp;gt;,
+## #   datascimedia_hackernews &amp;lt;chr&amp;gt;, datascimedia_reddit &amp;lt;chr&amp;gt;,
+## #   datascimedia_kaggle &amp;lt;chr&amp;gt;, datascimedia_courseforums &amp;lt;chr&amp;gt;,
+## #   datascimedia_youtube &amp;lt;chr&amp;gt;, datascimedia_podcasts &amp;lt;chr&amp;gt;,
+## #   datascimedia_blogs &amp;lt;chr&amp;gt;, datascimedia_journalpubs &amp;lt;chr&amp;gt;,
+## #   datascimedia_slack &amp;lt;chr&amp;gt;, datascimedia_none &amp;lt;chr&amp;gt;,
+## #   datascimedia_other &amp;lt;chr&amp;gt;, datascimedia_other_text &amp;lt;chr&amp;gt;,
+## #   datascicourses_udacity &amp;lt;chr&amp;gt;, datascicourses_coursera &amp;lt;chr&amp;gt;,
+## #   datascicourses_edx &amp;lt;chr&amp;gt;, datascicourses_datacamp &amp;lt;chr&amp;gt;,
+## #   datascicourses_dataquest &amp;lt;chr&amp;gt;, datascicourses_kaggle &amp;lt;chr&amp;gt;,
+## #   datascicourses_fastai &amp;lt;chr&amp;gt;, datascicourses_udemy &amp;lt;chr&amp;gt;,
+## #   datascicourses_linkedin &amp;lt;chr&amp;gt;, datascicourses_university &amp;lt;chr&amp;gt;,
+## #   datascicourses_none &amp;lt;chr&amp;gt;, datascicourses_other &amp;lt;chr&amp;gt;,
+## #   datascicourses_other_text &amp;lt;chr&amp;gt;, primarytool &amp;lt;chr&amp;gt;,
+## #   primarytool_basic &amp;lt;chr&amp;gt;, primarytool_advanced &amp;lt;chr&amp;gt;,
+## #   primarytool_bi &amp;lt;chr&amp;gt;, primarytool_devenv &amp;lt;chr&amp;gt;,
+## #   primarytool_cloud &amp;lt;chr&amp;gt;, primarytool_other &amp;lt;chr&amp;gt;,
+## #   experience_data &amp;lt;chr&amp;gt;, ide_jupyter &amp;lt;chr&amp;gt;, ide_rstudio &amp;lt;chr&amp;gt;,
+## #   ide_pycharm &amp;lt;chr&amp;gt;, ide_atom &amp;lt;chr&amp;gt;, ide_matlab &amp;lt;chr&amp;gt;,
+## #   ide_visualstudio &amp;lt;chr&amp;gt;, ide_spyder &amp;lt;chr&amp;gt;, ide_vim_emacs &amp;lt;chr&amp;gt;,
+## #   ide_notepadpp &amp;lt;chr&amp;gt;, ide_sublimetext &amp;lt;chr&amp;gt;, ide_none &amp;lt;chr&amp;gt;,
+## #   ide_other &amp;lt;chr&amp;gt;, ide_other_text &amp;lt;chr&amp;gt;, notebook_kaggle &amp;lt;chr&amp;gt;,
+## #   notebook_googlecolab &amp;lt;chr&amp;gt;, notebook_msoft_azure &amp;lt;chr&amp;gt;,
+## #   notebook_googlecloud &amp;lt;chr&amp;gt;, notebook_paperspace &amp;lt;chr&amp;gt;,
+## #   notebook_floydhub &amp;lt;chr&amp;gt;, notebook_binder_jupyterhub &amp;lt;chr&amp;gt;,
+## #   notebook_watson_studio &amp;lt;chr&amp;gt;, notebook_codeocean &amp;lt;chr&amp;gt;,
+## #   notebook_aws &amp;lt;chr&amp;gt;, notebook_none &amp;lt;chr&amp;gt;, notebook_other &amp;lt;chr&amp;gt;,
+## #   notebook_other_text &amp;lt;chr&amp;gt;, language_python &amp;lt;chr&amp;gt;, language_R &amp;lt;chr&amp;gt;,
+## #   language_sql &amp;lt;chr&amp;gt;, language_C &amp;lt;chr&amp;gt;, language_Cpp &amp;lt;chr&amp;gt;,
+## #   language_java &amp;lt;chr&amp;gt;, language_javascript &amp;lt;chr&amp;gt;,
+## #   language_typescript &amp;lt;chr&amp;gt;, language_bash &amp;lt;chr&amp;gt;, language_matlab &amp;lt;chr&amp;gt;,
+## #   language_none &amp;lt;chr&amp;gt;, language_other &amp;lt;chr&amp;gt;, language_other_text &amp;lt;chr&amp;gt;,
+## #   recommend_first_language &amp;lt;chr&amp;gt;,
+## #   recommend_first_language_other_text &amp;lt;chr&amp;gt;, datavizlib_ggplot &amp;lt;chr&amp;gt;,
+## #   datavizlib_matplotlib &amp;lt;chr&amp;gt;, datavizlib_altair &amp;lt;chr&amp;gt;,
+## #   datavizlib_shiny &amp;lt;chr&amp;gt;, datavizlib_d3js &amp;lt;chr&amp;gt;,
+## #   datavizlib_plotly &amp;lt;chr&amp;gt;, datavizlib_bokeh &amp;lt;chr&amp;gt;,
+## #   datavizlib_seaborn &amp;lt;chr&amp;gt;, datavizlib_geoplotlib &amp;lt;chr&amp;gt;, …&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Much better.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;unique(kaggle$role_influence_business_decisions)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;Analyze and understand data to influence product or business decisions&amp;quot;
+## [2] NA&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Looking at the unique values for these “check all the apply” questions, you can see that a “Checked” response is represented by the text of the response, while leaving it “Unchecked” is represented as an null value. Let’s take these variables and convert them to dummy variables.&lt;/p&gt;
+&lt;p&gt;To do this, I’m going to write a function I’m going to call “dummyify” that just converts non-null values to 1 and null values to 0 and apply with a “mutate_at” that points to the prefixed variables. This is where the renaming is already helping!&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;dummyify &amp;lt;- function(x) {
+  case_when(
+      !is.na(x) ~ 1,
+      is.na(x) ~ 0
+    )
+}
+
+kaggle &amp;lt;- kaggle %&amp;gt;% 
+  mutate_at(
+    vars(c(
+      starts_with(&amp;quot;role_&amp;quot;),
+      starts_with(&amp;quot;datascicourse_&amp;quot;),
+      starts_with(&amp;quot;ide_&amp;quot;), 
+      starts_with(&amp;quot;notebook_&amp;quot;), 
+      starts_with(&amp;quot;language_&amp;quot;),
+      starts_with(&amp;quot;mlalgs_&amp;quot;),
+      starts_with(&amp;quot;datascimedia_&amp;quot;),
+      starts_with(&amp;quot;datavizlib_&amp;quot;),
+      starts_with(&amp;quot;mltools_&amp;quot;),
+      starts_with(&amp;quot;compvisionmethods_&amp;quot;),
+      starts_with(&amp;quot;nlpmethods_&amp;quot;),
+      starts_with(&amp;quot;mlframeworks&amp;quot;),
+      starts_with(&amp;quot;cloudcomputeplatform_&amp;quot;),
+      starts_with(&amp;quot;cloudcomputeproduct_&amp;quot;),
+      starts_with(&amp;quot;bigdataproduct_&amp;quot;),
+      starts_with(&amp;quot;mlproduct_&amp;quot;),
+      starts_with(&amp;quot;automltools_&amp;quot;)
+      )),
+    dummyify
+  )&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Next, we might want to&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>announcement-network</title>
+      <link>/posts/announcement-network/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>/posts/announcement-network/</guid>
+      <description>
+
+
+
 </description>
     </item>
     

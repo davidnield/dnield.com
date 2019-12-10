@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 4.5.0">
+
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="David Nield">
+
+  
+  
+  
+    
+  
+  <meta name="description" content="What is a Data Scientist?">
+
+  
+  <link rel="alternate" hreflang="en-us" href="/posts/kaggle-survey/pt-three.rmarkdown/">
+
+  
+
+
+  
+  
+  
+  <meta name="theme-color" content="#2962ff">
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/github.min.css" crossorigin="anonymous" title="hl-light">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" disabled>
+        
+      
+    
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.css" integrity="sha256-SHMGCYmST46SoyGgo4YR/9AlK1vf3ff84Aq9yK4hdqM=" crossorigin="anonymous">
+    
+
+    
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7CRoboto:400,400italic,700%7CRoboto+Mono&display=swap">
+  
+
+  
+  
+  
+  
+  <link rel="stylesheet" href="/css/academic.css">
+
+  
+
+
+
+
+  
+
+
+  
+
+  <link rel="manifest" href="/index.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon-32.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="/posts/kaggle-survey/pt-three.rmarkdown/">
+
+  
+  
+  
+  
+    
+  
+  
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="twitter:site" content="@DRNield">
+  <meta property="twitter:creator" content="@DRNield">
+  
+  <meta property="og:site_name" content="David Nield">
+  <meta property="og:url" content="/posts/kaggle-survey/pt-three.rmarkdown/">
+  <meta property="og:title" content="The State of Data Science (Part 3) | David Nield">
+  <meta property="og:description" content="What is a Data Scientist?"><meta property="og:image" content="/img/portrait.jpg">
+  <meta property="twitter:image" content="/img/portrait.jpg"><meta property="og:locale" content="en-us">
+  
+    
+      <meta property="article:published_time" content="2019-11-19T00:00:00&#43;00:00">
+    
+    <meta property="article:modified_time" content="2019-11-19T00:00:00&#43;00:00">
+  
+
+  
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  <title>The State of Data Science (Part 3) | David Nield</title>
+
+</head>
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" >
+
+  <aside class="search-results" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search">
+        
+      </div>
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+  
+<nav class="navbar navbar-light fixed-top navbar-expand-lg py-0 compensate-for-scrollbar" id="navbar-main">
+  <div class="container">
+
+    
+      <a class="navbar-brand" href="/">David Nield</a>
+      
+      <button type="button" class="navbar-toggler" data-toggle="collapse"
+              data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span><i class="fas fa-bars"></i></span>
+      </button>
+      
+
+    
+    <div class="collapse navbar-collapse" id="navbar">
+
+      
+      
+      <ul class="navbar-nav ml-auto">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a class="nav-link  active" href="/posts"><span>Blog</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/contact"><span>Contact</span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+
+        
+        <li class="nav-item">
+          <a class="nav-link js-search" href="#"><i class="fas fa-search" aria-hidden="true"></i></a>
+        </li>
+        
+
+        
+
+        
+        <li class="nav-item">
+          <a class="nav-link js-dark-toggle" href="#"><i class="fas fa-moon" aria-hidden="true"></i></a>
+        </li>
+        
+
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+  <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>The State of Data Science (Part 3)</h1>
+
+  
+
+  
+    
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    Nov 19, 2019
+  </span>
+  
+
+  
+
+  
+
+  
+  
+  
+
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fas fa-folder mr-1"></i><a href="/categories/kaggle/">Kaggle</a></span>
+  
+
+</div>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      <p>Today let’s settle the question: what is a data scientist exactly?</p>
+<p>To settle that question, we’re essentially going to answer a related question: who is a data scientist? To do this, I’m going to train a classification model on our survey data from part 1 to figure out what are the traits that predict whether a respondent is a data scientist as opposed to some other category.</p>
+<p>I’ll leave the nitty gritty details and code for the data cleaning and feature engineering at the end for everyone interested.</p>
+<p>The first data cleaning step was to rename all of the variable names from “Q1”, “Q2”, etc. to something more descriptive and useful. This was done manually and was pretty tedious, but it’ll turn out to be useful not just for documentation purposes but also for feature engineering down the road.</p>
+<pre class="r"><code>require(pacman)</code></pre>
+<pre><code>## Loading required package: pacman</code></pre>
+<pre class="r"><code>p_load(tidyverse, caret)
+
+kaggle &lt;- read_csv(&quot;2019_multiple_choice_responses.csv&quot;) %&gt;% 
+  rename(surveyduration = `Time from Start to Finish (seconds)`,
+         age = Q1,
+         gender = Q2,
+         gender_other_text = Q2_OTHER_TEXT,
+         country_of_residence = Q3,
+         education = Q4,
+         job_title = Q5,
+         job_title_other_text = Q5_OTHER_TEXT,
+         company_size = Q6,
+         datasci_team_size = Q7,
+         company_ML_incorporation = Q8,
+         role_influence_business_decisions = Q9_Part_1,
+         role_build_or_run_data_infrastructure = Q9_Part_2,
+         role_build_ML_prototypes = Q9_Part_3,
+         role_build_ML_for_production = Q9_Part_4,
+         role_improve_existing_ML_models = Q9_Part_5,
+         role_ML_research = Q9_Part_6,
+         role_none_of_above = Q9_Part_7,
+         role_other = Q9_Part_8,
+         role_other_text = Q9_OTHER_TEXT,
+         yearly_compensation = Q10,
+         amt_spent_ML_cloud_products_last5years = Q11,
+         datascimedia_twitterdatasciinfluencers = Q12_Part_1,
+         datascimedia_hackernews = Q12_Part_2,
+         datascimedia_reddit = Q12_Part_3,
+         datascimedia_kaggle = Q12_Part_4,
+         datascimedia_courseforums = Q12_Part_5,
+         datascimedia_youtube = Q12_Part_6,
+         datascimedia_podcasts = Q12_Part_7,
+         datascimedia_blogs = Q12_Part_8,
+         datascimedia_journalpubs = Q12_Part_9,
+         datascimedia_slack = Q12_Part_10,
+         datascimedia_none = Q12_Part_11,
+         datascimedia_other = Q12_Part_12,
+         datascimedia_other_text = Q12_OTHER_TEXT,
+         datascicourses_udacity = Q13_Part_1,
+         datascicourses_coursera = Q13_Part_2,
+         datascicourses_edx = Q13_Part_3,
+         datascicourses_datacamp = Q13_Part_4,
+         datascicourses_dataquest = Q13_Part_5,
+         datascicourses_kaggle = Q13_Part_6,
+         datascicourses_fastai = Q13_Part_7,
+         datascicourses_udemy = Q13_Part_8,
+         datascicourses_linkedin = Q13_Part_9,
+         datascicourses_university = Q13_Part_10,
+         datascicourses_none = Q13_Part_11,
+         datascicourses_other = Q13_Part_12,
+         datascicourses_other_text = Q13_OTHER_TEXT,
+         primarytool = Q14,
+         primarytool_basic = Q14_Part_1_TEXT,
+         primarytool_advanced = Q14_Part_2_TEXT,
+         primarytool_bi = Q14_Part_3_TEXT,
+         primarytool_devenv = Q14_Part_4_TEXT,
+         primarytool_cloud = Q14_Part_5_TEXT,
+         primarytool_other = Q14_OTHER_TEXT,
+         experience_data = Q15,
+         ide_jupyter = Q16_Part_1,
+         ide_rstudio = Q16_Part_2,
+         ide_pycharm = Q16_Part_3,
+         ide_atom = Q16_Part_4,
+         ide_matlab = Q16_Part_5,
+         ide_visualstudio = Q16_Part_6,
+         ide_spyder = Q16_Part_7,
+         ide_vim_emacs = Q16_Part_8,
+         ide_notepadpp = Q16_Part_9,
+         ide_sublimetext = Q16_Part_10,
+         ide_none = Q16_Part_11,
+         ide_other = Q16_Part_12,
+         ide_other_text = Q16_OTHER_TEXT,
+         notebook_kaggle = Q17_Part_1,
+         notebook_googlecolab = Q17_Part_2,
+         notebook_msoft_azure = Q17_Part_3,
+         notebook_googlecloud = Q17_Part_4,
+         notebook_paperspace = Q17_Part_5,
+         notebook_floydhub = Q17_Part_6,
+         notebook_binder_jupyterhub = Q17_Part_7,
+         notebook_watson_studio = Q17_Part_8,
+         notebook_codeocean = Q17_Part_9,
+         notebook_aws = Q17_Part_10,
+         notebook_none = Q17_Part_11,
+         notebook_other = Q17_Part_12,
+         notebook_other_text = Q17_OTHER_TEXT,
+         language_python = Q18_Part_1,
+         language_R = Q18_Part_2,
+         language_sql = Q18_Part_3,
+         language_C = Q18_Part_4,
+         language_Cpp = Q18_Part_5,
+         language_java = Q18_Part_6,
+         language_javascript = Q18_Part_7,
+         language_typescript = Q18_Part_8,
+         language_bash = Q18_Part_9,
+         language_matlab = Q18_Part_10,
+         language_none = Q18_Part_11,
+         language_other = Q18_Part_12,
+         language_other_text = Q18_OTHER_TEXT,
+         recommend_first_language = Q19,
+         recommend_first_language_other_text = Q19_OTHER_TEXT,
+         datavizlib_ggplot = Q20_Part_1,
+         datavizlib_matplotlib = Q20_Part_2,
+         datavizlib_altair = Q20_Part_3,
+         datavizlib_shiny = Q20_Part_4,
+         datavizlib_d3js = Q20_Part_5,
+         datavizlib_plotly = Q20_Part_6,
+         datavizlib_bokeh = Q20_Part_7,
+         datavizlib_seaborn = Q20_Part_8,
+         datavizlib_geoplotlib = Q20_Part_9,
+         datavizlib_leaflet = Q20_Part_10,
+         datavizlib_none = Q20_Part_11,
+         datavizlib_other = Q20_Part_12,
+         dataviz_other_text = Q20_OTHER_TEXT,
+         hardware_cpu = Q21_Part_1,
+         hardware_gpu = Q21_Part_2,
+         hardware_tpu = Q21_Part_3,
+         hardware_none_idk = Q21_Part_4,
+         hardware_other = Q21_Part_5,
+         hardware_other_text = Q21_OTHER_TEXT,
+         ever_used_tpu = Q22,
+         experience_ml = Q23,
+         mlalgs_regression = Q24_Part_1,
+         mlalgs_trees = Q24_Part_2,
+         mlalgs_boosting = Q24_Part_3,
+         mlalgs_bayes = Q24_Part_4,
+         mlalgs_evolutionary = Q24_Part_5,
+         mlalgs_denseneuralnets = Q24_Part_6,
+         mlalgs_cnn = Q24_Part_7,
+         mlalgs_gan = Q24_Part_8,
+         mlalgs_rnn = Q24_Part_9,
+         mlalgs_transnets = Q24_Part_10,
+         mlalgs_none = Q24_Part_11,
+         mlalgs_other = Q24_Part_12,
+         mlalgs_other_text = Q24_OTHER_TEXT,
+         mltools_aug = Q25_Part_1,
+         mltools_feateng = Q25_Part_2,
+         mltools_modelselect = Q25_Part_3,
+         mltools_archsearch = Q25_Part_4,
+         mltools_tuning = Q25_Part_5,
+         mltools_fullmlpipelines = Q25_Part_6,
+         mltools_none = Q25_Part_7,
+         mltools_other = Q25_Part_8,
+         mltools_other_text = Q25_OTHER_TEXT,
+         compvisionmethods_genpurpose = Q26_Part_1,
+         compvisionmethods_segmentation = Q26_Part_2,
+         compvisionmethods_detection = Q26_Part_3,
+         compvisionmethods_classification = Q26_Part_4,
+         compvisionmethods_generativenets = Q26_Part_5,
+         compvisionmethods_none = Q26_Part_6,
+         compvisionmethods_other = Q26_Part_7,
+         compvisionmethods_other_text = Q26_OTHER_TEXT,
+         nlpmethods_wordembedding = Q27_Part_1,
+         nlpmethods_encodersdecoders = Q27_Part_2,
+         nlpmethods_contextembedding = Q27_Part_3,
+         nlpmethods_transformermodels = Q27_Part_4,
+         nlpmethods_none = Q27_Part_5,
+         nlpmethods_other = Q27_Part_6,
+         nlpmethods_other_text = Q27_OTHER_TEXT,
+         mlframeworks_sklearn = Q28_Part_1,
+         mlframeworks_tensorflow = Q28_Part_2,
+         mlframeworks_keras = Q28_Part_3,
+         mlframeworks_randomforest = Q28_Part_4,
+         mlframeworks_xgboost = Q28_Part_5,
+         mlframeworks_pytorch = Q28_Part_6,
+         mlframeworks_caret = Q28_Part_7,
+         mlframeworks_lightgbm = Q28_Part_8,
+         mlframeworks_sparkmlib = Q28_Part_9,
+         mlframeworks_fastai = Q28_Part_10,
+         mlframeworks_none = Q28_Part_11,
+         mlframeworks_other = Q28_Part_12,
+         mlframeworks_other_text = Q28_OTHER_TEXT,
+         cloudcomputeplatform_gcp = Q29_Part_1,
+         cloudcomputeplatform_aws = Q29_Part_2,
+         cloudcomputeplatform_azure = Q29_Part_3,
+         cloudcomputeplatform_ibm = Q29_Part_4,
+         cloudcomputeplatform_alibaba = Q29_Part_5,
+         cloudcomputeplatform_salesforce = Q29_Part_6,
+         cloudcomputeplatform_oracle = Q29_Part_7,
+         cloudcomputeplatform_sap = Q29_Part_8,
+         cloudcomputeplatform_vmware = Q29_Part_9,
+         cloudcomputeplatform_redhat = Q29_Part_10,
+         cloudcomputeplatform_none = Q29_Part_11,
+         cloudcomputeplatform_other = Q29_Part_12,
+         cloudcomputeplatform_other_text = Q29_OTHER_TEXT,
+         cloudcomputeproduct_ec2 = Q30_Part_1,
+         cloudcomputeproduct_gce = Q30_Part_2,
+         cloudcomputeproduct_lambda = Q30_Part_3,
+         cloudcomputeproduct_azurevm = Q30_Part_4,
+         cloudcomputeproduct_googleappengine = Q30_Part_5,
+         cloudcomputeproduct_googlecloudfunctions = Q30_Part_6,
+         cloudcomputeproduct_awselasticbeanstalk = Q30_Part_7,
+         cloudcomputeproduct_googlekubernetes = Q30_Part_8,
+         cloudcomputeproduct_awsbatch = Q30_Part_9,
+         cloudcomputeproduct_azurecontainer = Q30_Part_10,
+         cloudcomputeproduct_none = Q30_Part_11,
+         cloudcomputeproduct_other = Q30_Part_12,
+         cloudcomputeproduct_other_text = Q30_OTHER_TEXT,
+         bigdataproduct_bigquery = Q31_Part_1,
+         bigdataproduct_redshift = Q31_Part_2,
+         bigdataproduct_databricks = Q31_Part_3,
+         bigdataproduct_elasticmapreduce = Q31_Part_4,
+         bigdataproduct_teradata = Q31_Part_5,
+         bigdataproduct_msoftanalysis = Q31_Part_6,
+         bigdataproduct_googleclouddataflow = Q31_Part_7,
+         bigdataproduct_athena = Q31_Part_8,
+         bigdataproduct_kinesis = Q31_Part_9,
+         bigdataproduct_googlecloudpubsub = Q31_Part_10,
+         bigdataproduct_none = Q31_Part_11,
+         bigdataproduct_other = Q31_Part_12,
+         bigdataproduct_other_text = Q31_OTHER_TEXT,
+         mlproduct_sas = Q32_Part_1,
+         mlproduct_cloudera = Q32_Part_2,
+         mlproduct_azuremlstudio = Q32_Part_3,
+         mlproduct_googlecloudmlengine = Q32_Part_4,
+         mlproduct_googlecloudvision = Q32_Part_5,
+         mlproduct_googlecloudspeechtotext = Q32_Part_6,
+         mlproduct_googlecloudnaturallanguage = Q32_Part_7,
+         mlproduct_rapidminer = Q32_Part_8,
+         mlproduct_googlecloudtranslation = Q32_Part_9,
+         mlproduct_sagemaker = Q32_Part_10,
+         mlproduct_none = Q32_Part_11,
+         mlproduct_other = Q32_Part_12,
+         mlproduct_other_text = Q32_OTHER_TEXT,
+         automltools_googleautoml = Q33_Part_1,
+         automltools_h20driverless = Q33_Part_2,
+         automltools_databricksautoml = Q33_Part_3,
+         automltools_datarobotautoml = Q33_Part_4,
+         automltools_tpot = Q33_Part_5,
+         automltools_autokeras = Q33_Part_6,
+         automltools_autosklearn = Q33_Part_7,
+         automltools_auto_ml = Q33_Part_8,
+         automltools_xcessiv = Q33_Part_9,
+         automltools_mlbox = Q33_Part_10,
+         automltools_none = Q33_Part_11,
+         automltools_other = Q33_Part_12,
+         automltools_other_text = Q33_OTHER_TEXT,
+         dbproduct_mysql = Q34_Part_1,
+         dbproduct_postgressql = Q34_Part_2,
+         dbproduct_sqllite = Q34_Part_3,
+         dbproduct_msoftsql = Q34_Part_4,
+         dbproduct_oracledb = Q34_Part_5,
+         dbproduct_msoftaccess = Q34_Part_6,
+         dbproduct_awsrelationaldbs = Q34_Part_7,
+         dbproduct_awsdynamodb = Q34_Part_8,
+         dbproduct_azuresqldb = Q34_Part_9,
+         dbproduct_googlecloudsql = Q34_Part_10,
+         dbproduct_none = Q34_Part_11,
+         dbproduct_other = Q34_Part_12,
+         dbproduct_other_text = Q34_OTHER_TEXT
+         )</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<p>You can see that we have an incredible amount of variables here, 246 to be exact.</p>
+<p>But there weren’t 246 questions on the survey: these variables are in a wide format with respect to the “Check all the apply” questions, which I grouped together by using the same prefix (e.g. “role_”) for variables associated with the same question.</p>
+<p>Let’s take a glimpse at the data.</p>
+<pre class="r"><code>kaggle</code></pre>
+<pre><code>## # A tibble: 19,718 x 246
+##    surveyduration age   gender gender_other_te… country_of_resi… education
+##    &lt;chr&gt;          &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;    
+##  1 Duration (in … What… What … What is your ge… In which countr… What is …
+##  2 510            22-24 Male   -1               France           Master’s…
+##  3 423            40-44 Male   -1               India            Professi…
+##  4 83             55-59 Female -1               Germany          Professi…
+##  5 391            40-44 Male   -1               Australia        Master’s…
+##  6 392            22-24 Male   -1               India            Bachelor…
+##  7 470            50-54 Male   -1               France           Master’s…
+##  8 529            22-24 Male   -1               India            Master’s…
+##  9 624            22-24 Female -1               United States o… Bachelor…
+## 10 214            22-24 Male   -1               United States o… Bachelor…
+## # … with 19,708 more rows, and 240 more variables: job_title &lt;chr&gt;,
+## #   job_title_other_text &lt;chr&gt;, company_size &lt;chr&gt;,
+## #   datasci_team_size &lt;chr&gt;, company_ML_incorporation &lt;chr&gt;,
+## #   role_influence_business_decisions &lt;chr&gt;,
+## #   role_build_or_run_data_infrastructure &lt;chr&gt;,
+## #   role_build_ML_prototypes &lt;chr&gt;, role_build_ML_for_production &lt;chr&gt;,
+## #   role_improve_existing_ML_models &lt;chr&gt;, role_ML_research &lt;chr&gt;,
+## #   role_none_of_above &lt;chr&gt;, role_other &lt;chr&gt;, role_other_text &lt;chr&gt;,
+## #   yearly_compensation &lt;chr&gt;,
+## #   amt_spent_ML_cloud_products_last5years &lt;chr&gt;,
+## #   datascimedia_twitterdatasciinfluencers &lt;chr&gt;,
+## #   datascimedia_hackernews &lt;chr&gt;, datascimedia_reddit &lt;chr&gt;,
+## #   datascimedia_kaggle &lt;chr&gt;, datascimedia_courseforums &lt;chr&gt;,
+## #   datascimedia_youtube &lt;chr&gt;, datascimedia_podcasts &lt;chr&gt;,
+## #   datascimedia_blogs &lt;chr&gt;, datascimedia_journalpubs &lt;chr&gt;,
+## #   datascimedia_slack &lt;chr&gt;, datascimedia_none &lt;chr&gt;,
+## #   datascimedia_other &lt;chr&gt;, datascimedia_other_text &lt;chr&gt;,
+## #   datascicourses_udacity &lt;chr&gt;, datascicourses_coursera &lt;chr&gt;,
+## #   datascicourses_edx &lt;chr&gt;, datascicourses_datacamp &lt;chr&gt;,
+## #   datascicourses_dataquest &lt;chr&gt;, datascicourses_kaggle &lt;chr&gt;,
+## #   datascicourses_fastai &lt;chr&gt;, datascicourses_udemy &lt;chr&gt;,
+## #   datascicourses_linkedin &lt;chr&gt;, datascicourses_university &lt;chr&gt;,
+## #   datascicourses_none &lt;chr&gt;, datascicourses_other &lt;chr&gt;,
+## #   datascicourses_other_text &lt;chr&gt;, primarytool &lt;chr&gt;,
+## #   primarytool_basic &lt;chr&gt;, primarytool_advanced &lt;chr&gt;,
+## #   primarytool_bi &lt;chr&gt;, primarytool_devenv &lt;chr&gt;,
+## #   primarytool_cloud &lt;chr&gt;, primarytool_other &lt;chr&gt;,
+## #   experience_data &lt;chr&gt;, ide_jupyter &lt;chr&gt;, ide_rstudio &lt;chr&gt;,
+## #   ide_pycharm &lt;chr&gt;, ide_atom &lt;chr&gt;, ide_matlab &lt;chr&gt;,
+## #   ide_visualstudio &lt;chr&gt;, ide_spyder &lt;chr&gt;, ide_vim_emacs &lt;chr&gt;,
+## #   ide_notepadpp &lt;chr&gt;, ide_sublimetext &lt;chr&gt;, ide_none &lt;chr&gt;,
+## #   ide_other &lt;chr&gt;, ide_other_text &lt;chr&gt;, notebook_kaggle &lt;chr&gt;,
+## #   notebook_googlecolab &lt;chr&gt;, notebook_msoft_azure &lt;chr&gt;,
+## #   notebook_googlecloud &lt;chr&gt;, notebook_paperspace &lt;chr&gt;,
+## #   notebook_floydhub &lt;chr&gt;, notebook_binder_jupyterhub &lt;chr&gt;,
+## #   notebook_watson_studio &lt;chr&gt;, notebook_codeocean &lt;chr&gt;,
+## #   notebook_aws &lt;chr&gt;, notebook_none &lt;chr&gt;, notebook_other &lt;chr&gt;,
+## #   notebook_other_text &lt;chr&gt;, language_python &lt;chr&gt;, language_R &lt;chr&gt;,
+## #   language_sql &lt;chr&gt;, language_C &lt;chr&gt;, language_Cpp &lt;chr&gt;,
+## #   language_java &lt;chr&gt;, language_javascript &lt;chr&gt;,
+## #   language_typescript &lt;chr&gt;, language_bash &lt;chr&gt;, language_matlab &lt;chr&gt;,
+## #   language_none &lt;chr&gt;, language_other &lt;chr&gt;, language_other_text &lt;chr&gt;,
+## #   recommend_first_language &lt;chr&gt;,
+## #   recommend_first_language_other_text &lt;chr&gt;, datavizlib_ggplot &lt;chr&gt;,
+## #   datavizlib_matplotlib &lt;chr&gt;, datavizlib_altair &lt;chr&gt;,
+## #   datavizlib_shiny &lt;chr&gt;, datavizlib_d3js &lt;chr&gt;,
+## #   datavizlib_plotly &lt;chr&gt;, datavizlib_bokeh &lt;chr&gt;,
+## #   datavizlib_seaborn &lt;chr&gt;, datavizlib_geoplotlib &lt;chr&gt;, …</code></pre>
+<p>Here we see that the first row contains the text of the question, not responses. Let’s drop that. We could use <code>kaggle[-1,]</code> but I’m not a fan of dropping rows via indexing, just in case the line gets accidentally run more than once and the top row keeps getting shaved off. Let’s make a more explicit filter based on text in the first row to drop it. While we’re at it, let’s filter to Americans to be consistent with Part 1 of this series.</p>
+<pre class="r"><code>kaggle &lt;- kaggle %&gt;% 
+  filter(!str_detect(surveyduration, &quot;Duration&quot;),
+         country_of_residence == &quot;United States of America&quot;)
+
+kaggle</code></pre>
+<pre><code>## # A tibble: 3,085 x 246
+##    surveyduration age   gender gender_other_te… country_of_resi… education
+##    &lt;chr&gt;          &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;    
+##  1 624            22-24 Female -1               United States o… Bachelor…
+##  2 214            22-24 Male   -1               United States o… Bachelor…
+##  3 372            30-34 Male   -1               United States o… Master’s…
+##  4 485            50-54 Female -1               United States o… Master’s…
+##  5 979            35-39 Male   -1               United States o… Bachelor…
+##  6 518            25-29 Male   -1               United States o… Doctoral…
+##  7 402            30-34 Female -1               United States o… Master’s…
+##  8 1341           30-34 Female -1               United States o… Doctoral…
+##  9 682            35-39 Male   -1               United States o… Bachelor…
+## 10 443            30-34 Male   -1               United States o… Master’s…
+## # … with 3,075 more rows, and 240 more variables: job_title &lt;chr&gt;,
+## #   job_title_other_text &lt;chr&gt;, company_size &lt;chr&gt;,
+## #   datasci_team_size &lt;chr&gt;, company_ML_incorporation &lt;chr&gt;,
+## #   role_influence_business_decisions &lt;chr&gt;,
+## #   role_build_or_run_data_infrastructure &lt;chr&gt;,
+## #   role_build_ML_prototypes &lt;chr&gt;, role_build_ML_for_production &lt;chr&gt;,
+## #   role_improve_existing_ML_models &lt;chr&gt;, role_ML_research &lt;chr&gt;,
+## #   role_none_of_above &lt;chr&gt;, role_other &lt;chr&gt;, role_other_text &lt;chr&gt;,
+## #   yearly_compensation &lt;chr&gt;,
+## #   amt_spent_ML_cloud_products_last5years &lt;chr&gt;,
+## #   datascimedia_twitterdatasciinfluencers &lt;chr&gt;,
+## #   datascimedia_hackernews &lt;chr&gt;, datascimedia_reddit &lt;chr&gt;,
+## #   datascimedia_kaggle &lt;chr&gt;, datascimedia_courseforums &lt;chr&gt;,
+## #   datascimedia_youtube &lt;chr&gt;, datascimedia_podcasts &lt;chr&gt;,
+## #   datascimedia_blogs &lt;chr&gt;, datascimedia_journalpubs &lt;chr&gt;,
+## #   datascimedia_slack &lt;chr&gt;, datascimedia_none &lt;chr&gt;,
+## #   datascimedia_other &lt;chr&gt;, datascimedia_other_text &lt;chr&gt;,
+## #   datascicourses_udacity &lt;chr&gt;, datascicourses_coursera &lt;chr&gt;,
+## #   datascicourses_edx &lt;chr&gt;, datascicourses_datacamp &lt;chr&gt;,
+## #   datascicourses_dataquest &lt;chr&gt;, datascicourses_kaggle &lt;chr&gt;,
+## #   datascicourses_fastai &lt;chr&gt;, datascicourses_udemy &lt;chr&gt;,
+## #   datascicourses_linkedin &lt;chr&gt;, datascicourses_university &lt;chr&gt;,
+## #   datascicourses_none &lt;chr&gt;, datascicourses_other &lt;chr&gt;,
+## #   datascicourses_other_text &lt;chr&gt;, primarytool &lt;chr&gt;,
+## #   primarytool_basic &lt;chr&gt;, primarytool_advanced &lt;chr&gt;,
+## #   primarytool_bi &lt;chr&gt;, primarytool_devenv &lt;chr&gt;,
+## #   primarytool_cloud &lt;chr&gt;, primarytool_other &lt;chr&gt;,
+## #   experience_data &lt;chr&gt;, ide_jupyter &lt;chr&gt;, ide_rstudio &lt;chr&gt;,
+## #   ide_pycharm &lt;chr&gt;, ide_atom &lt;chr&gt;, ide_matlab &lt;chr&gt;,
+## #   ide_visualstudio &lt;chr&gt;, ide_spyder &lt;chr&gt;, ide_vim_emacs &lt;chr&gt;,
+## #   ide_notepadpp &lt;chr&gt;, ide_sublimetext &lt;chr&gt;, ide_none &lt;chr&gt;,
+## #   ide_other &lt;chr&gt;, ide_other_text &lt;chr&gt;, notebook_kaggle &lt;chr&gt;,
+## #   notebook_googlecolab &lt;chr&gt;, notebook_msoft_azure &lt;chr&gt;,
+## #   notebook_googlecloud &lt;chr&gt;, notebook_paperspace &lt;chr&gt;,
+## #   notebook_floydhub &lt;chr&gt;, notebook_binder_jupyterhub &lt;chr&gt;,
+## #   notebook_watson_studio &lt;chr&gt;, notebook_codeocean &lt;chr&gt;,
+## #   notebook_aws &lt;chr&gt;, notebook_none &lt;chr&gt;, notebook_other &lt;chr&gt;,
+## #   notebook_other_text &lt;chr&gt;, language_python &lt;chr&gt;, language_R &lt;chr&gt;,
+## #   language_sql &lt;chr&gt;, language_C &lt;chr&gt;, language_Cpp &lt;chr&gt;,
+## #   language_java &lt;chr&gt;, language_javascript &lt;chr&gt;,
+## #   language_typescript &lt;chr&gt;, language_bash &lt;chr&gt;, language_matlab &lt;chr&gt;,
+## #   language_none &lt;chr&gt;, language_other &lt;chr&gt;, language_other_text &lt;chr&gt;,
+## #   recommend_first_language &lt;chr&gt;,
+## #   recommend_first_language_other_text &lt;chr&gt;, datavizlib_ggplot &lt;chr&gt;,
+## #   datavizlib_matplotlib &lt;chr&gt;, datavizlib_altair &lt;chr&gt;,
+## #   datavizlib_shiny &lt;chr&gt;, datavizlib_d3js &lt;chr&gt;,
+## #   datavizlib_plotly &lt;chr&gt;, datavizlib_bokeh &lt;chr&gt;,
+## #   datavizlib_seaborn &lt;chr&gt;, datavizlib_geoplotlib &lt;chr&gt;, …</code></pre>
+<p>Much better.</p>
+<pre class="r"><code>unique(kaggle$role_influence_business_decisions)</code></pre>
+<pre><code>## [1] &quot;Analyze and understand data to influence product or business decisions&quot;
+## [2] NA</code></pre>
+<p>Looking at the unique values for these “check all the apply” questions, you can see that a “Checked” response is represented by the text of the response, while leaving it “Unchecked” is represented as an null value. Let’s take these variables and convert them to dummy variables.</p>
+<p>To do this, I’m going to write a function I’m going to call “dummyify” that just converts non-null values to 1 and null values to 0 and apply with a “mutate_at” that points to the prefixed variables. This is where the renaming is already helping!</p>
+<pre class="r"><code>dummyify &lt;- function(x) {
+  case_when(
+      !is.na(x) ~ 1,
+      is.na(x) ~ 0
+    )
+}
+
+kaggle &lt;- kaggle %&gt;% 
+  mutate_at(
+    vars(c(
+      starts_with(&quot;role_&quot;),
+      starts_with(&quot;datascicourse_&quot;),
+      starts_with(&quot;ide_&quot;), 
+      starts_with(&quot;notebook_&quot;), 
+      starts_with(&quot;language_&quot;),
+      starts_with(&quot;mlalgs_&quot;),
+      starts_with(&quot;datascimedia_&quot;),
+      starts_with(&quot;datavizlib_&quot;),
+      starts_with(&quot;mltools_&quot;),
+      starts_with(&quot;compvisionmethods_&quot;),
+      starts_with(&quot;nlpmethods_&quot;),
+      starts_with(&quot;mlframeworks&quot;),
+      starts_with(&quot;cloudcomputeplatform_&quot;),
+      starts_with(&quot;cloudcomputeproduct_&quot;),
+      starts_with(&quot;bigdataproduct_&quot;),
+      starts_with(&quot;mlproduct_&quot;),
+      starts_with(&quot;automltools_&quot;)
+      )),
+    dummyify
+  )</code></pre>
+<p>Next, we might want to</p>
+
+    </div>
+
+    
+
+
+
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="/tags/survey-analysis/">survey analysis</a>
+  
+  <a class="badge badge-light" href="/tags/data-visualization/">data visualization</a>
+  
+  <a class="badge badge-light" href="/tags/data-science/">data science</a>
+  
+</div>
+
+
+
+<div class="share-box" aria-hidden="true">
+  <ul class="share">
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://twitter.com/intent/tweet?url=/posts/kaggle-survey/pt-three.rmarkdown/&amp;text=The%20State%20of%20Data%20Science%20%28Part%203%29" target="_blank" rel="noopener" class="share-btn-twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.facebook.com/sharer.php?u=/posts/kaggle-survey/pt-three.rmarkdown/&amp;t=The%20State%20of%20Data%20Science%20%28Part%203%29" target="_blank" rel="noopener" class="share-btn-facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="mailto:?subject=The%20State%20of%20Data%20Science%20%28Part%203%29&amp;body=/posts/kaggle-survey/pt-three.rmarkdown/" target="_blank" rel="noopener" class="share-btn-email">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://www.linkedin.com/shareArticle?url=/posts/kaggle-survey/pt-three.rmarkdown/&amp;title=The%20State%20of%20Data%20Science%20%28Part%203%29" target="_blank" rel="noopener" class="share-btn-linkedin">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://web.whatsapp.com/send?text=The%20State%20of%20Data%20Science%20%28Part%203%29%20/posts/kaggle-survey/pt-three.rmarkdown/" target="_blank" rel="noopener" class="share-btn-whatsapp">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+      </li>
+    
+      
+      
+      
+        
+      
+      
+      
+      <li>
+        <a href="https://service.weibo.com/share/share.php?url=/posts/kaggle-survey/pt-three.rmarkdown/&amp;title=The%20State%20of%20Data%20Science%20%28Part%203%29" target="_blank" rel="noopener" class="share-btn-weibo">
+          <i class="fab fa-weibo"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  
+  
+    
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <img class="portrait mr-3" src="/authors/admin/avatar_hu60340a1b76a180012f072a33435b5d14_90559_250x250_fill_q90_lanczos_center.jpg" alt="Avatar">
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="/">David Nield</a></h5>
+      <h6 class="card-subtitle">Data Analyst</h6>
+      <p class="card-text">My research interests include design-based inference, network analysis, and data visualization.</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <li>
+      <a href="mailto:nield.dr@gmail.com" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://twitter.com/DRNield" target="_blank" rel="noopener">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/davidnield" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+  
+  
+  <div class="article-widget content-widget-hr">
+    <h3>Related</h3>
+    <ul>
+      
+      <li><a href="/posts/kaggle-survey/pt-one/">The State of Data Science (Part 1)</a></li>
+      
+      <li><a href="/posts/kaggle-survey/pt-two/">The State of Data Science (Part 2)</a></li>
+      
+      <li><a href="/posts/kaggle-survey/pt-three/">The State of Data Science (Part 3)</a></li>
+      
+    </ul>
+  </div>
+  
+
+
+
+  </div>
+</article>
+
+      
+
+    
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/highlight.min.js" integrity="sha256-1zu+3BnLYV9LdiY85uXMzii3bdrkelyp37e0ZyTAQh0=" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/languages/r.min.js"></script>
+        
+      
+
+      
+      
+    
+
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.5.1/leaflet.js" integrity="sha256-EErZamuLefUnbMBQbsEqu1USa+btR2oIlCpBJbyD4/g=" crossorigin="anonymous"></script>
+    
+
+    
+    
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    
+    
+    
+    
+    <script>
+      const search_config = {"indexURI":"/index.json","minLength":1,"threshold":0.3};
+      const i18n = {"no_results":"No results found","placeholder":"Search...","results":"results found"};
+      const content_type = {
+        'post': "Posts",
+        'project': "Projects",
+        'publication' : "Publications",
+        'talk' : "Talks"
+        };
+    </script>
+    
+
+    
+    
+
+    
+    
+    <script id="search-hit-fuse-template" type="text/x-template">
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    
+    
+    
+    <script src="/js/academic.min.d6bd04fdad2ad213aa8111c5a3b72fc5.js"></script>
+
+    
+
+
+
+
+
+
+  
+  
+  <div class="container">
+    <footer class="site-footer">
+  
+  <p class="powered-by">
+    
+      <a href="/privacy/">Privacy Policy</a>
+    
+    
+       &middot; 
+      <a href="/terms/">Terms</a>
+    
+  </p>
+  
+
+  <p class="powered-by">
+    &copy; David Nield, 2019 &middot; 
+
+    Made with <a href="https://github.com/davidnield/davidnield.info" target="_blank" rel="noopener"><i class="fas fa-code-branch" style="color:#E13D3D"></i></a>, the <a href="https://cran.r-project.org/" target="_blank" rel="noopener"><i class="fab fa-r-project"></i> </a><a href="https://github.com/rstudio/blogdown" target="_blank" rel="noopener">blogdown</a> package, and the 
+    <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+    <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+    
+    <span class="float-right" aria-hidden="true">
+      <a href="#" class="back-to-top">
+        <span class="button_icon">
+          <i class="fas fa-chevron-up fa-2x"></i>
+        </span>
+      </a>
+    </span>
+    
+  </p>
+</footer>
+
+  </div>
+  
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,7 +1,7 @@
 ---
 markup: mmark
 title: "The State of Data Science (Part 1)"
-summary: "Results from the latest Kaggle Machine Learning & Data Science Survey (n = 19,717 respondents!)"
+summary: "What does the data science landscape look like today?"
 author: "David Nield"
 date: 2019-11-19
 output:
@@ -83,7 +83,7 @@ tags: ["survey analysis", "data visualization", "data science"]
 <h2>Data scientists make the big bucks</h2>
 <p><img src="/posts/kaggle-survey/pt-one_files/figure-html/compensation-1.png" width="672" /></p>
 <p>The 2019 Kaggle ML &amp; DS Survey reports annual compensation in brackets. I’m interested in the median income of data professionals by title, but obviously taking the median of categorical data isn’t something R takes kindly to!</p>
-<p>However, since this factor is ordinal, it is possible to take an idomatic median: just arrange by the ordered factor, and take the median value. The hitch is when you have a a vector of even length and the middle two values are two different categories (e.g. $80,000-89,999 and $90,000-99,999). Strictly speaking, I prefer to just take the cutpoint between the two categories ($90,000) or an interval with the cutpoint as the center point as the value. However, for this quick and dirty exploration, I’m just going to take the lower of the two categories as the winner of the tie.</p>
+<p>However, since this factor is ordinal, it is possible to take an idomatic median: just arrange by the ordered factor, and take the median value. The hitch is when you have a vector of even length and the middle two values are two different categories (e.g. $80,000-89,999 and $90,000-99,999). Strictly speaking, I prefer to just take the cutpoint between the two categories ($90,000) or an interval with the cutpoint as the center point as the value. However, for this quick and dirty exploration, I’m just going to take the lower of the two categories as the winner of the tie.</p>
 <p>The function for this implementation is below, <a href="https://stackoverflow.com/questions/7925102/idiomatic-method-of-finding-the-median-of-an-ordinal">with credit to Hong Ooi and Richie Cotton from StackOverflow.</a></p>
 <pre><code>median.ordered &lt;- function(x) {
   levs &lt;- levels(x)
@@ -93,7 +93,7 @@ tags: ["survey analysis", "data visualization", "data science"]
   }
   ordered(m, labels = levs, levels = seq_along(levs))
 }</code></pre>
-<p>The above plot shows the median income of each job title computed in this way, preserving the ordering of job titles by their frequency in . Students and Unemployed respondents were not asked for their annual compensation, but in order to preserve the frequency ordered they are represented here.</p>
+<p>The above plot shows the median income of each job title computed in this way, preserving the ordering of job titles by their frequency in the previous plot. Students and Unemployed respondents were not asked for their annual compensation, but in order to preserve the frequency order they are represented here.</p>
 <p>Clearly, as a Data Analyst, I’m in the wrong job! Data Analysts and Business Analysts are tied for last, with the median analysts making $80,000 to $89,999 annually, while Data Scientists make the big bucks, with the median data scientist making $125,000 to $149,999 annually.</p>
 </div>
 <div id="data-professionals-team-sizes-are-highly-bimodal" class="section level2">
@@ -114,10 +114,9 @@ tags: ["survey analysis", "data visualization", "data science"]
 <div id="python-is-king" class="section level2">
 <h2>Python is King</h2>
 <p><img src="/posts/kaggle-survey/pt-one_files/figure-html/languages-1.png" width="672" /></p>
-<p>Much to my chagrin as an R user, Python dominates as the most coding language used by data professional. SQL comes next, followed by R, then Java, followed by a long tail of other languages.</p>
-<p>Two things surprise me here: 1) the complete lack of Julia users and 2) the proliference of Java.</p>
-<p>I know Julia is a very young language, but I hear so much about it and it’s eponymous with JuPytR so I expected to see more users.</p>
-<p>As for Java, I’ve always thought of the modal data professional toolkit as: SQL for querying databases, R/Python for modeling and prototyping, and C++ for production code. I don’t know of any data scientists using Java. I’ll be curious to dig into this more.</p>
+<p>Unfortunately, Julia wasn’t offered as an option on this survey, and I’m not sure why. It was asked about in previous iterations of this survey, and Julia has continued to mature as a language.</p>
+<p>Much to my chagrin as an R user, Python dominates as the most coding language used by data professionals. SQL comes next, followed by R, then Java, followed by a long tail of other languages.</p>
+<p>I’m surprised by the proliference of Java. I’ve always thought of the modal data professional toolkit as: SQL for querying databases, R/Python for modeling and prototyping, and C++ for production code. I don’t know of any data scientists using Java. I’ll be curious to dig into this more.</p>
 </div>
 <div id="the-majority-of-data-professionals-on-kaggle-are-relatively-new-to-writing-code-for-data-analysis." class="section level2">
 <h2>The majority of data professionals on Kaggle are relatively new to writing code for data analysis.</h2>

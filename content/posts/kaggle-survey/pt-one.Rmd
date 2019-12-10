@@ -1,7 +1,7 @@
 ---
 markup: mmark
 title: "The State of Data Science (Part 1)"
-summary: "Results from the latest Kaggle Machine Learning & Data Science Survey (n = 19,717 respondents!)"
+summary: "What does the data science landscape look like today?"
 author: "David Nield"
 date: 2019-11-19
 output:
@@ -573,7 +573,7 @@ current %>%
 
 The 2019 Kaggle ML & DS Survey reports annual compensation in brackets. I'm interested in the median income of data professionals by title, but obviously taking the median of categorical data isn't something R takes kindly to!
 
-However, since this factor is ordinal, it is possible to take an idomatic median: just arrange by the ordered factor, and take the median value. The hitch is when you have a a vector of even length and the middle two values are two different categories (e.g. $80,000-89,999 and $90,000-99,999). Strictly speaking, I prefer to just take the cutpoint between the two categories ($90,000) or an interval with the cutpoint as the center point as the value. However, for this quick and dirty exploration, I'm just going to take the lower of the two categories as the winner of the tie.
+However, since this factor is ordinal, it is possible to take an idomatic median: just arrange by the ordered factor, and take the median value. The hitch is when you have a vector of even length and the middle two values are two different categories (e.g. $80,000-89,999 and $90,000-99,999). Strictly speaking, I prefer to just take the cutpoint between the two categories ($90,000) or an interval with the cutpoint as the center point as the value. However, for this quick and dirty exploration, I'm just going to take the lower of the two categories as the winner of the tie.
 
 The function for this implementation is below, [with credit to Hong Ooi and Richie Cotton from StackOverflow.](https://stackoverflow.com/questions/7925102/idiomatic-method-of-finding-the-median-of-an-ordinal)
 
@@ -588,7 +588,7 @@ median.ordered <- function(x) {
 }
 ```
 
-The above plot shows the median income of each job title computed in this way, preserving the ordering of job titles by their frequency in . Students and Unemployed respondents were not asked for their annual compensation, but in order to preserve the frequency ordered they are represented here.
+The above plot shows the median income of each job title computed in this way, preserving the ordering of job titles by their frequency in the previous plot. Students and Unemployed respondents were not asked for their annual compensation, but in order to preserve the frequency order they are represented here.
 
 Clearly, as a Data Analyst, I'm in the wrong job! Data Analysts and Business Analysts are tied for last, with the median analysts making $80,000 to $89,999 annually, while Data Scientists make the big bucks, with the median data scientist making $125,000 to $149,999 annually.
 

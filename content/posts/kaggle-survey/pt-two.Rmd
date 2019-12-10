@@ -1,7 +1,7 @@
 ---
 markup: mmark
-title: "The State of Data Science (Part 1)"
-summary: "Results from the latest Kaggle Machine Learning & Data Science Survey (n = 19,717 respondents!)"
+title: "The State of Data Science (Part 2)"
+summary: "How has the data science landscape changed over the last three years?"
 author: "David Nield"
 date: 2019-11-19
 output:
@@ -259,100 +259,28 @@ tsdata <- current %>%
                                              '200,000 - 250,000',
                                              '250,000 - 300,000',
                                              '300,000 - 500,000',
-                                             '500,000+'))
+                                             '500,000+')),
+                                  education = case_when(
+    education == "I did not complete any formal education past high school" ~ "High school",
+    education == "No formal education past high school" ~ "High school",
+    education == "Some college/university study without earning a bachelor’s degree" ~ "Some college",
+    education == "Some college/university study without earning a bachelor's degree" ~ "Some college",
+    education == "Master's degree" ~ "Master's",
+    education == "Master’s degree" ~ "Master's",
+    education == "Bachelor’s degree" ~ "Bachelor's",
+    education == "Bachelor's degree" ~ "Bachelor's",
+    education == "Doctoral degree" ~ "Doctorate",
+    TRUE ~ education),
+    education = ordered(education, levels = c(
+      "High school",
+      "Some sollege",
+      "Bachelor's",
+      "Professional degree",
+      "Master's",
+      "Doctorate",
+      "I prefer not to answer")
+    )
   )
-
-# Age Group Percentage by Year
-tsdata %>% 
-  group_by(year) %>% 
-  count(age) %>% 
-  mutate(prop = n/sum(n)) %>% 
-  ungroup() %>% 
-  ggplot(aes(x = year, y = prop, color = age, group = age, label = age)) +
-  geom_line() +
-  geom_label() +
-  scale_y_continuous(label = scales::percent) +
-  labs(x = "Year",
-       y = "Percent") +
-  theme_ed +
-  theme(legend.position = "")
-
-# Job Title Percentage by Year
-tsdata %>% 
-  group_by(year) %>% 
-  count(job_title) %>% 
-  mutate(prop = n/sum(n)) %>% 
-  ungroup() %>% 
-  filter(!is.na(job_title)) %>% 
-  ggplot(aes(x = year, y = prop, color = job_title, group = job_title, label = job_title)) +
-  geom_line() +
-  geom_label() +
-  scale_y_continuous(label = scales::percent) +
-  labs(x = "Year",
-       y = "Percent") +
-  theme_ed +
-  theme(legend.position = "")
-
-#
-
-
-tsdata %>% 
-  group_by(year, job_title) %>% 
-  summarise(income = median(yearly_compensation)) %>% 
-  ungroup() %>% 
-  mutate(income_dbl = case_when(
-    income == '50,000 - 60,000' ~ mean(50000, 60000),
-    income == '60,000 - 70,000' ~ mean(60000, 70000),
-    income == '70,000 - 80,000' ~ mean(70000, 80000),
-    income == '80,000 - 90,000' ~ mean(80000, 90000),
-    income == '90,000 - 100,000' ~ mean(90000, 10000),
-    income == '100,000 - 125,000' ~ mean(100000, 125000),
-    income == '125,000 - 150,000' ~ mean(125000, 150000)
-  )) %>% 
-  filter(!is.na(job_title)) %>% 
-  ggplot(aes(x = year, y = income_dbl, label = job_title, group = job_title, color = job_title)) +
-  geom_line() +
-  geom_label_repel(min.segment.length = 1e10, direction = 'y', box.padding = 0, seed = 2) +
-  scale_y_continuous(label = scales::dollar) +
-  labs(x = "Year",
-       y = "Median Income") +
-  theme_ed +
-  theme(legend.position = "")
-
-tsdata %>% 
-  filter(gender %in% c("Male", "Female")) %>% 
-  group_by(year) %>% 
-  count(gender) %>% 
-  mutate(prop = n/sum(n)) %>% 
-  ungroup() %>% 
-  ggplot(aes(x = year, y = prop, fill = gender)) +
-  geom_bar(position = 'stack', stat = 'identity') +
-  scale_y_continuous(label = scales::percent) +
-  labs(x = 'Year',
-       y = 'Percent',
-       fill = 'Gender') +
-  theme_ed
-
-tsdata %>% 
-  select(year, starts_with("language")) %>% 
-  group_by(year) %>% 
-  summarise_all(~sum(., na.rm = TRUE)/n()) %>% 
-  gather(language, prop, -year) %>% 
-  mutate(language = str_extract(language, pattern = "(?<=language_).*"),
-         language = case_when(language == 'python' ~ 'Python',
-                              language == 'sql' ~ 'SQL',
-                              language == 'java' ~ 'Java',
-                              language == 'c_cpp' ~ 'C/C++',
-                              language == 'matlab' ~ 'MATLAB',
-                              language == 'R' ~ 'R')) %>% 
-  ggplot(aes(x = year, y = prop, group = language, label = language, color = language)) +
-  geom_line() +
-  geom_label_repel(min.segment.length = 1, direction = 'y', box.padding = 0.1, seed = 42) +
-  scale_y_continuous(label = scales::percent) +
-  labs(x = "Year",
-       y = "Percent") +
-  theme_ed +
-  theme(legend.position = "")
 
 ```
 
@@ -722,3 +650,186 @@ tsdata %>%
     # major = MajorSelect,
 ```
 
+Kaggle has released the data for their third annual [*Machine Learning and Data Science Survey*](https://www.kaggle.com/c/kaggle-survey-2019/overview). I've only recently joined the Kaggle platform as I've transitioned from academia to private industry, so this seems to be an excellent opportunity to explore the backgrounds of my new data science peers.
+
+This is the second of the three part series exploring this data.
+
+[Part 1](https://dnield.com/posts/kaggle-survey/pt-one/) explored this year's survey results.
+
+Part 2, this post, brings in survey data from the first two years of this annual survey to investigate how the field has changed over the last three years in the United States.
+
+Part 3 will use modeling try to answer three burning questions I have: 1. what *is* the difference between the variety of different job titles in the Data field, 2. what factors predict annual compensation, and 3. how unique different combinations of characteristics in the field to explore how unique I am, or are you are, in the data science community.
+
+{{% alert note %}}
+
+Because I am based in the United States, as are most of the data science community with which I interact with regularly in-person or on social media, this analysis is limited to respondents living in the United States.
+
+{{% /alert %}}
+
+Let's get started!
+
+# Demographics
+## The data field today is as disproportionately male as its ever been.
+
+```{r gender, echo = FALSE}
+tsdata %>% 
+  filter(gender %in% c("Male", "Female")) %>% 
+  group_by(year) %>% 
+  count(gender) %>% 
+  mutate(prop = n/sum(n)) %>% 
+  ungroup() %>% 
+  ggplot(aes(x = year, y = prop, fill = gender)) +
+  geom_bar(position = 'stack', stat = 'identity') +
+  scale_y_continuous(label = scales::percent) +
+  labs(x = 'Year',
+       y = 'Percent',
+       fill = 'Gender') +
+  theme_ed
+```
+
+Perhaps unsurprising given how disportionately male we found the field to be in [part 1](https://dnield.com/posts/kaggle-survey/pt-one/), but there appears to be no trend towards increasing gender diversity among data professionals.
+
+## No clear trend in age composition
+```{r age, echo = FALSE}
+# Age Group Percentage by Year
+tsdata %>% 
+  group_by(year) %>% 
+  count(age) %>% 
+  mutate(prop = n/sum(n)) %>% 
+  ungroup() %>% 
+  ggplot(aes(x = year, y = prop, color = age, group = age, label = age)) +
+  geom_line() +
+  geom_label() +
+  scale_y_continuous(label = scales::percent) +
+  labs(x = "Year",
+       y = "Percent") +
+  theme_ed +
+  theme(legend.position = "")
+```
+
+Survey data doesn't seem to show a clear trend in the age composition of data professionals. This isn't to say that the composition is stable or unchanging. As always, it should be noted that this survey is a not a random sample of data professionals, but a voluntary response sample survey of Kaggle users, so the composition may change widely based on how Kaggle chooses to promote the survey.
+
+## The increasingly educated data workforce
+```{r education, echo = FALSE}
+tsdata %>% 
+  filter(!is.na(education),
+         education != "I prefer not to answer") %>% 
+  group_by(year) %>% 
+  count(education) %>% 
+  mutate(prop = n/sum(n)) %>% 
+  ungroup() %>% 
+  # mutate(label = if_else(year == max(year), as.character(education), NA_character_)) %>% 
+  ggplot(aes(x = year, y = prop, group = education, color = education, label = education)) +
+  geom_line() +
+  geom_label() +
+  scale_y_continuous(label = scales::percent) +
+  scale_color_brewer(palette = 'Set1') +
+  labs(x = "Year",
+       y = "Percent") +
+  theme_ed +
+  theme(legend.position = "")
+```
+
+The plot above shows the highest education attainment of respondents to all three years' surveys. The number of data professionals holding a Master's degree shocked me in part 1, but the data show that this has been an ongoing trend, while the percent of data professionals holding professional degrees, or only some college education or a high school diploma is near zero. Whether this trend towards a more educated data workforce is due to former Bachelor's holders seeking and attaining higher education or due to new hires disporportionately coming out of grad school is unclear.
+
+# Titles and Compensation
+## The ascendency of the "data scientist" title
+```{r jobtitles, echo = FALSE}
+# Job Title Percentage by Year
+tsdata %>% 
+  filter(!is.na(job_title)) %>% 
+  group_by(year) %>% 
+  count(job_title) %>% 
+  mutate(prop = n/sum(n)) %>% 
+  ungroup() %>% 
+  ggplot(aes(x = year, y = prop, color = job_title, group = job_title, label = job_title)) +
+  geom_line() +
+  geom_label() +
+  scale_y_continuous(label = scales::percent) +
+  labs(x = "Year",
+       y = "Percent") +
+  theme_ed +
+  theme(legend.position = "")
+```
+
+The proportion of data professionals on Kaggle with the job title "data scientist" has increased 30% relative to 2017: from 30% to 40%. And this doesn't seem to be simple title changing from former "data analysts", who also have increased as a proportion of employed Kaggle respondents.
+
+The greatest decline in relative share of the data workforce are among engineers (which include all titles with "engineer" in their title, from data engineers to SWEs) and researchers (which include all titles with "research" in their title, with the exception of research assistants, which were excluded because these positions are typically not careers).
+
+More difficult to see here is the relative decline in the "Statistician" title, which started at a barely registerable 3.3%, but has since fallen to 2.4%.
+
+## Data scientists' compensation has increased even as the title has become more widespread
+```{r income, echo = FALSE, warning = FALSE}
+tsdata %>% 
+  group_by(year, job_title) %>% 
+  summarise(income = median(yearly_compensation)) %>% 
+  ungroup() %>% 
+  mutate(income_dbl = case_when(
+    income == '50,000 - 60,000' ~ mean(c(50000, 60000)),
+    income == '60,000 - 70,000' ~ mean(c(60000, 70000)),
+    income == '70,000 - 80,000' ~ mean(c(70000, 80000)),
+    income == '80,000 - 90,000' ~ mean(c(80000, 90000)),
+    income == '90,000 - 100,000' ~ mean(c(90000, 100000)),
+    income == '100,000 - 125,000' ~ mean(c(100000, 125000)),
+    income == '125,000 - 150,000' ~ mean(c(125000, 150000))
+  )) %>% 
+  filter(!is.na(job_title)) %>% 
+  ggplot(aes(x = year, y = income_dbl, label = job_title, group = job_title, color = job_title)) +
+  geom_line() +
+  geom_label_repel(min.segment.length = 1e10, direction = 'y', box.padding = 0, seed = 2) +
+  scale_y_continuous(label = scales::dollar,
+                     limits = c(50000, 150000)) +
+  labs(x = "Year",
+       y = "Median Income") +
+  theme_ed +
+  theme(legend.position = "")
+
+```
+
+The above plot reports the typical (median) compensation of respondents with each job title. The responses are an ordinal factor so the data is an idomatic median: arrange by the ordered factor, and take the median value. Given a vector of even length and the middle two values are two different categories (e.g. $80,000-89,999 and $90,000-99,999), the lower value will be used.
+
+The function for this implementation is below, [with credit to Hong Ooi and Richie Cotton from StackOverflow.](https://stackoverflow.com/questions/7925102/idiomatic-method-of-finding-the-median-of-an-ordinal)
+
+```
+median.ordered <- function(x) {
+  levs <- levels(x)
+  m <- median(as.integer(x), na.rm = TRUE)
+  if(floor(m) != m) { 
+  m <- floor(m)
+  }
+  ordered(m, labels = levs, levels = seq_along(levs))
+}
+```
+
+On the whole, the wages of data professionals appear to be on the rise! The median compensation for respondents of every job title except for Engineers appears to be higher in 2019 than it was in 2017 (and median Engineer compensation remaining steady at a very respectable $100,000 to $125,000). Data scientists in particular have broken away to typically make $125,000 to $150,000.
+
+# Languages
+## Python's meteoric rise
+```{r languages, echo = FALSE, warning = FALSE}
+tsdata %>% 
+  select(year, starts_with("language")) %>% 
+  group_by(year) %>% 
+  summarise_all(~sum(., na.rm = TRUE)/n()) %>% 
+  gather(language, prop, -year) %>% 
+  mutate(language = str_extract(language, pattern = "(?<=language_).*"),
+         language = case_when(language == 'python' ~ 'Python',
+                              language == 'sql' ~ 'SQL',
+                              language == 'java' ~ 'Java',
+                              language == 'c_cpp' ~ 'C/C++',
+                              language == 'matlab' ~ 'MATLAB',
+                              language == 'R' ~ 'R'),
+         labels = ifelse(year == max(year), as.character(language), NA_character_)) %>% 
+  ggplot(aes(x = year, y = prop, group = language, label = labels, color = language)) +
+  geom_line() +
+  geom_point() +
+  geom_label_repel(min.segment.length = 10, direction = 'y', box.padding = 0, seed = 5,
+                   nudge_x = 0.2) +
+  scale_y_continuous(label = scales::percent,
+                     limits = c(0, 0.80)) +
+  labs(x = "Year",
+       y = "Percent") +
+  theme_ed +
+  theme(legend.position = "")
+```
+
+About two-thirds of data professionals who program today are using Python, this is a 50% increase relative to the proportion using Python in 2017. Likewise, SQL use has increased 30% during the same time, while R use has remained fairly stable at about 33% and all other languages stable at about 10%.

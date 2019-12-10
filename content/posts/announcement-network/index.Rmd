@@ -5,65 +5,66 @@ date: "11/22/2019"
 output: html_document
 editor_options: 
   chunk_output_type: console
+draft: true
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-
-require(pacman)
-p_load(rtweet, tidyverse)
-
-dn <- lookup_users("DRNield")
-
-dn_flw <- get_followers("DRNield",
-                       n = dn$followers_count,
-                       retryonratelimit = TRUE)
-
-
-dn_flw_data <- lookup_users(dn_flw$user_id)
-
-dn_flw_under5k <- dn_flw_data %>% 
-  filter(followers_count <= 5000)
-
-dn_flw_flw <- lst()
-
-lims <- tibble(start = seq(1, 333, by = 15),
-            end = c(seq(15, 333, by = 15), 333))
-
-for (i in 1:nrow(lims)) {
-  results <- dn_flw$user_id[lims$start[i]:lims$end[i]] %>%
-    map(~ get_followers(.))
-  
-  dn_flw_flw <- c(dn_flw_flw, results)
-  
-  Sys.sleep(60 * 16)
-}
-
-edgelist <- c(lst('2830195082' = dn_flw),
-              dn_flw_flw) %>% 
-  enframe() %>% 
-  unnest() %>% 
-  rename(user = name,
-         follower = user_id)
-
-rate_limit() %>% 
-   arrange(reset)
-
-dn_flw_flw_data_1 <- lookup_users(unique_users[1:90000])
-
-Sys.sleep(60 * 16)
-
-dn_flw_flw_data_2 <- unique_users[90001:180000]
-
-Sys.sleep(60 * 16)
-
-dn_flw_flw_data_3 <- unique_users[180001:270000]
-
-Sys.sleep(60 * 16)
-
-dn_flw_flw_data_4 <- unique_users[270001:293060]
-
-write_rds(dn_flw_flw, "under5kfollowers.rds")
+# knitr::opts_chunk$set(echo = TRUE)
+# 
+# require(pacman)
+# p_load(rtweet, tidyverse)
+# 
+# dn <- lookup_users("DRNield")
+# 
+# dn_flw <- get_followers("DRNield",
+#                        n = dn$followers_count,
+#                        retryonratelimit = TRUE)
+# 
+# 
+# dn_flw_data <- lookup_users(dn_flw$user_id)
+# 
+# dn_flw_under5k <- dn_flw_data %>% 
+#   filter(followers_count <= 5000)
+# 
+# dn_flw_flw <- lst()
+# 
+# lims <- tibble(start = seq(1, 333, by = 15),
+#             end = c(seq(15, 333, by = 15), 333))
+# 
+# for (i in 1:nrow(lims)) {
+#   results <- dn_flw$user_id[lims$start[i]:lims$end[i]] %>%
+#     map(~ get_followers(.))
+#   
+#   dn_flw_flw <- c(dn_flw_flw, results)
+#   
+#   Sys.sleep(60 * 16)
+# }
+# 
+# edgelist <- c(lst('2830195082' = dn_flw),
+#               dn_flw_flw) %>% 
+#   enframe() %>% 
+#   unnest() %>% 
+#   rename(user = name,
+#          follower = user_id)
+# 
+# rate_limit() %>% 
+#    arrange(reset)
+# 
+# dn_flw_flw_data_1 <- lookup_users(unique_users[1:90000])
+# 
+# Sys.sleep(60 * 16)
+# 
+# dn_flw_flw_data_2 <- unique_users[90001:180000]
+# 
+# Sys.sleep(60 * 16)
+# 
+# dn_flw_flw_data_3 <- unique_users[180001:270000]
+# 
+# Sys.sleep(60 * 16)
+# 
+# dn_flw_flw_data_4 <- unique_users[270001:293060]
+# 
+# write_rds(dn_flw_flw, "under5kfollowers.rds")
 
 
 ```
