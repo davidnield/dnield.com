@@ -658,11 +658,7 @@ This is the second blog post exploring this data.
 
 Part 2, this post, brings in survey data from the first two years of this annual survey to investigate how the field has changed over the last three years in the United States.
 
-{{% alert note %}}
-
-Because I am based in the United States, as are most of the data science community with which I interact with regularly in-person or on social media, this analysis is limited to respondents living in the United States.
-
-{{% /alert %}}
+Note: Because I am based in the United States, as are most of the data science community with which I interact with regularly in-person or on social media, this analysis is limited to the 3085 survey respondents living in the United States.
 
 Let's get started!
 

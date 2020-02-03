@@ -372,20 +372,11 @@
 </ul>
 </div>
 
-<p>Kaggle has released the data for their third annual <a href="https://www.kaggle.com/c/kaggle-survey-2019/overview"><em>Machine Learning and Data Science Survey</em></a>. I’ve only recently joined the Kaggle platform as I’ve transitioned from academia to private industry, so this seems to be an excellent opportunity to explore the backgrounds of my new data science peers.</p>
-<p>This is the second of the three part series exploring this data.</p>
+<p><p>Kaggle has released the data for their third annual <a href="https://www.kaggle.com/c/kaggle-survey-2019/overview"><em>Machine Learning and Data Science Survey</em></a>. I’ve only recently joined the Kaggle platform as I’ve transitioned from academia to private industry, so this seems to be an excellent opportunity to explore the backgrounds of my new data science peers.</p>
+<p>This is the second blog post exploring this data.</p>
 <p><a href="https://dnield.com/posts/kaggle-survey/pt-one/">Part 1</a> explored this year’s survey results.</p>
 <p>Part 2, this post, brings in survey data from the first two years of this annual survey to investigate how the field has changed over the last three years in the United States.</p>
-<p>Part 3 will use modeling try to answer three burning questions I have: 1. what <em>is</em> the difference between the variety of different job titles in the Data field, 2. what factors predict annual compensation, and 3. how unique different combinations of characteristics in the field to explore how unique I am, or are you are, in the data science community.</p>
-<p><div class="alert alert-note">
-  <div>
-    <p></p>
-<p>Because I am based in the United States, as are most of the data science community with which I interact with regularly in-person or on social media, this analysis is limited to respondents living in the United States.</p>
-<p></p>
-
-<p></div>
-</div>
-</p>
+<p>Note: Because I am based in the United States, as are most of the data science community with which I interact with regularly in-person or on social media, this analysis is limited to the 3085 survey respondents living in the United States.</p>
 <p>Let’s get started!</p>
 <div id="demographics" class="section level1">
 <h1>Demographics</h1>
@@ -417,7 +408,7 @@
 <div id="data-scientists-compensation-has-increased-even-as-the-title-has-become-more-widespread" class="section level2">
 <h2>Data scientists’ compensation has increased even as the title has become more widespread</h2>
 <p><img src="/posts/kaggle-survey/pt-two_files/figure-html/income-1.png" width="672" /></p>
-<p>The above plot reports the typical (median) compensation of respondents with each job title. The responses are an ordinal factor so the data is an idomatic median: arrange by the ordered factor, and take the median value. Given a vector of even length and the middle two values are two different categories (e.g. $80,000-89,999 and $90,000-99,999), the lower value will be used.</p>
+<p>The above plot reports the typical (median) compensation of respondents with each job title. The responses are an ordinal factor so the data is an idomatic median: arrange by the ordered factor, and take the median value. Given a vector of even length and the middle two values are two different categories (e.g. $80,000-89,999 and $90,000-99,999), the lower value will be used.</p>
 <p>The function for this implementation is below, <a href="https://stackoverflow.com/questions/7925102/idiomatic-method-of-finding-the-median-of-an-ordinal">with credit to Hong Ooi and Richie Cotton from StackOverflow.</a></p>
 <pre><code>median.ordered &lt;- function(x) {
   levs &lt;- levels(x)
@@ -427,7 +418,7 @@
   }
   ordered(m, labels = levs, levels = seq_along(levs))
 }</code></pre>
-<p>On the whole, the wages of data professionals appear to be on the rise! The median compensation for respondents of every job title except for Engineers appears to be higher in 2019 than it was in 2017 (and median Engineer compensation remaining steady at a very respectable $100,000 to $125,000). Data scientists in particular have broken away to typically make $125,000 to $150,000.</p>
+<p>On the whole, the wages of data professionals appear to be on the rise. The median compensation for respondents of every job title except for Engineers appears to be higher in 2019 than it was in 2017 (and median Engineer compensation remaining steady at a very respectable $100,000 to $125,000). Data scientists in particular have broken away to typically make $125,000 to $150,000.</p>
 </div>
 </div>
 <div id="languages" class="section level1">
@@ -447,7 +438,6 @@
 <li><p>“Data scientist” as a title has become extremely widespread, and in spite of this proliference, is as highly paid as ever.</p></li>
 <li><p>Python and SQL are becoming universal, but not at the expense of other languages.</p></li>
 </ul>
-<p>The next post will be my last using this survey data, in it I will be attempting to answer three burning questions: 1) just what is a “data scientist”, 2) what set of skills/characteristics appear to be making the most money, and 3) just how unique are you, or I, in the data workforce?</p>
 </div></p>
 
     </div>
@@ -660,8 +650,6 @@
       
       <li><a href="/posts/kaggle-survey/pt-one/">The State of Data Science (Part 1)</a></li>
       
-      <li><a href="/posts/kaggle-survey/pt-three/">The State of Data Science (Part 3)</a></li>
-      
     </ul>
   </div>
   
@@ -796,7 +784,7 @@
   
 
   <p class="powered-by">
-    &copy; David Nield, 2019 &middot; 
+    © David Nield, 2020 &middot; 
 
     Made with <a href="https://github.com/davidnield/davidnield.info" target="_blank" rel="noopener"><i class="fas fa-code-branch" style="color:#E13D3D"></i></a>, the <a href="https://cran.r-project.org/" target="_blank" rel="noopener"><i class="fab fa-r-project"></i> </a><a href="https://github.com/rstudio/blogdown" target="_blank" rel="noopener">blogdown</a> package, and the 
     <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for

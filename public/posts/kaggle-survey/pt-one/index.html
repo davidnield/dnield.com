@@ -377,20 +377,11 @@
 </ul>
 </div>
 
-<p>Kaggle has released the data for their third annual <a href="https://www.kaggle.com/c/kaggle-survey-2019/overview"><em>Machine Learning and Data Science Survey</em></a>. I’ve only recently joined the Kaggle platform as I’ve transitioned from academia to private industry, so this seems to be an excellent opportunity to explore the backgrounds of my new data science peers.</p>
-<p>This is the first of the three part series exploring this data.</p>
-<p>Part 1 will explore this year’s survey results.</p>
+<p><p>Kaggle has released the data for their third annual <a href="https://www.kaggle.com/c/kaggle-survey-2019/overview"><em>Machine Learning and Data Science Survey</em></a>. I’ve only recently joined the Kaggle platform as I’ve transitioned from academia to private industry, so this seems to be an excellent opportunity to explore the backgrounds of my new data science peers.</p>
+<p>This is the first of the two part series exploring this data.</p>
+<p>Today we will explore this year’s survey results.</p>
 <p>Part 2 will bring in survey data from the first two years of this annual survey to investigate how the field has changed over the last three years in the United States.</p>
-<p>Part 3 will use modeling try to answer three burning questions I have: 1. what <em>is</em> the difference between the variety of different job titles in the Data field, 2. what factors predict annual compensation, and 3. how unique different combinations of characteristics in the field to explore how unique I am, or are you are, in the data science community.</p>
-<p><div class="alert alert-note">
-  <div>
-    <p></p>
-<p>Because I am based in the United States, as are most of the data science community with which I interact with regularly in-person or on social media, this analysis is limited to the 3085 survey respondents living in the United States.</p>
-<p></p>
-
-<p></div>
-</div>
-</p>
+<p>Note: Because I am based in the United States, as are most of the data science community with which I interact with regularly in-person or on social media, this analysis is limited to the 3085 survey respondents living in the United States.</p>
 <p>Let’s get started!</p>
 <div id="demographics" class="section level1">
 <h1>Demographics</h1>
@@ -431,7 +422,7 @@
 <h2>Data scientists make the big bucks</h2>
 <p><img src="/posts/kaggle-survey/pt-one_files/figure-html/compensation-1.png" width="672" /></p>
 <p>The 2019 Kaggle ML &amp; DS Survey reports annual compensation in brackets. I’m interested in the median income of data professionals by title, but obviously taking the median of categorical data isn’t something R takes kindly to!</p>
-<p>However, since this factor is ordinal, it is possible to take an idomatic median: just arrange by the ordered factor, and take the median value. The hitch is when you have a vector of even length and the middle two values are two different categories (e.g. $80,000-89,999 and $90,000-99,999). Strictly speaking, I prefer to just take the cutpoint between the two categories ($90,000) or an interval with the cutpoint as the center point as the value. However, for this quick and dirty exploration, I’m just going to take the lower of the two categories as the winner of the tie.</p>
+<p>However, since this factor is ordinal, it is possible to take an idomatic median: just arrange by the ordered factor, and take the median value. The hitch is when you have a vector of even length and the middle two values are two different categories (e.g. $80,000-89,999 and $90,000-99,999). Strictly speaking, I prefer to just take the cutpoint between the two categories ($90,000) or an interval with the cutpoint as the center point as the value. However, for this quick and dirty exploration, I’m just going to take the lower of the two categories as the winner of the tie.</p>
 <p>The function for this implementation is below, <a href="https://stackoverflow.com/questions/7925102/idiomatic-method-of-finding-the-median-of-an-ordinal">with credit to Hong Ooi and Richie Cotton from StackOverflow.</a></p>
 <pre><code>median.ordered &lt;- function(x) {
   levs &lt;- levels(x)
@@ -489,7 +480,7 @@
 <p>Luckily, we have data on this as well!</p>
 <p><img src="/posts/kaggle-survey/pt-one_files/figure-html/mlframeworks-1.png" width="672" /></p>
 <p>With Python dominance comes sklearn dominance. Luckily for R users, TensorFlow and Keras remain the dominant framework for building neural networks. I expect PyTorch to continue to grow, but if it ever overtakes TensorFlow, I expect R implementations and interfaces to have matured by then.</p>
-<p>I also expect that the <a href="https://www.tidyverse.org/blog/2018/08/tidymodels-0-0-1/"><em>tidymodels</em></a> framework, developed by Max Kuhn, the author of “caret”, and other authors in the tidyverse…-verse to succeed <em>caret</em> to begin emerging as a leading machine learning framework for R users in 2020 as the ecosystem continues to mature.</p>
+<p>I also expect that the <a href="https://www.tidyverse.org/blog/2018/08/tidymodels-0-0-1/"><em>tidymodels</em></a> framework, developed by Max Kuhn, the author of “caret”, and other authors in the tidyverse to succeed <em>caret</em> to begin emerging as a leading machine learning framework for R users in 2020 as the ecosystem continues to mature.</p>
 </div>
 </div>
 <div id="thats-all-folks" class="section level1">
@@ -503,7 +494,7 @@
 <li id="fn1"><p>Retired respondents are not counted as Not Employed here, as they were instructed to choose the most similar to the one they held most recently<a href="#fnref1" class="footnote-back">↩</a></p></li>
 <li id="fn2"><p>Some readers with an economics background may, rightfully, chime in that some frictional unemployment may actually be a sign of a healthy labor market that favors workers, as people may quit jobs knowing they’ll get a better job shortly, although I would argue that this is still consistent with the point that Kagglers are on the platform, in part, as a signal to employers<a href="#fnref2" class="footnote-back">↩</a></p></li>
 <li id="fn3"><p>Even if it’s true that every single respondent has some experience with machine learning, even a miniscule amount of measurement error should result in at least one response indicating none<a href="#fnref3" class="footnote-back">↩</a></p></li>
-<li id="fn4"><p>including Hastie et al in <em>Elements of Statistical Learning</em>, one of the many bibles on the topic<a href="#fnref4" class="footnote-back">↩</a></p></li>
+<li id="fn4"><p>Including Hastie et al in <em>Elements of Statistical Learning</em>, one of the many bibles on the topic<a href="#fnref4" class="footnote-back">↩</a></p></li>
 </ol>
 </div></p>
 
@@ -711,15 +702,6 @@
 
   
   
-  <div class="article-widget content-widget-hr">
-    <h3>Related</h3>
-    <ul>
-      
-      <li><a href="/posts/kaggle-survey/pt-three/">The State of Data Science (Part 3)</a></li>
-      
-    </ul>
-  </div>
-  
 
 
 
@@ -851,7 +833,7 @@
   
 
   <p class="powered-by">
-    &copy; David Nield, 2019 &middot; 
+    © David Nield, 2020 &middot; 
 
     Made with <a href="https://github.com/davidnield/davidnield.info" target="_blank" rel="noopener"><i class="fas fa-code-branch" style="color:#E13D3D"></i></a>, the <a href="https://cran.r-project.org/" target="_blank" rel="noopener"><i class="fab fa-r-project"></i> </a><a href="https://github.com/rstudio/blogdown" target="_blank" rel="noopener">blogdown</a> package, and the 
     <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for

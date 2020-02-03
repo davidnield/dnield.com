@@ -323,12 +323,7 @@ Today we will explore this year's survey results.
 
 Part 2 will bring in survey data from the first two years of this annual survey to investigate how the field has changed over the last three years in the United States.
 
-
-{{% alert note %}}
-
-Because I am based in the United States, as are most of the data science community with which I interact with regularly in-person or on social media, this analysis is limited to the 3085 survey respondents living in the United States.
-
-{{% /alert %}}
+Note: Because I am based in the United States, as are most of the data science community with which I interact with regularly in-person or on social media, this analysis is limited to the 3085 survey respondents living in the United States.
 
 Let's get started!
 
@@ -800,7 +795,7 @@ First of all, there's no reason ex-ante that data analysis should entail fitting
 
 Secondly, I would be surprised if every single Kaggler has the training (formal or informal) necessary for the application and interpretation of even simple machine learning models such as linear regression, nevermind more complex "black box" models like neural networks and support vector machines.
 
-Thirdly, the very definition of what counts as "machine learning" is contentious. Does linear regression even count? My gut says no, only the related linear model selection algorithms like MARS, lasso, and ridge regression count, but linear regression is considered to be a machine learning algorithm by many others^[including Hastie et al in *Elements of Statistical Learning*, one of the many bibles on the topic] and is listed as a machine learning algorithm in this survey. By my own definition, I only have 2 years of machine learning experience, but if linear regression counts then I have 4 years experience, which, according this data, makes me a veteran!
+Thirdly, the very definition of what counts as "machine learning" is contentious. Does linear regression even count? My gut says no, only the related linear model selection algorithms like MARS, lasso, and ridge regression count, but linear regression is considered to be a machine learning algorithm by many others^[Including Hastie et al in *Elements of Statistical Learning*, one of the many bibles on the topic] and is listed as a machine learning algorithm in this survey. By my own definition, I only have 2 years of machine learning experience, but if linear regression counts then I have 4 years experience, which, according this data, makes me a veteran!
 
 Luckily, another question asks respondents which machine learning algorithms they use on a regular basis, helping us to dig into this a bit more.
 
