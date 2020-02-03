@@ -1,6 +1,6 @@
 ---
 markup: mmark
-title: "The State of Data Science (Part 1)"
+title: "The State of Data Science Today"
 summary: "What does the data science landscape look like today?"
 author: "David Nield"
 date: 2019-11-19
