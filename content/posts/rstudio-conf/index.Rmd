@@ -1,0 +1,492 @@
+---
+markup: mmark
+title: "What I learned at rstudio::conf(2020)"
+summary: "Lessons from the Applied Learning Workshop and conference sessions"
+author: "David Nield"
+date: 2020-02-02
+output:
+  blogdown::html_page:
+    toc: true
+categories: ["rstats"]
+tags: ["rstats", "data science", "machine learning"]
+---
+
+This January I was fortunate enough to attend [rstudio::conf(2020)](https://blog.rstudio.com/2019/07/15/rstudio-conf-2020/), the official conference hosted by [RStudio, PBC](https://rstudio.com/) (formerly RStudio, Inc., more on that later) creators of the RStudio IDE and primary contributors to the {tidyverse} ecosystem that has become the defacto standard for data importation, manipulation, and visualization in R.
+
+I could not have asked for a better time for this conference to land in my back yard (San Francisco). As of this writing, I am only 7 months removed from graduating with my Masters and leaving academic political science. My graduate training left me with a deep understanding of linear models and design-based causal inference, but with little or no training in other types of predictive modeling, unsupervised machine learning, version control, or putting models into production.
+
+Being able to attend this conference in my first year as a data professional is an enormous blessing and I thank all of the workshop leaders, TAs, session presenters, and conference attendees for creating such a welcoming environment. Every interaction I had at the conference was positive and a learning moment.
+
+With that, I hope to pay it forward by sharing my notes from rstudio::conf(2020).
+
+
+# Applied Machine Learning Workshop
+
+The first two days of the conference were divided into 19 workshops, taught from 9-5 for two days. I chose the Applied Machine Learning workshop in order to fill the gap in my knowledge about machine learning models beyond OLS and logistic regression. I also knew that the {tidymodels} ecosystem being developed by Max Kuhn and Davis Vaughn, the two workshop leaders, as a successor to their popular {caret} package is nearing maturity and promises fill the modeling gap in the {tidyverse} ecosystem. This was an amazing opportunity to both fill in the gaps as well as learn from the package developers themselves.
+
+My notes for this workshop are incredibly sparse, in no small part because the workshop materials (which are free and available online from [the workshop's github repo](https://github.com/rstudio-conf-2020/applied-ml)) are very detailed.
+
+## {tidymodels} principles
+* Separating model building process into different concepts/steps/units
+  * tidymodels naming conventions
+    * _mod for a parsnip model specification
+    * _fit for a fitted model
+    * _rec for a recipe
+    * _wfl for a workflow
+    * _tune for a tuning object
+    * _res for a general result
+    
+* When you might use PCA
+  * Two variables together might be good for prediction, but not useful individually (Slide 29, Part 3)
+
+* Regular grid search might be super efficient for some ensemble models (boosted trees, lasso, partial least squares) where the packages natively store nested results.
+
+## Example {tidymodels} workflow
+
+Below is an example of a tidymodels from start to finish, from sample splitting, to data preprocessing, to modeling, to tuning hyperparameters.
+
+We'll be using the [Ames Housing dataset](http://jse.amstat.org/v19n3/decock.pdf) which contains 81 variables and 2930 observations and our dependent variable is Sale_Price. Obviously, in an actual analysis we would spend much more time exploring this dataset, but for sole purpose of demonstrating the {tidymodels} workflow, we'll just do some standard preprocessing and throw the kitchen sink at the data and fit an Lasso model.
+
+Let's start by inspecting the data.
+
+```{r setup}
+# Loading packages
+library(tidymodels)
+library(AmesHousing)
+
+# Loading Ames 
+ames <- make_ames()
+
+# Checking data
+glimpse(ames)
+```
+
+Next let's split the data. Here, we'll show one of the neat features of {rsample}, a package within the {tidymodels} ecosystem, which lets us perform stratified sampling on our dependent variable to ensure better balance. We'll stick with the default split, which is a 75-25 Training-Test split.
+
+```{r trainingtestsplit}
+# Setting seed
+set.seed(1)
+
+# Generate split
+ames_split <- initial_split(ames, strata = "Sale_Price")
+
+# Printing the function gives us <Num Rows in Training Set/Num Rows in Testing Set/Total Num Rows>
+ames_split
+
+# Calling training() on this object will give us our training set, and calling testing() on it will give us our testing set
+ames_train <- training(ames_split)
+ames_test <- testing(ames_split)
+
+glimpse(ames_train)
+
+```
+
+Now let's preprocess our data using the {recipes} package, also part of the {tidymodels} ecosystem. To do this, we'll first specify our formula and our data, and then iterate the preprocessing steps we want. To demonstrate a wide range of things that can be done with {recipes}, let's first log transform our dependent variable (Sale_Price), then remove variables containing "_Qual" or "Condition" (which are subjective ratings on the part of the appraiser made on or after the sale, we want to predict Sale_Price before sale!), remove any near-zero variance predictors, create dummy variables out of our factor variables, center and scale our predictors, then run PCA on the 13 different variables that contain "SF" or "Area" to enough components to capture 75% of the variation in these variables. This all sounds like a lot, but the recipes package makes this pre-processing almost self-documenting!
+
+```{r recipe}
+
+ames_rec <- recipe(
+  Sale_Price ~ .,
+  data = ames_train
+) %>% 
+  step_log(Sale_Price, base = 10) %>% 
+  step_rm(matches("Qual"), matches("Cond")) %>% 
+  step_dummy(all_nominal()) %>% 
+  step_center(all_predictors()) %>% 
+  step_scale(all_predictors()) %>% 
+  step_pca(contains("SF"), contains("Area"), threshold = .75) %>% 
+  step_nzv(all_predictors())
+
+ames_rec
+
+```
+
+The next step is to prepare or prep() this recipe, which estimates any parameters necessary for the preprocessing steps from the training set to be later applied to other datasets.
+
+```{r prep}
+
+ames_rec_trained <- prep(ames_rec, training = ames_train, verbose = TRUE)
+
+ames_rec_trained
+
+```
+
+Now we can "juice" the prepared recipes, which gives us our preprocessed training set. Lets take a look at our PCA extraction.
+
+```{r juice}
+
+ames_rec_trained %>% 
+  juice() %>% 
+  select(starts_with("PC"))
+
+```
+
+Not bad, we've reduced 13 variables down to 7. This probably wasn't the best use case of PCA, but it provides a good example of some advanced preprocessing made simple in {recipes}.
+
+Now let's specify our model. We're going to go with a Lasso model with a penalty of 0.001 using the {parsnip} package.
+
+To do this, we're first going to specify our model as a linear regression using linear_reg(), set the mixture to 1 for full L1 regularization (the Lasso), and the penalty/Lambda to 0.001. Then we'll set the engine to "glmnet",as opposed to "lm", "stan", "spark", or "keras" as alternative options. The beauty of {parsnip} is that it unifies the interface for model specifications so that you don't need to remember dozens of different interfaces for each implementation of a model.
+
+```{r lasso}
+
+ames_mod <- linear_reg(penalty = 0.001, mixture = 1) %>% 
+  set_engine("glmnet")
+
+```
+
+Now we have our recipe and our model, we can create our workflow, which is just the preprocessing and model.
+
+```{r workflow}
+
+ames_wfl <- workflow() %>% 
+  add_recipe(ames_rec_trained) %>% 
+  add_model(ames_mod)
+
+```
+
+
+
+
+How does it perform on our training set vs our test set? We would *never* want to do this right away without exploring other improvements first, but for demonstration's sake let's find out anyway using bake() from the {recipes} package and metrics from the {yardstick} package. We'll use three metrics: Root Mean Squared Error (RMSE), $R^2$, and the concordance correlation coefficient.
+
+First we'll set our three metrics, then we'll generate predictions using the juice()ed 
+
+```{r yardstick}
+ames_fit <- fit(
+  ames_mod,
+  Sale_Price ~ .,
+  data = juice(ames_rec_trained)
+)
+
+
+perf_metrics <- metric_set(rmse, rsq, ccc)
+
+perf_lasso_training <- ames_fit %>% 
+  predict(juice(ames_rec_trained)) %>% 
+  bind_cols(juice(ames_rec_trained)) %>% 
+  perf_metrics(truth = Sale_Price, estimate = .pred)
+
+perf_lasso_test <- ames_fit %>% 
+  predict(bake(ames_rec_trained, )) %>% 
+  bind_cols(bake(ames_rec_trained, new_data = ames_test)) %>% 
+  perf_metrics(truth = Sale_Price, estimate = .pred)
+
+```
+
+
+
+Let's say we want to go further than evaluate our training set models using cross-validation. {rsample} also makes that easy, so let's create 10-fold cross-validation sets for evaluating our training set models.
+
+```{r tenfoldcv}
+cv_splits <- vfold_cv(ames_train)
+
+cv_splits
+
+```
+
+
+# Keynotes
+## Open Source Data Science
+* Original legal purpose of corporations
+  * Stakeholder primacy vs shareholder primacy
+* RStudio, Inc. is now RStudio, PBC!
+* Book recs
+  * Fooled by Randomness
+  * Shopcraft and Soulcraft
+  
+## Visualization for AI
+* [People + AI Guidebook](https://pair.withgoogle.com/)
+
+* The _Facets_ tool is available for visualizing AI results of photographic data!
+
+* The _What-If_ tool is available for probing machine learning models for fairness
+
+* _Projector_ tool for TensorFlow for visualizing high dimensional linear space
+
+* _Embedding_ tool for visualizing high dimensional non-linear space
+
+* _TCAV_ method for interpreting black box models for end users
+  * Intermediate layers where you train a classifier on concepts you think might be useful (e.g. stripes in an animal recognition model to help explain why it classified something as a zebra)
+
+* _SMILY_ tool for augmenting similar-image search w/ refinement tools
+  * e.g. refine by region (focus on similar cases to this part of this image)
+  * Go further, select similar cases and "refine by example"
+  * Go further, from these examples, create a concept (TCAV), and adjust by a slider on this concept
+
+* Loss functions as UX Design
+
+# Production Panel
+## End-to-end Data Science 
+_Motivating Example: Capital Bikeshare_
+* High level architecture
+  * Import bike api and train Xgboost in Rmd
+    * Import live data every 20 mins from api
+    * Retrain model every day
+  * Serve using Plumber
+  * Create Shiny app
+    * Always available
+    
+* Complications
+  * Need to store analysis data when importing data from api
+  * Need to store model when updating model
+  
+* Enter Pins
+  * Computer and the Board
+    * Pin data the the board using pins::pin() and get it from pins::pin_get()
+    * Pins are best considered a cacheing mechanism
+    * Not a replacement for a database (), but better than recreating on demand, great for prototyping.
+      * Small
+      * Reused
+      * Current
+    * Best for things you can recreate (not archival)
+
+* Is it secure?
+  * Import/Train
+    * Server/CronJob
+  * Storing Data/Model
+    * Database or Pins board
+  * Serve
+    * Server w/ R Auth
+
+## We're hitting R millions of times a day so we made a talk about it
+* Text-based customer service
+  * AI trained to identify the customer's problem then generate the necessary information to solve that problem for the agent before they ever read it
+  
+* Three Lessons learned
+  * The tale of too many tests
+    * Stakeholder: how can you ensure that model will work before deploying?
+    * Solution: using {testthat} to run a unit testing script to test the script.
+    * Lesson learned
+      * Unit testing = bowling lane buffers
+      * Data scientists make the strikes
+      * Never just turn them off
+      
+  * The curiously slow response
+    * DevOps: sometimes when we hit your topic model API the response is too slow. Can you find out why?
+    * Saw the issue in our production logs
+      * Lesson: you want a record of everything
+      * R packages like {log4r} integrate with production systems
+      * Load testing
+        * {loadtest} package now open source for load testing your code
+      * The problems
+        * Garbage collection: sometimes R needs to stop and clean up a bit
+        * Connection time out: if {httr} tries to connect to a service that's down it'll wait a bit
+      * Important to note: R is at its core single-threaded
+        * But you can work around this
+          * Use parallelizing tools like {future} and RestRserve
+          * Making your code run better
+          * Deploying copies of your API using kubernetes or Docker
+      * Lessons learned
+        * Load testing your code
+        * Check your edge cases
+  * The stakeholders that cried "model"
+    * When things go wrong, people first look to the things they don't understand
+      * We had many Shiny demos but not enough
+        * Great for selling work, but some may want to go deeper
+      * Created an explanatory tool that explains the architecture
+      * Resolve issues by keeping track of things
+        * Confluence for common issues
+        * Definition of *done* for repeated tasks
+    * Lessons learned
+      * Problems are unlikely to be the model
+      * Provide tools people can reference to reassure themselves
+      * When it is the model, document issues and solutions
+* [http://putrinprod.com](http://putrinprod.com)
+
+## Growth Analytics with R
+* Customer journey
+  1. Getting customers
+  2. Retaining customers
+  3. Upselling/cross-selling
+  
+* Retention is key
+  * Key metrics
+    * MAU - Montlhy Active Users
+    * Retention - Pct of active users over time
+    * DAU - Daily Active Users
+    * Churn - Pct of users who turnover between periods
+  * Challenges of retention analytics
+    * Log data is not optimized for analytics
+      * Raw applogs are abundant and complex
+      * Requires transformation from user logs into retention data set
+    * Commercial tools are available, but they are expensive
+    * Skills gap
+    * We want a free, open-source tool to use
+  * Challenge: Base R doesn't compute monthly intervals
+    * Solution: function on Stackoverflow
+    * Using function, add age (in months), and start_month variables
+
+```{r, eval = FALSE}
+dat %>% 
+  group_by(age) %>% 
+  summarise(users = count(users)) %>% 
+  mutate(user_rention = users/max(users))
+```
+
+  * Retention analysis is survival analysis!
+  * A retention curve is essentially a Kaplan-Meier Curve
+  * Book rec: Dirk Moore's _Applied Surival Analysis Using R_
+  
+## Practical {plumber} patterns
+* Problem: how to maintain an api-exposed model without breaking things
+  * How can we test to know?
+  * Use packages!
+  
+# Interface Panel
+## [Accelerating Analytics with Apache Arrow](https://enpiar.com/talks/rstudio-conf-2020/#1)
+
+## Updates to Spark and ML Ecosystem
+* MLFlow = open-source platform for tracking experiments in modeling
+* Book: Mastering Spark with R textbook
+  * Free online
+  
+## [What's new in TensorFlow for R](http://bit.ly/whats-new-in-tf)
+* Packages
+  * {tensorflow}
+  * {keras}
+  * {tfdata}
+  * {tfhub}
+  
+## What's new in TensorFlow 2.x (for #rstats and #tidyverse users)
+
+# Case Studies
+## Journalism using R at the AssocPress
+* Loading data
+  * Use {dbplyr}
+  * Using {googlesheets4}
+  * Using {httr} apis
+  
+## [Making better spaghetti plots](bit.ly/njt-rstudio)
+* Problems
+  * Overplotting
+  * We don't see individuals
+  * Dozens or more plots doesn't help
+  
+* Possible solutions?
+  * Transparency + a model?
+    * But still lose track of individuals
+
+* Introducing brolgar
+  * What is longitudinal data?
+    * indviduals repeatedly measured through time
+
+# Communication
+## [Branding RMarkdown Reports](https://www.wjakethompson.com/talk/2020-01-30-rstudioconf-ratlas/)
+
+## [Automating reports](https://sharstudioconf.netlify.com/#1)
+
+# ggplot2
+## [Best practices with ggplot2](fishandwhistle.net/slides/rstudioconf2020)
+
+* Mapping and facet specifications use tidy evaluation
+  * Use .data[["variable_name"]] within aes() and/or vars()
+  * ggplot(...) + NULL is identical to ggplot(...)
+    * Use it conditional to add items to a plot
+    * ggplot(...) + item1 + item2 is identical to ggplot(...) + list(item1, item2)
+    
+* Namespacing
+  * When writing functions you always need to specify namespaces for any functions from packages, but you don't need to use "::"
+  * E.g. "@importFrom ggplot2 ggplot aes vars facet_wrap geom_point labs"
+  * "@importFrom rlang .data
+  
+## [Spruce up your ggplot2 visualizations with formatted text](https://www.slideshare.net/ClausWilke/spruce-up-your-ggplot2-visualizations-with-formatted-text)
+[https://wilkelab.org/ggtext/](https://wilkelab.org/ggtext/)
+
+```{r, eval = FALSE}
+library(ggtext)
+
+
+# Making "in italics" in italics in title
+data %>% 
+  ggplot(aes(name, value)) +
+  geom_col() + coord_flip() +
+  ggtitle("species name +in italics") +
+  theme(
+    plot.title = element_markdown()
+  )
+
+# Making labels same color as the corresponding bars
+data %>% mutate(
+  color = c("color vector")
+  name = glue("<i style='color:{color}'>{bactname}</i> ({OTUname})")
+) %>% 
+  ggplot(aes(name, value, fill = color)) +
+  geom_col(alpha = 0.5) + coord_flip() +
+  scale_fill_identity() +
+  theme(axis.text.y = element_markdown()})
+
+# Can also put images (by url/file path) in a plot (see presentation)
+
+# Not restricted to theme elements
+iris_cor <- iris %>% 
+  group_by(Species) %>% 
+  summarise(r_sq = cor(x, y)^2) 
+
+```
+
+## [Taking visualization to the next level with the {scales} package](danaseidel.com/rstudioconf2020)
+* 5 parts of scales
+  1. Transformations
+  2. Bounds and rescaling
+  3. Breaks
+  4. Labels
+  5. Palettes
+  
+# Data Science Career Panel
+<!-- ## Takeaways -->
+<!-- * Develop familiarity with SQL, Spark, Hadoop, and Hive -->
+
+## Q/A
+Q: I’m trying to decide whether to maintain a technical role or try and shift into management and decision making—any tips on what to do if I want to do both?
+
+* Panelist 1: It's possible to go back and forth between tracks. Schedule time for yourself (e.g. "I take Fridays to schedule no meetings and go in a corner to code and do code reviews")
+
+* Panelist 3: As a manager, actively make sure you're flexing those technical muscles so you don't lose them (whether that's a coding exercise or a project)
+
+* P1: I actually became a better debugger/StackOverflow searcher from being a manager
+
+* Panelist 2: For better or for worse, when you work for yourself, you get to do both.
+
+Q: Any tips for salary negotiation?
+
+* P3: "How much are you currently making" is a trap question. If you get asked it, you can lie (story about a colleague being asked that, saying 200k, and then getting offered 170k). Ask for more than you think you're worth and the worst they can say is no.
+
+* P1: One thing I've learned to do is to have a network of industry peers where you're comfortable asking what you should ask for. Ask people who are hiring managers at other companies.
+
+* Host: You should be able to ask your colleagues/the people you're working with right now about what they're making.
+
+Q: What's the difference between a Data Analyst and a Data Scientist?
+
+* P1: Analysts get data from DBs, create reports. Scientists do data collection, cleaning, and modeling.
+
+* P3: Scientists tend to have more formal training in quantiative fields (math, stats, physics) and expertise in advanced modeling. Analysts tend to be better at queries, building dashboards and reports, questions like "why are we spending so much money here" whereas Scientists start from scratch, no pre-made CSVs, start from scratch questioning why we do something a certain way, build hypotheses, test them.
+
+* H: It's almost an arbitrary title handled case-by-case by HR.
+
+Q: ???
+
+* P3: Don't need to know everything, it can help just to have a network of people who know things (e.g. I don't know how to do this, but I know someone who might)
+
+Q: Can you recommend any specific Twitter follows?
+
+* P2: Mara Averick (@dataandme), #tidytuesday community, #rstats community, RLadiesGlobal (@RLadiesGlobal)
+
+Q: How important is specializing? Is being a generalist viable as a career or should I specialize?
+
+* P1: It depends. I think there is space for everyone. 
+
+* P3: If I wanted to be a generalist or have the widest appeal possible, I would want expertise in machine learning, big data, and ??? capabilities. If I know what kind of industry or company I want to be at, I would specialize in that domain area (e.g. telecommunications, baseball data). And you're never locked in, if you learn you don't like a specialty area, you can always move in another area.
+
+Q: How do you deal with being the only woman or POC in your data organization?
+
+* P3: When you're the only person of a demographic you take it upon yourself to be representative of the whole, but you have to be able to forgive yourself for mistakes, and remind yourself that you are smart, qualified, etc.
+
+* P1: Try to get other people (allies) to take on some of the work that you would usually be expected to take on as a woman or POC.
+
+Q: Career-wise, is it better to start at a large company or a start-up?
+
+* P1: The most important thing is having support and mentorship. At a start-up, you'll be more generalized and probably less mentorship. At a large company, you'll be more specialized and more opportunity to receive mentorship.
+
+Q: P2, how did you get started in consulting?
+
+* P2: I got started b/c I just had twins and wanted more flexibility than I had at the time. I find customers through digital advertising and through creating resources aimed at beginners and newcomers
