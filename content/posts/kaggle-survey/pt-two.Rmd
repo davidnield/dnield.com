@@ -652,13 +652,11 @@ tsdata <- current %>%
 
 Kaggle has released the data for their third annual [*Machine Learning and Data Science Survey*](https://www.kaggle.com/c/kaggle-survey-2019/overview). I've only recently joined the Kaggle platform as I've transitioned from academia to private industry, so this seems to be an excellent opportunity to explore the backgrounds of my new data science peers.
 
-This is the second of the three part series exploring this data.
+This is the second blog post exploring this data.
 
 [Part 1](https://dnield.com/posts/kaggle-survey/pt-one/) explored this year's survey results.
 
 Part 2, this post, brings in survey data from the first two years of this annual survey to investigate how the field has changed over the last three years in the United States.
-
-Part 3 will use modeling try to answer three burning questions I have: 1. what *is* the difference between the variety of different job titles in the Data field, 2. what factors predict annual compensation, and 3. how unique different combinations of characteristics in the field to explore how unique I am, or are you are, in the data science community.
 
 {{% alert note %}}
 
@@ -807,7 +805,7 @@ median.ordered <- function(x) {
 }
 ```
 
-On the whole, the wages of data professionals appear to be on the rise! The median compensation for respondents of every job title except for Engineers appears to be higher in 2019 than it was in 2017 (and median Engineer compensation remaining steady at a very respectable $100,000 to $125,000). Data scientists in particular have broken away to typically make $125,000 to $150,000.
+On the whole, the wages of data professionals appear to be on the rise. The median compensation for respondents of every job title except for Engineers appears to be higher in 2019 than it was in 2017 (and median Engineer compensation remaining steady at a very respectable $100,000 to $125,000). Data scientists in particular have broken away to typically make $125,000 to $150,000.
 
 # Languages
 ## Python's meteoric rise
@@ -851,5 +849,3 @@ As far as I see here, here are the three big take-aways from Kaggle's three year
 * "Data scientist" as a title has become extremely widespread, and in spite of this proliference, is as highly paid as ever.
 
 * Python and SQL are becoming universal, but not at the expense of other languages.
-
-The next post will be my last using this survey data, in it I will be attempting to answer three burning questions: 1) just what is a "data scientist", 2) what set of skills/characteristics appear to be making the most money, and 3) just how unique are you, or I, in the data workforce?

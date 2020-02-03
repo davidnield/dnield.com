@@ -317,13 +317,12 @@ current <- current %>%
 
 Kaggle has released the data for their third annual [*Machine Learning and Data Science Survey*](https://www.kaggle.com/c/kaggle-survey-2019/overview). I've only recently joined the Kaggle platform as I've transitioned from academia to private industry, so this seems to be an excellent opportunity to explore the backgrounds of my new data science peers.
 
-This is the first of the three part series exploring this data.
+This is the first of the two part series exploring this data.
 
-Part 1 will explore this year's survey results. 
+Today we will explore this year's survey results. 
 
 Part 2 will bring in survey data from the first two years of this annual survey to investigate how the field has changed over the last three years in the United States.
 
-Part 3 will use modeling try to answer three burning questions I have: 1. what *is* the difference between the variety of different job titles in the Data field, 2. what factors predict annual compensation, and 3. how unique different combinations of characteristics in the field to explore how unique I am, or are you are, in the data science community.
 
 {{% alert note %}}
 
@@ -875,7 +874,7 @@ current %>%
 
 With Python dominance comes sklearn dominance. Luckily for R users, TensorFlow and Keras remain the dominant framework for building neural networks. I expect PyTorch to continue to grow, but if it ever overtakes TensorFlow, I expect R implementations and interfaces to have matured by then.
 
-I also expect that the [*tidymodels*](https://www.tidyverse.org/blog/2018/08/tidymodels-0-0-1/) framework, developed by Max Kuhn, the author of "caret", and other authors in the tidyverse...-verse to succeed *caret* to begin emerging as a leading machine learning framework for R users in 2020 as the ecosystem continues to mature.
+I also expect that the [*tidymodels*](https://www.tidyverse.org/blog/2018/08/tidymodels-0-0-1/) framework, developed by Max Kuhn, the author of "caret", and other authors in the tidyverse to succeed *caret* to begin emerging as a leading machine learning framework for R users in 2020 as the ecosystem continues to mature.
 
 # That's all, folks!
 As mentioned before, Part 2 of this series will be a comparing the results of this survey to the results of the two prior annual Kaggle surveys to see how the industry has changed over the last three years.
