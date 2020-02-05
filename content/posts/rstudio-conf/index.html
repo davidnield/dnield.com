@@ -1,0 +1,1613 @@
+---
+title: "What I learned at rstudio::conf(2020)"
+summary: "Lessons from the Applied Learning Workshop and conference sessions"
+author: "David Nield"
+date: 2020-02-02
+output:
+  blogdown::html_page:
+    toc: true
+categories: ["rstats"]
+tags: ["rstats", "data science", "machine learning"]
+---
+
+
+<div id="TOC">
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#stratified-trainingtest-splits">Stratified training/test splits</a></li>
+<li><a href="#data-pre-processing">Data pre-processing</a></li>
+<li><a href="#modeling">Modeling</a></li>
+<li><a href="#model-evaluation">Model evaluation</a></li>
+<li><a href="#model-tuning">Model tuning</a></li>
+</ul>
+</div>
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>This January I was fortunate enough to attend <a href="https://blog.rstudio.com/2019/07/15/rstudio-conf-2020/">rstudio::conf(2020)</a>, the official conference hosted by <a href="https://rstudio.com/">RStudio, PBC</a> creators of the RStudio IDE and major contributors to the {tidyverse} ecosystem that has become the defacto standard for data importation, manipulation, and visualization in R.</p>
+<p>I could not have asked for a better time for this conference to land in my back yard (San Francisco). As of this writing, I am only 7 months removed from graduating with my Masters. My graduate training left me with a deep understanding of linear models and design-based causal inference, but with little or no training in other types of predictive modeling, unsupervised machine learning, version control, or putting models into production.</p>
+<p>Being able to attend this conference in my first year as a data professional is an enormous blessing and I thank all of the workshop leaders, TAs, session presenters, and conference attendees for creating such a welcoming environment. Every interaction I had at the conference was positive and a learning moment.</p>
+<p>With that, I hope to pay it forward by sharing some of what I learned at the conference.</p>
+<p>The first two days of the conference were divided into 19 workshops, each taught from 9-5 for two days. I chose the Applied Machine Learning workshop in order to fill the gap in my knowledge about machine learning models beyond OLS and logistic regression. Max Kuhn and Davis Vaughn were the two workshop leaders and I knew they were in the process of developing the {tidymodels} ecosystem, which stands to be a successor to their popular {caret} package and promises fill the modeling gap in the {tidyverse} ecosystem. This was an amazing opportunity to both fill in the gaps as well as learn from the package developers themselves.</p>
+<p>My notes for this workshop were incredibly sparse, in no small part because the workshop materials (which are free and available online from <a href="https://github.com/rstudio-conf-2020/applied-ml">the workshop’s github repo</a>) are very detailed.</p>
+<p>Instead of sharing those, I’ve decided to revisit a dataset we worked with during the workshop and present an example of a tidymodels workflow from start to finish, from sample splitting, to data preprocessing, to modeling, to tuning hyperparameters, to packaging it all up into a single workflow object.</p>
+<p>We’ll be using the <a href="http://jse.amstat.org/v19n3/decock.pdf">Ames Housing dataset</a> which contains 81 variables and 2930 observations and our dependent variable is Sale_Price. Obviously, in an actual analysis we would spend much more time exploring this dataset, but for sole purpose of demonstrating the {tidymodels} workflow, we’ll just perform a variety of preprocessing, throw the kitchen sink at the data, then fit a Lasso model and a tuned elastic net model.</p>
+<p>Let’s start by inspecting the data.</p>
+<pre class="r"><code>library(tidymodels)
+library(AmesHousing)
+
+ames &lt;- make_ames()
+
+ames %&gt;% 
+  head() %&gt;% 
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">MS_SubClass</th>
+<th align="left">MS_Zoning</th>
+<th align="right">Lot_Frontage</th>
+<th align="right">Lot_Area</th>
+<th align="left">Street</th>
+<th align="left">Alley</th>
+<th align="left">Lot_Shape</th>
+<th align="left">Land_Contour</th>
+<th align="left">Utilities</th>
+<th align="left">Lot_Config</th>
+<th align="left">Land_Slope</th>
+<th align="left">Neighborhood</th>
+<th align="left">Condition_1</th>
+<th align="left">Condition_2</th>
+<th align="left">Bldg_Type</th>
+<th align="left">House_Style</th>
+<th align="left">Overall_Qual</th>
+<th align="left">Overall_Cond</th>
+<th align="right">Year_Built</th>
+<th align="right">Year_Remod_Add</th>
+<th align="left">Roof_Style</th>
+<th align="left">Roof_Matl</th>
+<th align="left">Exterior_1st</th>
+<th align="left">Exterior_2nd</th>
+<th align="left">Mas_Vnr_Type</th>
+<th align="right">Mas_Vnr_Area</th>
+<th align="left">Exter_Qual</th>
+<th align="left">Exter_Cond</th>
+<th align="left">Foundation</th>
+<th align="left">Bsmt_Qual</th>
+<th align="left">Bsmt_Cond</th>
+<th align="left">Bsmt_Exposure</th>
+<th align="left">BsmtFin_Type_1</th>
+<th align="right">BsmtFin_SF_1</th>
+<th align="left">BsmtFin_Type_2</th>
+<th align="right">BsmtFin_SF_2</th>
+<th align="right">Bsmt_Unf_SF</th>
+<th align="right">Total_Bsmt_SF</th>
+<th align="left">Heating</th>
+<th align="left">Heating_QC</th>
+<th align="left">Central_Air</th>
+<th align="left">Electrical</th>
+<th align="right">First_Flr_SF</th>
+<th align="right">Second_Flr_SF</th>
+<th align="right">Low_Qual_Fin_SF</th>
+<th align="right">Gr_Liv_Area</th>
+<th align="right">Bsmt_Full_Bath</th>
+<th align="right">Bsmt_Half_Bath</th>
+<th align="right">Full_Bath</th>
+<th align="right">Half_Bath</th>
+<th align="right">Bedroom_AbvGr</th>
+<th align="right">Kitchen_AbvGr</th>
+<th align="left">Kitchen_Qual</th>
+<th align="right">TotRms_AbvGrd</th>
+<th align="left">Functional</th>
+<th align="right">Fireplaces</th>
+<th align="left">Fireplace_Qu</th>
+<th align="left">Garage_Type</th>
+<th align="left">Garage_Finish</th>
+<th align="right">Garage_Cars</th>
+<th align="right">Garage_Area</th>
+<th align="left">Garage_Qual</th>
+<th align="left">Garage_Cond</th>
+<th align="left">Paved_Drive</th>
+<th align="right">Wood_Deck_SF</th>
+<th align="right">Open_Porch_SF</th>
+<th align="right">Enclosed_Porch</th>
+<th align="right">Three_season_porch</th>
+<th align="right">Screen_Porch</th>
+<th align="right">Pool_Area</th>
+<th align="left">Pool_QC</th>
+<th align="left">Fence</th>
+<th align="left">Misc_Feature</th>
+<th align="right">Misc_Val</th>
+<th align="right">Mo_Sold</th>
+<th align="right">Year_Sold</th>
+<th align="left">Sale_Type</th>
+<th align="left">Sale_Condition</th>
+<th align="right">Sale_Price</th>
+<th align="right">Longitude</th>
+<th align="right">Latitude</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">One_Story_1946_and_Newer_All_Styles</td>
+<td align="left">Residential_Low_Density</td>
+<td align="right">141</td>
+<td align="right">31770</td>
+<td align="left">Pave</td>
+<td align="left">No_Alley_Access</td>
+<td align="left">Slightly_Irregular</td>
+<td align="left">Lvl</td>
+<td align="left">AllPub</td>
+<td align="left">Corner</td>
+<td align="left">Gtl</td>
+<td align="left">North_Ames</td>
+<td align="left">Norm</td>
+<td align="left">Norm</td>
+<td align="left">OneFam</td>
+<td align="left">One_Story</td>
+<td align="left">Above_Average</td>
+<td align="left">Average</td>
+<td align="right">1960</td>
+<td align="right">1960</td>
+<td align="left">Hip</td>
+<td align="left">CompShg</td>
+<td align="left">BrkFace</td>
+<td align="left">Plywood</td>
+<td align="left">Stone</td>
+<td align="right">112</td>
+<td align="left">Typical</td>
+<td align="left">Typical</td>
+<td align="left">CBlock</td>
+<td align="left">Typical</td>
+<td align="left">Good</td>
+<td align="left">Gd</td>
+<td align="left">BLQ</td>
+<td align="right">2</td>
+<td align="left">Unf</td>
+<td align="right">0</td>
+<td align="right">441</td>
+<td align="right">1080</td>
+<td align="left">GasA</td>
+<td align="left">Fair</td>
+<td align="left">Y</td>
+<td align="left">SBrkr</td>
+<td align="right">1656</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1656</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="left">Typical</td>
+<td align="right">7</td>
+<td align="left">Typ</td>
+<td align="right">2</td>
+<td align="left">Good</td>
+<td align="left">Attchd</td>
+<td align="left">Fin</td>
+<td align="right">2</td>
+<td align="right">528</td>
+<td align="left">Typical</td>
+<td align="left">Typical</td>
+<td align="left">Partial_Pavement</td>
+<td align="right">210</td>
+<td align="right">62</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">No_Pool</td>
+<td align="left">No_Fence</td>
+<td align="left">None</td>
+<td align="right">0</td>
+<td align="right">5</td>
+<td align="right">2010</td>
+<td align="left">WD</td>
+<td align="left">Normal</td>
+<td align="right">215000</td>
+<td align="right">-93.61975</td>
+<td align="right">42.05403</td>
+</tr>
+<tr class="even">
+<td align="left">One_Story_1946_and_Newer_All_Styles</td>
+<td align="left">Residential_High_Density</td>
+<td align="right">80</td>
+<td align="right">11622</td>
+<td align="left">Pave</td>
+<td align="left">No_Alley_Access</td>
+<td align="left">Regular</td>
+<td align="left">Lvl</td>
+<td align="left">AllPub</td>
+<td align="left">Inside</td>
+<td align="left">Gtl</td>
+<td align="left">North_Ames</td>
+<td align="left">Feedr</td>
+<td align="left">Norm</td>
+<td align="left">OneFam</td>
+<td align="left">One_Story</td>
+<td align="left">Average</td>
+<td align="left">Above_Average</td>
+<td align="right">1961</td>
+<td align="right">1961</td>
+<td align="left">Gable</td>
+<td align="left">CompShg</td>
+<td align="left">VinylSd</td>
+<td align="left">VinylSd</td>
+<td align="left">None</td>
+<td align="right">0</td>
+<td align="left">Typical</td>
+<td align="left">Typical</td>
+<td align="left">CBlock</td>
+<td align="left">Typical</td>
+<td align="left">Typical</td>
+<td align="left">No</td>
+<td align="left">Rec</td>
+<td align="right">6</td>
+<td align="left">LwQ</td>
+<td align="right">144</td>
+<td align="right">270</td>
+<td align="right">882</td>
+<td align="left">GasA</td>
+<td align="left">Typical</td>
+<td align="left">Y</td>
+<td align="left">SBrkr</td>
+<td align="right">896</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">896</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="left">Typical</td>
+<td align="right">5</td>
+<td align="left">Typ</td>
+<td align="right">0</td>
+<td align="left">No_Fireplace</td>
+<td align="left">Attchd</td>
+<td align="left">Unf</td>
+<td align="right">1</td>
+<td align="right">730</td>
+<td align="left">Typical</td>
+<td align="left">Typical</td>
+<td align="left">Paved</td>
+<td align="right">140</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">120</td>
+<td align="right">0</td>
+<td align="left">No_Pool</td>
+<td align="left">Minimum_Privacy</td>
+<td align="left">None</td>
+<td align="right">0</td>
+<td align="right">6</td>
+<td align="right">2010</td>
+<td align="left">WD</td>
+<td align="left">Normal</td>
+<td align="right">105000</td>
+<td align="right">-93.61976</td>
+<td align="right">42.05301</td>
+</tr>
+<tr class="odd">
+<td align="left">One_Story_1946_and_Newer_All_Styles</td>
+<td align="left">Residential_Low_Density</td>
+<td align="right">81</td>
+<td align="right">14267</td>
+<td align="left">Pave</td>
+<td align="left">No_Alley_Access</td>
+<td align="left">Slightly_Irregular</td>
+<td align="left">Lvl</td>
+<td align="left">AllPub</td>
+<td align="left">Corner</td>
+<td align="left">Gtl</td>
+<td align="left">North_Ames</td>
+<td align="left">Norm</td>
+<td align="left">Norm</td>
+<td align="left">OneFam</td>
+<td align="left">One_Story</td>
+<td align="left">Above_Average</td>
+<td align="left">Above_Average</td>
+<td align="right">1958</td>
+<td align="right">1958</td>
+<td align="left">Hip</td>
+<td align="left">CompShg</td>
+<td align="left">Wd Sdng</td>
+<td align="left">Wd Sdng</td>
+<td align="left">BrkFace</td>
+<td align="right">108</td>
+<td align="left">Typical</td>
+<td align="left">Typical</td>
+<td align="left">CBlock</td>
+<td align="left">Typical</td>
+<td align="left">Typical</td>
+<td align="left">No</td>
+<td align="left">ALQ</td>
+<td align="right">1</td>
+<td align="left">Unf</td>
+<td align="right">0</td>
+<td align="right">406</td>
+<td align="right">1329</td>
+<td align="left">GasA</td>
+<td align="left">Typical</td>
+<td align="left">Y</td>
+<td align="left">SBrkr</td>
+<td align="right">1329</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1329</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="left">Good</td>
+<td align="right">6</td>
+<td align="left">Typ</td>
+<td align="right">0</td>
+<td align="left">No_Fireplace</td>
+<td align="left">Attchd</td>
+<td align="left">Unf</td>
+<td align="right">1</td>
+<td align="right">312</td>
+<td align="left">Typical</td>
+<td align="left">Typical</td>
+<td align="left">Paved</td>
+<td align="right">393</td>
+<td align="right">36</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">No_Pool</td>
+<td align="left">No_Fence</td>
+<td align="left">Gar2</td>
+<td align="right">12500</td>
+<td align="right">6</td>
+<td align="right">2010</td>
+<td align="left">WD</td>
+<td align="left">Normal</td>
+<td align="right">172000</td>
+<td align="right">-93.61939</td>
+<td align="right">42.05266</td>
+</tr>
+<tr class="even">
+<td align="left">One_Story_1946_and_Newer_All_Styles</td>
+<td align="left">Residential_Low_Density</td>
+<td align="right">93</td>
+<td align="right">11160</td>
+<td align="left">Pave</td>
+<td align="left">No_Alley_Access</td>
+<td align="left">Regular</td>
+<td align="left">Lvl</td>
+<td align="left">AllPub</td>
+<td align="left">Corner</td>
+<td align="left">Gtl</td>
+<td align="left">North_Ames</td>
+<td align="left">Norm</td>
+<td align="left">Norm</td>
+<td align="left">OneFam</td>
+<td align="left">One_Story</td>
+<td align="left">Good</td>
+<td align="left">Average</td>
+<td align="right">1968</td>
+<td align="right">1968</td>
+<td align="left">Hip</td>
+<td align="left">CompShg</td>
+<td align="left">BrkFace</td>
+<td align="left">BrkFace</td>
+<td align="left">None</td>
+<td align="right">0</td>
+<td align="left">Good</td>
+<td align="left">Typical</td>
+<td align="left">CBlock</td>
+<td align="left">Typical</td>
+<td align="left">Typical</td>
+<td align="left">No</td>
+<td align="left">ALQ</td>
+<td align="right">1</td>
+<td align="left">Unf</td>
+<td align="right">0</td>
+<td align="right">1045</td>
+<td align="right">2110</td>
+<td align="left">GasA</td>
+<td align="left">Excellent</td>
+<td align="left">Y</td>
+<td align="left">SBrkr</td>
+<td align="right">2110</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">2110</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="left">Excellent</td>
+<td align="right">8</td>
+<td align="left">Typ</td>
+<td align="right">2</td>
+<td align="left">Typical</td>
+<td align="left">Attchd</td>
+<td align="left">Fin</td>
+<td align="right">2</td>
+<td align="right">522</td>
+<td align="left">Typical</td>
+<td align="left">Typical</td>
+<td align="left">Paved</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">No_Pool</td>
+<td align="left">No_Fence</td>
+<td align="left">None</td>
+<td align="right">0</td>
+<td align="right">4</td>
+<td align="right">2010</td>
+<td align="left">WD</td>
+<td align="left">Normal</td>
+<td align="right">244000</td>
+<td align="right">-93.61732</td>
+<td align="right">42.05125</td>
+</tr>
+<tr class="odd">
+<td align="left">Two_Story_1946_and_Newer</td>
+<td align="left">Residential_Low_Density</td>
+<td align="right">74</td>
+<td align="right">13830</td>
+<td align="left">Pave</td>
+<td align="left">No_Alley_Access</td>
+<td align="left">Slightly_Irregular</td>
+<td align="left">Lvl</td>
+<td align="left">AllPub</td>
+<td align="left">Inside</td>
+<td align="left">Gtl</td>
+<td align="left">Gilbert</td>
+<td align="left">Norm</td>
+<td align="left">Norm</td>
+<td align="left">OneFam</td>
+<td align="left">Two_Story</td>
+<td align="left">Average</td>
+<td align="left">Average</td>
+<td align="right">1997</td>
+<td align="right">1998</td>
+<td align="left">Gable</td>
+<td align="left">CompShg</td>
+<td align="left">VinylSd</td>
+<td align="left">VinylSd</td>
+<td align="left">None</td>
+<td align="right">0</td>
+<td align="left">Typical</td>
+<td align="left">Typical</td>
+<td align="left">PConc</td>
+<td align="left">Good</td>
+<td align="left">Typical</td>
+<td align="left">No</td>
+<td align="left">GLQ</td>
+<td align="right">3</td>
+<td align="left">Unf</td>
+<td align="right">0</td>
+<td align="right">137</td>
+<td align="right">928</td>
+<td align="left">GasA</td>
+<td align="left">Good</td>
+<td align="left">Y</td>
+<td align="left">SBrkr</td>
+<td align="right">928</td>
+<td align="right">701</td>
+<td align="right">0</td>
+<td align="right">1629</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="left">Typical</td>
+<td align="right">6</td>
+<td align="left">Typ</td>
+<td align="right">1</td>
+<td align="left">Typical</td>
+<td align="left">Attchd</td>
+<td align="left">Fin</td>
+<td align="right">2</td>
+<td align="right">482</td>
+<td align="left">Typical</td>
+<td align="left">Typical</td>
+<td align="left">Paved</td>
+<td align="right">212</td>
+<td align="right">34</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">No_Pool</td>
+<td align="left">Minimum_Privacy</td>
+<td align="left">None</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">2010</td>
+<td align="left">WD</td>
+<td align="left">Normal</td>
+<td align="right">189900</td>
+<td align="right">-93.63893</td>
+<td align="right">42.06090</td>
+</tr>
+<tr class="even">
+<td align="left">Two_Story_1946_and_Newer</td>
+<td align="left">Residential_Low_Density</td>
+<td align="right">78</td>
+<td align="right">9978</td>
+<td align="left">Pave</td>
+<td align="left">No_Alley_Access</td>
+<td align="left">Slightly_Irregular</td>
+<td align="left">Lvl</td>
+<td align="left">AllPub</td>
+<td align="left">Inside</td>
+<td align="left">Gtl</td>
+<td align="left">Gilbert</td>
+<td align="left">Norm</td>
+<td align="left">Norm</td>
+<td align="left">OneFam</td>
+<td align="left">Two_Story</td>
+<td align="left">Above_Average</td>
+<td align="left">Above_Average</td>
+<td align="right">1998</td>
+<td align="right">1998</td>
+<td align="left">Gable</td>
+<td align="left">CompShg</td>
+<td align="left">VinylSd</td>
+<td align="left">VinylSd</td>
+<td align="left">BrkFace</td>
+<td align="right">20</td>
+<td align="left">Typical</td>
+<td align="left">Typical</td>
+<td align="left">PConc</td>
+<td align="left">Typical</td>
+<td align="left">Typical</td>
+<td align="left">No</td>
+<td align="left">GLQ</td>
+<td align="right">3</td>
+<td align="left">Unf</td>
+<td align="right">0</td>
+<td align="right">324</td>
+<td align="right">926</td>
+<td align="left">GasA</td>
+<td align="left">Excellent</td>
+<td align="left">Y</td>
+<td align="left">SBrkr</td>
+<td align="right">926</td>
+<td align="right">678</td>
+<td align="right">0</td>
+<td align="right">1604</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="left">Good</td>
+<td align="right">7</td>
+<td align="left">Typ</td>
+<td align="right">1</td>
+<td align="left">Good</td>
+<td align="left">Attchd</td>
+<td align="left">Fin</td>
+<td align="right">2</td>
+<td align="right">470</td>
+<td align="left">Typical</td>
+<td align="left">Typical</td>
+<td align="left">Paved</td>
+<td align="right">360</td>
+<td align="right">36</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">No_Pool</td>
+<td align="left">No_Fence</td>
+<td align="left">None</td>
+<td align="right">0</td>
+<td align="right">6</td>
+<td align="right">2010</td>
+<td align="left">WD</td>
+<td align="left">Normal</td>
+<td align="right">195500</td>
+<td align="right">-93.63893</td>
+<td align="right">42.06078</td>
+</tr>
+</tbody>
+</table>
+<p>Tons of (probably) strongly related variables here. In the real world, we’d probably spend some time thinking about which variables are strictly necessary.</p>
+</div>
+<div id="stratified-trainingtest-splits" class="section level1">
+<h1>Stratified training/test splits</h1>
+<p>First, let’s split the data. Here, we’ll show one of the neat features of {rsample}, a package within the {tidymodels} ecosystem, which lets us perform stratified sampling on our dependent variable to ensure better balance. We’ll stick with the default split, which is a 75-25 Training-Test split.</p>
+<pre class="r"><code>## Setting seed
+set.seed(1)
+
+## Generate split
+ames_split &lt;- initial_split(ames, strata = &quot;Sale_Price&quot;)
+
+## Printing the function gives us &lt;Num Rows in Training Set/Num Rows in Testing Set/Total Num Rows&gt;
+ames_split</code></pre>
+<pre><code>## &lt;2199/731/2930&gt;</code></pre>
+<pre class="r"><code>## Calling training() on this object will give us our training set, and calling testing() on it will give us our testing set
+ames_train &lt;- training(ames_split)
+ames_test &lt;- testing(ames_split)
+
+ames_train %&gt;% 
+  head() %&gt;% 
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">MS_SubClass</th>
+<th align="left">MS_Zoning</th>
+<th align="right">Lot_Frontage</th>
+<th align="right">Lot_Area</th>
+<th align="left">Street</th>
+<th align="left">Alley</th>
+<th align="left">Lot_Shape</th>
+<th align="left">Land_Contour</th>
+<th align="left">Utilities</th>
+<th align="left">Lot_Config</th>
+<th align="left">Land_Slope</th>
+<th align="left">Neighborhood</th>
+<th align="left">Condition_1</th>
+<th align="left">Condition_2</th>
+<th align="left">Bldg_Type</th>
+<th align="left">House_Style</th>
+<th align="left">Overall_Qual</th>
+<th align="left">Overall_Cond</th>
+<th align="right">Year_Built</th>
+<th align="right">Year_Remod_Add</th>
+<th align="left">Roof_Style</th>
+<th align="left">Roof_Matl</th>
+<th align="left">Exterior_1st</th>
+<th align="left">Exterior_2nd</th>
+<th align="left">Mas_Vnr_Type</th>
+<th align="right">Mas_Vnr_Area</th>
+<th align="left">Exter_Qual</th>
+<th align="left">Exter_Cond</th>
+<th align="left">Foundation</th>
+<th align="left">Bsmt_Qual</th>
+<th align="left">Bsmt_Cond</th>
+<th align="left">Bsmt_Exposure</th>
+<th align="left">BsmtFin_Type_1</th>
+<th align="right">BsmtFin_SF_1</th>
+<th align="left">BsmtFin_Type_2</th>
+<th align="right">BsmtFin_SF_2</th>
+<th align="right">Bsmt_Unf_SF</th>
+<th align="right">Total_Bsmt_SF</th>
+<th align="left">Heating</th>
+<th align="left">Heating_QC</th>
+<th align="left">Central_Air</th>
+<th align="left">Electrical</th>
+<th align="right">First_Flr_SF</th>
+<th align="right">Second_Flr_SF</th>
+<th align="right">Low_Qual_Fin_SF</th>
+<th align="right">Gr_Liv_Area</th>
+<th align="right">Bsmt_Full_Bath</th>
+<th align="right">Bsmt_Half_Bath</th>
+<th align="right">Full_Bath</th>
+<th align="right">Half_Bath</th>
+<th align="right">Bedroom_AbvGr</th>
+<th align="right">Kitchen_AbvGr</th>
+<th align="left">Kitchen_Qual</th>
+<th align="right">TotRms_AbvGrd</th>
+<th align="left">Functional</th>
+<th align="right">Fireplaces</th>
+<th align="left">Fireplace_Qu</th>
+<th align="left">Garage_Type</th>
+<th align="left">Garage_Finish</th>
+<th align="right">Garage_Cars</th>
+<th align="right">Garage_Area</th>
+<th align="left">Garage_Qual</th>
+<th align="left">Garage_Cond</th>
+<th align="left">Paved_Drive</th>
+<th align="right">Wood_Deck_SF</th>
+<th align="right">Open_Porch_SF</th>
+<th align="right">Enclosed_Porch</th>
+<th align="right">Three_season_porch</th>
+<th align="right">Screen_Porch</th>
+<th align="right">Pool_Area</th>
+<th align="left">Pool_QC</th>
+<th align="left">Fence</th>
+<th align="left">Misc_Feature</th>
+<th align="right">Misc_Val</th>
+<th align="right">Mo_Sold</th>
+<th align="right">Year_Sold</th>
+<th align="left">Sale_Type</th>
+<th align="left">Sale_Condition</th>
+<th align="right">Sale_Price</th>
+<th align="right">Longitude</th>
+<th align="right">Latitude</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">One_Story_1946_and_Newer_All_Styles</td>
+<td align="left">Residential_Low_Density</td>
+<td align="right">141</td>
+<td align="right">31770</td>
+<td align="left">Pave</td>
+<td align="left">No_Alley_Access</td>
+<td align="left">Slightly_Irregular</td>
+<td align="left">Lvl</td>
+<td align="left">AllPub</td>
+<td align="left">Corner</td>
+<td align="left">Gtl</td>
+<td align="left">North_Ames</td>
+<td align="left">Norm</td>
+<td align="left">Norm</td>
+<td align="left">OneFam</td>
+<td align="left">One_Story</td>
+<td align="left">Above_Average</td>
+<td align="left">Average</td>
+<td align="right">1960</td>
+<td align="right">1960</td>
+<td align="left">Hip</td>
+<td align="left">CompShg</td>
+<td align="left">BrkFace</td>
+<td align="left">Plywood</td>
+<td align="left">Stone</td>
+<td align="right">112</td>
+<td align="left">Typical</td>
+<td align="left">Typical</td>
+<td align="left">CBlock</td>
+<td align="left">Typical</td>
+<td align="left">Good</td>
+<td align="left">Gd</td>
+<td align="left">BLQ</td>
+<td align="right">2</td>
+<td align="left">Unf</td>
+<td align="right">0</td>
+<td align="right">441</td>
+<td align="right">1080</td>
+<td align="left">GasA</td>
+<td align="left">Fair</td>
+<td align="left">Y</td>
+<td align="left">SBrkr</td>
+<td align="right">1656</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1656</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="left">Typical</td>
+<td align="right">7</td>
+<td align="left">Typ</td>
+<td align="right">2</td>
+<td align="left">Good</td>
+<td align="left">Attchd</td>
+<td align="left">Fin</td>
+<td align="right">2</td>
+<td align="right">528</td>
+<td align="left">Typical</td>
+<td align="left">Typical</td>
+<td align="left">Partial_Pavement</td>
+<td align="right">210</td>
+<td align="right">62</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">No_Pool</td>
+<td align="left">No_Fence</td>
+<td align="left">None</td>
+<td align="right">0</td>
+<td align="right">5</td>
+<td align="right">2010</td>
+<td align="left">WD</td>
+<td align="left">Normal</td>
+<td align="right">215000</td>
+<td align="right">-93.61975</td>
+<td align="right">42.05403</td>
+</tr>
+<tr class="even">
+<td align="left">One_Story_1946_and_Newer_All_Styles</td>
+<td align="left">Residential_Low_Density</td>
+<td align="right">81</td>
+<td align="right">14267</td>
+<td align="left">Pave</td>
+<td align="left">No_Alley_Access</td>
+<td align="left">Slightly_Irregular</td>
+<td align="left">Lvl</td>
+<td align="left">AllPub</td>
+<td align="left">Corner</td>
+<td align="left">Gtl</td>
+<td align="left">North_Ames</td>
+<td align="left">Norm</td>
+<td align="left">Norm</td>
+<td align="left">OneFam</td>
+<td align="left">One_Story</td>
+<td align="left">Above_Average</td>
+<td align="left">Above_Average</td>
+<td align="right">1958</td>
+<td align="right">1958</td>
+<td align="left">Hip</td>
+<td align="left">CompShg</td>
+<td align="left">Wd Sdng</td>
+<td align="left">Wd Sdng</td>
+<td align="left">BrkFace</td>
+<td align="right">108</td>
+<td align="left">Typical</td>
+<td align="left">Typical</td>
+<td align="left">CBlock</td>
+<td align="left">Typical</td>
+<td align="left">Typical</td>
+<td align="left">No</td>
+<td align="left">ALQ</td>
+<td align="right">1</td>
+<td align="left">Unf</td>
+<td align="right">0</td>
+<td align="right">406</td>
+<td align="right">1329</td>
+<td align="left">GasA</td>
+<td align="left">Typical</td>
+<td align="left">Y</td>
+<td align="left">SBrkr</td>
+<td align="right">1329</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1329</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="left">Good</td>
+<td align="right">6</td>
+<td align="left">Typ</td>
+<td align="right">0</td>
+<td align="left">No_Fireplace</td>
+<td align="left">Attchd</td>
+<td align="left">Unf</td>
+<td align="right">1</td>
+<td align="right">312</td>
+<td align="left">Typical</td>
+<td align="left">Typical</td>
+<td align="left">Paved</td>
+<td align="right">393</td>
+<td align="right">36</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">No_Pool</td>
+<td align="left">No_Fence</td>
+<td align="left">Gar2</td>
+<td align="right">12500</td>
+<td align="right">6</td>
+<td align="right">2010</td>
+<td align="left">WD</td>
+<td align="left">Normal</td>
+<td align="right">172000</td>
+<td align="right">-93.61939</td>
+<td align="right">42.05266</td>
+</tr>
+<tr class="odd">
+<td align="left">One_Story_1946_and_Newer_All_Styles</td>
+<td align="left">Residential_Low_Density</td>
+<td align="right">93</td>
+<td align="right">11160</td>
+<td align="left">Pave</td>
+<td align="left">No_Alley_Access</td>
+<td align="left">Regular</td>
+<td align="left">Lvl</td>
+<td align="left">AllPub</td>
+<td align="left">Corner</td>
+<td align="left">Gtl</td>
+<td align="left">North_Ames</td>
+<td align="left">Norm</td>
+<td align="left">Norm</td>
+<td align="left">OneFam</td>
+<td align="left">One_Story</td>
+<td align="left">Good</td>
+<td align="left">Average</td>
+<td align="right">1968</td>
+<td align="right">1968</td>
+<td align="left">Hip</td>
+<td align="left">CompShg</td>
+<td align="left">BrkFace</td>
+<td align="left">BrkFace</td>
+<td align="left">None</td>
+<td align="right">0</td>
+<td align="left">Good</td>
+<td align="left">Typical</td>
+<td align="left">CBlock</td>
+<td align="left">Typical</td>
+<td align="left">Typical</td>
+<td align="left">No</td>
+<td align="left">ALQ</td>
+<td align="right">1</td>
+<td align="left">Unf</td>
+<td align="right">0</td>
+<td align="right">1045</td>
+<td align="right">2110</td>
+<td align="left">GasA</td>
+<td align="left">Excellent</td>
+<td align="left">Y</td>
+<td align="left">SBrkr</td>
+<td align="right">2110</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">2110</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="left">Excellent</td>
+<td align="right">8</td>
+<td align="left">Typ</td>
+<td align="right">2</td>
+<td align="left">Typical</td>
+<td align="left">Attchd</td>
+<td align="left">Fin</td>
+<td align="right">2</td>
+<td align="right">522</td>
+<td align="left">Typical</td>
+<td align="left">Typical</td>
+<td align="left">Paved</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">No_Pool</td>
+<td align="left">No_Fence</td>
+<td align="left">None</td>
+<td align="right">0</td>
+<td align="right">4</td>
+<td align="right">2010</td>
+<td align="left">WD</td>
+<td align="left">Normal</td>
+<td align="right">244000</td>
+<td align="right">-93.61732</td>
+<td align="right">42.05125</td>
+</tr>
+<tr class="even">
+<td align="left">Two_Story_1946_and_Newer</td>
+<td align="left">Residential_Low_Density</td>
+<td align="right">74</td>
+<td align="right">13830</td>
+<td align="left">Pave</td>
+<td align="left">No_Alley_Access</td>
+<td align="left">Slightly_Irregular</td>
+<td align="left">Lvl</td>
+<td align="left">AllPub</td>
+<td align="left">Inside</td>
+<td align="left">Gtl</td>
+<td align="left">Gilbert</td>
+<td align="left">Norm</td>
+<td align="left">Norm</td>
+<td align="left">OneFam</td>
+<td align="left">Two_Story</td>
+<td align="left">Average</td>
+<td align="left">Average</td>
+<td align="right">1997</td>
+<td align="right">1998</td>
+<td align="left">Gable</td>
+<td align="left">CompShg</td>
+<td align="left">VinylSd</td>
+<td align="left">VinylSd</td>
+<td align="left">None</td>
+<td align="right">0</td>
+<td align="left">Typical</td>
+<td align="left">Typical</td>
+<td align="left">PConc</td>
+<td align="left">Good</td>
+<td align="left">Typical</td>
+<td align="left">No</td>
+<td align="left">GLQ</td>
+<td align="right">3</td>
+<td align="left">Unf</td>
+<td align="right">0</td>
+<td align="right">137</td>
+<td align="right">928</td>
+<td align="left">GasA</td>
+<td align="left">Good</td>
+<td align="left">Y</td>
+<td align="left">SBrkr</td>
+<td align="right">928</td>
+<td align="right">701</td>
+<td align="right">0</td>
+<td align="right">1629</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="left">Typical</td>
+<td align="right">6</td>
+<td align="left">Typ</td>
+<td align="right">1</td>
+<td align="left">Typical</td>
+<td align="left">Attchd</td>
+<td align="left">Fin</td>
+<td align="right">2</td>
+<td align="right">482</td>
+<td align="left">Typical</td>
+<td align="left">Typical</td>
+<td align="left">Paved</td>
+<td align="right">212</td>
+<td align="right">34</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">No_Pool</td>
+<td align="left">Minimum_Privacy</td>
+<td align="left">None</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">2010</td>
+<td align="left">WD</td>
+<td align="left">Normal</td>
+<td align="right">189900</td>
+<td align="right">-93.63893</td>
+<td align="right">42.06090</td>
+</tr>
+<tr class="odd">
+<td align="left">Two_Story_1946_and_Newer</td>
+<td align="left">Residential_Low_Density</td>
+<td align="right">78</td>
+<td align="right">9978</td>
+<td align="left">Pave</td>
+<td align="left">No_Alley_Access</td>
+<td align="left">Slightly_Irregular</td>
+<td align="left">Lvl</td>
+<td align="left">AllPub</td>
+<td align="left">Inside</td>
+<td align="left">Gtl</td>
+<td align="left">Gilbert</td>
+<td align="left">Norm</td>
+<td align="left">Norm</td>
+<td align="left">OneFam</td>
+<td align="left">Two_Story</td>
+<td align="left">Above_Average</td>
+<td align="left">Above_Average</td>
+<td align="right">1998</td>
+<td align="right">1998</td>
+<td align="left">Gable</td>
+<td align="left">CompShg</td>
+<td align="left">VinylSd</td>
+<td align="left">VinylSd</td>
+<td align="left">BrkFace</td>
+<td align="right">20</td>
+<td align="left">Typical</td>
+<td align="left">Typical</td>
+<td align="left">PConc</td>
+<td align="left">Typical</td>
+<td align="left">Typical</td>
+<td align="left">No</td>
+<td align="left">GLQ</td>
+<td align="right">3</td>
+<td align="left">Unf</td>
+<td align="right">0</td>
+<td align="right">324</td>
+<td align="right">926</td>
+<td align="left">GasA</td>
+<td align="left">Excellent</td>
+<td align="left">Y</td>
+<td align="left">SBrkr</td>
+<td align="right">926</td>
+<td align="right">678</td>
+<td align="right">0</td>
+<td align="right">1604</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="left">Good</td>
+<td align="right">7</td>
+<td align="left">Typ</td>
+<td align="right">1</td>
+<td align="left">Good</td>
+<td align="left">Attchd</td>
+<td align="left">Fin</td>
+<td align="right">2</td>
+<td align="right">470</td>
+<td align="left">Typical</td>
+<td align="left">Typical</td>
+<td align="left">Paved</td>
+<td align="right">360</td>
+<td align="right">36</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">No_Pool</td>
+<td align="left">No_Fence</td>
+<td align="left">None</td>
+<td align="right">0</td>
+<td align="right">6</td>
+<td align="right">2010</td>
+<td align="left">WD</td>
+<td align="left">Normal</td>
+<td align="right">195500</td>
+<td align="right">-93.63893</td>
+<td align="right">42.06078</td>
+</tr>
+<tr class="even">
+<td align="left">One_Story_PUD_1946_and_Newer</td>
+<td align="left">Residential_Low_Density</td>
+<td align="right">41</td>
+<td align="right">4920</td>
+<td align="left">Pave</td>
+<td align="left">No_Alley_Access</td>
+<td align="left">Regular</td>
+<td align="left">Lvl</td>
+<td align="left">AllPub</td>
+<td align="left">Inside</td>
+<td align="left">Gtl</td>
+<td align="left">Stone_Brook</td>
+<td align="left">Norm</td>
+<td align="left">Norm</td>
+<td align="left">TwnhsE</td>
+<td align="left">One_Story</td>
+<td align="left">Very_Good</td>
+<td align="left">Average</td>
+<td align="right">2001</td>
+<td align="right">2001</td>
+<td align="left">Gable</td>
+<td align="left">CompShg</td>
+<td align="left">CemntBd</td>
+<td align="left">CmentBd</td>
+<td align="left">None</td>
+<td align="right">0</td>
+<td align="left">Good</td>
+<td align="left">Typical</td>
+<td align="left">PConc</td>
+<td align="left">Good</td>
+<td align="left">Typical</td>
+<td align="left">Mn</td>
+<td align="left">GLQ</td>
+<td align="right">3</td>
+<td align="left">Unf</td>
+<td align="right">0</td>
+<td align="right">722</td>
+<td align="right">1338</td>
+<td align="left">GasA</td>
+<td align="left">Excellent</td>
+<td align="left">Y</td>
+<td align="left">SBrkr</td>
+<td align="right">1338</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1338</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="left">Good</td>
+<td align="right">6</td>
+<td align="left">Typ</td>
+<td align="right">0</td>
+<td align="left">No_Fireplace</td>
+<td align="left">Attchd</td>
+<td align="left">Fin</td>
+<td align="right">2</td>
+<td align="right">582</td>
+<td align="left">Typical</td>
+<td align="left">Typical</td>
+<td align="left">Paved</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">170</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="left">No_Pool</td>
+<td align="left">No_Fence</td>
+<td align="left">None</td>
+<td align="right">0</td>
+<td align="right">4</td>
+<td align="right">2010</td>
+<td align="left">WD</td>
+<td align="left">Normal</td>
+<td align="right">213500</td>
+<td align="right">-93.63379</td>
+<td align="right">42.06298</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="data-pre-processing" class="section level1">
+<h1>Data pre-processing</h1>
+<p>Now let’s preprocess our data using the {recipes} package, also part of the {tidymodels} ecosystem. To do this, we’ll first specify our formula and our data, and then iterate the preprocessing steps we want. To demonstrate a wide range of things that can be done with {recipes}, let’s first log transform our dependent variable (Sale_Price), then remove variables containing &quot;_Qual&quot; or “Condition” (which are subjective ratings on the part of the appraiser made on or after the sale, we want to predict Sale_Price before sale!), create dummy variables out of our factor variables, center and scale our predictors, then run PCA on the 13 different variables that contain “SF” or “Area” to enough components to capture 75% of the variation in these variables, then remove any near-zero variance predictors. This all sounds like a lot, but the recipes package makes this pre-processing almost self-documenting!</p>
+<pre class="r"><code>ames_rec &lt;- recipe(
+  Sale_Price ~ .,
+  data = ames_train
+) %&gt;% 
+  step_log(Sale_Price, base = 10) %&gt;%
+  step_rm(matches(&quot;Qual&quot;), matches(&quot;Cond&quot;)) %&gt;% 
+  step_dummy(all_nominal()) %&gt;% 
+  step_center(all_predictors()) %&gt;% 
+  step_scale(all_predictors()) %&gt;% 
+  step_pca(contains(&quot;SF&quot;), contains(&quot;Area&quot;), threshold = .75) %&gt;% 
+  step_nzv(all_predictors())
+
+ames_rec</code></pre>
+<pre><code>## Data Recipe
+## 
+## Inputs:
+## 
+##       role #variables
+##    outcome          1
+##  predictor         80
+## 
+## Operations:
+## 
+## Log transformation on Sale_Price
+## Delete terms matches, Qual, matches, Cond
+## Dummy variables from all_nominal
+## Centering for all_predictors
+## Scaling for all_predictors
+## No PCA components were extracted.
+## Sparse, unbalanced variable filter on all_predictors</code></pre>
+<p>The next step is to prepare or prep() this recipe, which estimates any parameters necessary for the preprocessing steps from the training set to be later applied to other datasets.</p>
+<pre class="r"><code>ames_rec_trained &lt;- prep(ames_rec, training = ames_train, verbose = TRUE)</code></pre>
+<pre><code>## oper 1 step log [training] 
+## oper 2 step rm [training] 
+## oper 3 step dummy [training] 
+## oper 4 step center [training] 
+## oper 5 step scale [training] 
+## oper 6 step pca [training] 
+## oper 7 step nzv [training] 
+## The retained training set is ~ 1.47 Mb  in memory.</code></pre>
+<pre class="r"><code>ames_rec_trained</code></pre>
+<pre><code>## Data Recipe
+## 
+## Inputs:
+## 
+##       role #variables
+##    outcome          1
+##  predictor         80
+## 
+## Training data contained 2199 data points and no missing data.
+## 
+## Operations:
+## 
+## Log transformation on Sale_Price [trained]
+## Variables removed Overall_Qual, Exter_Qual, Bsmt_Qual, ... [trained]
+## Dummy variables from MS_SubClass, MS_Zoning, Street, Alley, ... [trained]
+## Centering for Lot_Frontage, Lot_Area, ... [trained]
+## Scaling for Lot_Frontage, Lot_Area, ... [trained]
+## PCA extraction with BsmtFin_SF_1, BsmtFin_SF_2, ... [trained]
+## Sparse, unbalanced variable filter removed Kitchen_AbvGr, ... [trained]</code></pre>
+<p>Now we can “juice” the prepared recipes, which gives us our preprocessed training set. Lets take a look at our PCA extraction.</p>
+<pre class="r"><code>ames_rec_trained %&gt;% 
+  juice() %&gt;% 
+  select(starts_with(&quot;PC&quot;))</code></pre>
+<pre><code>## # A tibble: 2,199 x 7
+##         PC1    PC2    PC3     PC4     PC5     PC6     PC7
+##       &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+##  1 -1.79     1.20   0.783  0.194   0.120   0.204   2.13  
+##  2 -0.625    1.51   0.164 -0.0112  0.0919  1.50    0.256 
+##  3 -2.57    -0.201 -0.677  0.723   1.08   -0.455  -0.799 
+##  4  0.339    0.932  0.400 -0.230  -0.486   0.819   0.846 
+##  5  0.159    0.903  0.385 -0.360  -0.390   1.62    0.510 
+##  6 -0.00598 -0.337 -0.603  0.247   0.395  -0.0660 -0.781 
+##  7 -0.172   -0.277 -0.689 -0.116  -0.219  -0.772  -0.838 
+##  8  0.568   -1.19   0.716 -0.382  -0.347   0.243   0.715 
+##  9  0.0123   1.80   0.152 -0.217  -0.0602  2.17   -0.0132
+## 10  1.06    -1.55   0.423 -0.211  -0.251  -0.520   0.318 
+## # … with 2,189 more rows</code></pre>
+<p>Not bad, we’ve reduced 13 variables down to 7. This probably wasn’t the best use case of PCA, but it provides a good example of some advanced preprocessing made simple in {recipes}.</p>
+</div>
+<div id="modeling" class="section level1">
+<h1>Modeling</h1>
+<p>Now let’s specify our model. We’re going to go with a Lasso model with a penalty of 0.001 using the {parsnip} package.</p>
+<p>To do this, we’re first going to specify our model as a linear regression using linear_reg(), set the mixture proportion to 1 for full L1 regularization (the Lasso), and the penalty to 0.001. Then we’ll set the engine to “glmnet”,as opposed to “lm”, “stan”, “spark”, or “keras” as alternative options. The beauty of {parsnip} is that it unifies the interface for model specifications so that you don’t need to remember dozens of different interfaces for each implementation of a model.</p>
+<pre class="r"><code>ames_lasso &lt;- linear_reg(penalty = 0.001, mixture = 1) %&gt;% 
+  set_engine(&quot;glmnet&quot;)</code></pre>
+<p>Now we have our recipe and our model, we can create our “workflow”, which packages up our the preprocessing steps and model. Using workflows, we don’t need to go through the prep() and juice() steps we went through earlier when we go to fit our model (I demonstrated prep() and juice() as they can be useful for being able to inspect your pre-processed data as we did earlier).</p>
+<pre class="r"><code>ames_lasso_wfl &lt;- workflow() %&gt;% 
+  add_recipe(ames_rec) %&gt;% 
+  add_model(ames_lasso)
+
+ames_lasso_wfl</code></pre>
+<pre><code>## ══ Workflow ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+## Preprocessor: Recipe
+## Model: linear_reg()
+## 
+## ── Preprocessor ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## 7 Recipe Steps
+## 
+## ● step_log()
+## ● step_rm()
+## ● step_dummy()
+## ● step_center()
+## ● step_scale()
+## ● step_pca()
+## ● step_nzv()
+## 
+## ── Model ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## Linear Regression Model Specification (regression)
+## 
+## Main Arguments:
+##   penalty = 0.001
+##   mixture = 1
+## 
+## Computational engine: glmnet</code></pre>
+<p>With our workflow designed, fitting our model is as simple as passing our training data and workflow to the fit() function.</p>
+<pre class="r"><code>ames_lasso_fit &lt;- fit(ames_lasso_wfl, ames_train)</code></pre>
+<p>And getting predictions is as simple as passing out fitted model and the data we want predictions for to the predict() function.</p>
+<pre class="r"><code>predict(ames_lasso_fit, ames_train) %&gt;% slice(1:5)</code></pre>
+<pre><code>## # A tibble: 5 x 1
+##   .pred
+##   &lt;dbl&gt;
+## 1  5.32
+## 2  5.16
+## 3  5.36
+## 4  5.30
+## 5  5.32</code></pre>
+</div>
+<div id="model-evaluation" class="section level1">
+<h1>Model evaluation</h1>
+<p>How does our model perform on our training set? Let’s find out using metrics from the {yardstick} package. We’ll use three metrics: Root Mean Squared Error (RMSE), R squared, and the concordance correlation coefficient (ccc).</p>
+<p>First we’ll set our three metrics, then we’ll generate predictions, and compare those predictions to the true values within the training set.</p>
+<pre class="r"><code>perf_metrics &lt;- metric_set(rmse, rsq, ccc)
+
+perf_lasso &lt;- ames_lasso_fit %&gt;% 
+  predict(ames_train) %&gt;% 
+  bind_cols(juice(ames_rec_trained)) %&gt;% 
+  perf_metrics(truth = Sale_Price, estimate = .pred)
+
+perf_lasso %&gt;% 
+  arrange(.metric)</code></pre>
+<pre><code>## # A tibble: 3 x 3
+##   .metric .estimator .estimate
+##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+## 1 ccc     standard      0.924 
+## 2 rmse    standard      0.0657
+## 3 rsq     standard      0.861</code></pre>
+<p>Easy peasy! But of course, this is all in-sample. Perhaps we want to know what kind of out-of-sample performance we can expect from our model using cross-validation. {rsample} also makes that easy, so let’s create 10-fold cross-validation sets for evaluating our training set models using vfold_cv(), which defaults to creating 10 folds.</p>
+<pre class="r"><code>cv_splits &lt;- vfold_cv(ames_train)
+cv_splits</code></pre>
+<pre><code>## #  10-fold cross-validation 
+## # A tibble: 10 x 2
+##    splits           id    
+##    &lt;named list&gt;     &lt;chr&gt; 
+##  1 &lt;split [2K/220]&gt; Fold01
+##  2 &lt;split [2K/220]&gt; Fold02
+##  3 &lt;split [2K/220]&gt; Fold03
+##  4 &lt;split [2K/220]&gt; Fold04
+##  5 &lt;split [2K/220]&gt; Fold05
+##  6 &lt;split [2K/220]&gt; Fold06
+##  7 &lt;split [2K/220]&gt; Fold07
+##  8 &lt;split [2K/220]&gt; Fold08
+##  9 &lt;split [2K/220]&gt; Fold09
+## 10 &lt;split [2K/219]&gt; Fold10</code></pre>
+<p>Now we’ll take our workflow and use it to fit 10 models on these 10 splits using the fit_resamples() function from the {tune} package (also a part of the tidymodels ecosystem), as well as tell it to compute the performance metrics we set earlier.</p>
+<pre class="r"><code>cv_eval &lt;- fit_resamples(ames_lasso_wfl, resamples = cv_splits, metrics = perf_metrics)
+cv_eval</code></pre>
+<pre><code>## #  10-fold cross-validation 
+## # A tibble: 10 x 4
+##    splits           id     .metrics         .notes          
+##  * &lt;list&gt;           &lt;chr&gt;  &lt;list&gt;           &lt;list&gt;          
+##  1 &lt;split [2K/220]&gt; Fold01 &lt;tibble [3 × 3]&gt; &lt;tibble [0 × 1]&gt;
+##  2 &lt;split [2K/220]&gt; Fold02 &lt;tibble [3 × 3]&gt; &lt;tibble [0 × 1]&gt;
+##  3 &lt;split [2K/220]&gt; Fold03 &lt;tibble [3 × 3]&gt; &lt;tibble [0 × 1]&gt;
+##  4 &lt;split [2K/220]&gt; Fold04 &lt;tibble [3 × 3]&gt; &lt;tibble [0 × 1]&gt;
+##  5 &lt;split [2K/220]&gt; Fold05 &lt;tibble [3 × 3]&gt; &lt;tibble [0 × 1]&gt;
+##  6 &lt;split [2K/220]&gt; Fold06 &lt;tibble [3 × 3]&gt; &lt;tibble [0 × 1]&gt;
+##  7 &lt;split [2K/220]&gt; Fold07 &lt;tibble [3 × 3]&gt; &lt;tibble [0 × 1]&gt;
+##  8 &lt;split [2K/220]&gt; Fold08 &lt;tibble [3 × 3]&gt; &lt;tibble [0 × 1]&gt;
+##  9 &lt;split [2K/220]&gt; Fold09 &lt;tibble [3 × 3]&gt; &lt;tibble [0 × 1]&gt;
+## 10 &lt;split [2K/219]&gt; Fold10 &lt;tibble [3 × 3]&gt; &lt;tibble [0 × 1]&gt;</code></pre>
+<p>Now let’s compare the in-sample performance we just checked to our cross-validated performance, which is as easy as passing the above fit_samples() object to the collect_metrics() function!</p>
+<pre class="r"><code>collect_metrics(cv_eval)</code></pre>
+<pre><code>## # A tibble: 3 x 5
+##   .metric .estimator   mean     n std_err
+##   &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt;
+## 1 ccc     standard   0.911     10 0.00767
+## 2 rmse    standard   0.0686    10 0.00289
+## 3 rsq     standard   0.847     10 0.0155</code></pre>
+<pre class="r"><code>perf_lasso %&gt;% 
+  arrange(.metric)</code></pre>
+<pre><code>## # A tibble: 3 x 3
+##   .metric .estimator .estimate
+##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+## 1 ccc     standard      0.924 
+## 2 rmse    standard      0.0657
+## 3 rsq     standard      0.861</code></pre>
+<p>Not bad at all! Our cross-validated performance is fairly close to our in-sample performance, it doesn’t seem like we’re overfitting here.</p>
+<p>But I think we can do better. We’ve already used the {tune} package to fit across these resamples, but as the package name suggests, its real power comes in allowing us to easily tune the hyperparameters in our model.</p>
+</div>
+<div id="model-tuning" class="section level1">
+<h1>Model tuning</h1>
+<p>Recall that we set our regularization penalty to 0.001 and we chose to use L1 regularization. Both those decisions were relatively arbitrary. Let’s use the {tune} package to build an elastic net model by exploring other penalty values and regularization mixtures using cross validation performance to decide what values these parameters should be.</p>
+<p>We’ll start by defining a new model, ames_mixture, which will not take specific specific values for penalty and mixture and will instead leave these as variables to be tuned and swapping out our ames_lasso_wfl with this new workflow.</p>
+<pre class="r"><code>ames_mixture &lt;- linear_reg(penalty = tune(), mixture = tune()) %&gt;% 
+  set_engine(&quot;glmnet&quot;)
+
+ames_mixture_wfl &lt;- update_model(ames_lasso_wfl, ames_mixture)</code></pre>
+<p>Next, we will define a parameter space to search. {tune} allows you to perform either grid search (where the candidate values are pre-defined) or iterative search (ex: Bayesian optimization) where the results of the previous model are used to select the next parameter values to try.</p>
+<p>There are pros/cons to each. A big plus of grid search is that it allows you to take advantage of parallel processing to speed up your search, while iterative search is, by construction, sequential. A big plus of iterative search is that it can quickly rule out areas of parameter space which can be efficient when covering many values of a high dimensional parameter space (where a grid may require many, many models to comfortably cover the entire parameter space, where many of them may turn out to be redundant).</p>
+<p>For this post, we’re going to stick with grid search. The simplest form of grid search uses regular grids, where you provide a vector of values for each parameter and the grid is composed of every possible value combination.</p>
+<p>{tune} provides useful defaults for searching parameter spaces of many common hyperparameters, for example, creating grids for the “penalty” parameter in log-10 space. We can simply specify the parameters, pass these to grid_regular(), and specify that we want 5 levels of penalization and 5 levels of mixture.</p>
+<pre class="r"><code>mixture_param &lt;- parameters(penalty(), mixture())
+
+regular_grid &lt;- grid_regular(mixture_param, levels = c(5, 5))
+
+regular_grid %&gt;% 
+  ggplot(aes(x = mixture, y = penalty)) +
+  geom_point() +
+  scale_y_log10()</code></pre>
+<p><img src="/posts/rstudio-conf/index_files/figure-html/regulargrids-1.png" width="672" /></p>
+<p>{tune} also provides ways to create non-regular grids as well.
+* Random grids generated using grid_random() will uniformly sample the parameter space.
+* Space-filling designs (SFD) generated using grid_max_entropy() will try to keep candidate values away from one another in order to more efficiently cover the parameter space.</p>
+<pre class="r"><code>sfd_grid &lt;- grid_max_entropy(mixture_param, size = 25)
+
+sfd_grid</code></pre>
+<pre><code>## # A tibble: 25 x 2
+##     penalty mixture
+##       &lt;dbl&gt;   &lt;dbl&gt;
+##  1 1.21e- 8  0.614 
+##  2 1.32e- 1  0.679 
+##  3 1.20e-10  0.269 
+##  4 3.90e- 9  0.414 
+##  5 8.38e- 6  0.0756
+##  6 4.02e- 1  0.838 
+##  7 5.94e-10  0.504 
+##  8 1.83e- 1  0.177 
+##  9 3.61e- 3  0.866 
+## 10 2.86e- 7  0.856 
+## # … with 15 more rows</code></pre>
+<pre class="r"><code>sfd_grid %&gt;% 
+  ggplot(aes(x = mixture, y = penalty)) +
+  geom_point() +
+  scale_y_log10()</code></pre>
+<p><img src="/posts/rstudio-conf/index_files/figure-html/sfdgrids-1.png" width="672" /></p>
+<p>For simplicity’s sake, we’ll stick with the regular grid we generated. Let’s start tuning.</p>
+<p>First, we’ll set up our parallelization.</p>
+<p>Now we’re going to create our tuning object, which will take our recipe, our model, our resamples, and our metrics, to fit our 25 models over 10 resamples and compute our performance metrics, then we’ll stop our parallelization.</p>
+<pre class="r"><code>ames_tune &lt;- tune_grid(
+  ames_rec,
+  model = ames_mixture,
+  resamples = cv_splits,
+  grid = regular_grid,
+  metrics = perf_metrics
+)
+
+stopCluster(cl)
+
+# Naive Lasso performance
+collect_metrics(cv_eval)</code></pre>
+<pre><code>## # A tibble: 3 x 5
+##   .metric .estimator   mean     n std_err
+##   &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt;
+## 1 ccc     standard   0.911     10 0.00767
+## 2 rmse    standard   0.0686    10 0.00289
+## 3 rsq     standard   0.847     10 0.0155</code></pre>
+<pre class="r"><code># Best tuned models
+show_best(ames_tune, &quot;ccc&quot;)</code></pre>
+<pre><code>## # A tibble: 5 x 7
+##        penalty mixture .metric .estimator  mean     n std_err
+##          &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt;
+## 1 0.0000000001    0.25 ccc     standard   0.913    10 0.00760
+## 2 0.0000000316    0.25 ccc     standard   0.913    10 0.00760
+## 3 0.00001         0.25 ccc     standard   0.913    10 0.00760
+## 4 0.0000000001    0.75 ccc     standard   0.913    10 0.00762
+## 5 0.0000000316    0.75 ccc     standard   0.913    10 0.00762</code></pre>
+<pre class="r"><code>show_best(ames_tune, &quot;rmse&quot;, maximize = FALSE)</code></pre>
+<pre><code>## # A tibble: 5 x 7
+##        penalty mixture .metric .estimator   mean     n std_err
+##          &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt;
+## 1 0.0000000001    0    rmse    standard   0.0682    10 0.00235
+## 2 0.0000000316    0    rmse    standard   0.0682    10 0.00235
+## 3 0.00001         0    rmse    standard   0.0682    10 0.00235
+## 4 0.00316         0    rmse    standard   0.0682    10 0.00235
+## 5 0.00316         0.25 rmse    standard   0.0684    10 0.00274</code></pre>
+<pre class="r"><code>show_best(ames_tune, &quot;rsq&quot;)</code></pre>
+<pre><code>## # A tibble: 5 x 7
+##        penalty mixture .metric .estimator  mean     n std_err
+##          &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt;
+## 1 0.0000000001    0    rsq     standard   0.849    10  0.0130
+## 2 0.0000000316    0    rsq     standard   0.849    10  0.0130
+## 3 0.00001         0    rsq     standard   0.849    10  0.0130
+## 4 0.00316         0    rsq     standard   0.849    10  0.0130
+## 5 0.00316         0.25 rsq     standard   0.848    10  0.0148</code></pre>
+<p>Our results suggest that our original model parameters choices definitely had room for improvement. A much smaller penalty and going with pure L2 regularization seems to perform better on this data. The improvements are relatively modest (RMSE: 0.0686 –&gt; 0.0682, R squared: 0.847 –&gt; 0.849), but when tuning is this easy, why leave money on the table?</p>
+<p>The plot below nicely visualizes the performance of each grid candidate nicely, along with a dotted line to indicate where our original model would’ve been.</p>
+<pre class="r"><code>collect_metrics(ames_tune) %&gt;% 
+  filter(.metric == &quot;rmse&quot;) %&gt;%
+  mutate(mixture = format(mixture)) %&gt;% 
+  ggplot(aes(x = penalty, y = mean, col = mixture)) +
+  geom_line() +
+  geom_point() +
+  scale_x_log10() +
+  geom_vline(xintercept = 0.001, color = &quot;purple&quot;, lty = &quot;dotted&quot;)</code></pre>
+<p><img src="/posts/rstudio-conf/index_files/figure-html/tuningplot-1.png" width="672" /></p>
+<p>Now let’s select our best grid candidate, finalize our workflow, and fit our model.</p>
+<pre class="r"><code>best_mixture &lt;- select_best(ames_tune, metric = &quot;rmse&quot;, maximize = FALSE)
+best_mixture</code></pre>
+<pre><code>## # A tibble: 1 x 2
+##        penalty mixture
+##          &lt;dbl&gt;   &lt;dbl&gt;
+## 1 0.0000000001       0</code></pre>
+<pre class="r"><code>ames_mixture_final &lt;- ames_mixture_wfl %&gt;% 
+  finalize_workflow(best_mixture) %&gt;% 
+  fit(data = ames_train)</code></pre>
+<p>And we’re done! We now have a fitted, tuned, regularized mixtured model (albeit, the mixture is 100% L2 regularization, but we got there via tuning!)</p>
+<p><em>Finally</em> we get to the fun part. What variables turned out to be the most important in predicting sale price?</p>
+<pre class="r"><code>tidy_coefs &lt;- ames_mixture_final$fit$fit$fit %&gt;% 
+  broom::tidy() %&gt;% 
+  filter(term != &quot;(Intercept)&quot;) %&gt;% 
+  select(-step, -dev.ratio)
+
+delta &lt;- abs(tidy_coefs$lambda - best_mixture$penalty)
+lambda_opt &lt;- tidy_coefs$lambda[which.min(delta)]
+
+label_coefs &lt;- tidy_coefs %&gt;% 
+  mutate(abs_estimate = abs(estimate)) %&gt;% 
+  filter(abs_estimate &gt;= 0.01) %&gt;% 
+  distinct(term) %&gt;% 
+  inner_join(tidy_coefs, by = &quot;term&quot;) %&gt;% 
+  filter(lambda == lambda_opt)
+
+label_coefs</code></pre>
+<pre><code>## # A tibble: 10 x 3
+##    term                              estimate lambda
+##    &lt;chr&gt;                                &lt;dbl&gt;  &lt;dbl&gt;
+##  1 Garage_Cars                         0.0156 0.0139
+##  2 Year_Remod_Add                      0.0235 0.0139
+##  3 TotRms_AbvGrd                       0.0134 0.0139
+##  4 Full_Bath                           0.0124 0.0139
+##  5 PC1                                -0.0244 0.0139
+##  6 Fireplaces                          0.0121 0.0139
+##  7 Central_Air_Y                       0.0121 0.0139
+##  8 Bsmt_Full_Bath                      0.0103 0.0139
+##  9 Neighborhood_Gilbert               -0.0110 0.0139
+## 10 MS_Zoning_Residential_Low_Density   0.0107 0.0139</code></pre>
+<pre class="r"><code>tidy_coefs %&gt;% 
+  ggplot(aes(x = lambda, y = estimate, group = term, col = term, label = term)) +
+  geom_vline(xintercept = lambda_opt, lty = 3) +
+  geom_line(alpha = .4) +
+  theme(legend.position = &quot;none&quot;) +
+  scale_x_log10() +
+  ggrepel::geom_text_repel(data = label_coefs)</code></pre>
+<p><img src="/posts/rstudio-conf/index_files/figure-html/varimportance-1.png" width="672" /></p>
+<p>The above shows the coefficient estimates plotted against lambda, the dotted line indicating the optimal lambda that we selected during our tuning. Nice to see that one of our principal components ended up being important!</p>
+<p>With that all said and done, let’s finally see how our model did against our test set.</p>
+<pre class="r"><code>ames_mixture_final %&gt;% 
+  predict(ames_test) %&gt;% 
+  bind_cols(select(ames_test, Sale_Price)) %&gt;% 
+  mutate(Sale_Price = log10(Sale_Price)) %&gt;% 
+  perf_metrics(truth = Sale_Price, estimate = .pred)</code></pre>
+<pre><code>## # A tibble: 3 x 3
+##   .metric .estimator .estimate
+##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+## 1 rmse    standard      0.0828
+## 2 rsq     standard      0.787 
+## 3 ccc     standard      0.877</code></pre>
+<p>Having practiced on this data before, I can say that this is not great performance, but as mentioned before, all of this is just to demonstrate {tidymodels} functionality and workflow.</p>
+<p>There are many, many more features to the {tidymodels} ecosystem and more are continually being developed. I encourage you to explore the vignettes for its composite packages. The parent website is not live as of the writing of this post, but I expect it will be soon. In the mean time, <a href="https://github.com/tidymodels/tidymodels">the tidymodels github repository</a> can point you to the vignettes for each of its composite packages.</p>
+</div>
