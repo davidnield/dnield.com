@@ -61,6 +61,7 @@ ames <- make_ames()
 glimpse(ames)
 ```
 
+### Stratified training/test splits
 Next let's split the data. Here, we'll show one of the neat features of {rsample}, a package within the {tidymodels} ecosystem, which lets us perform stratified sampling on our dependent variable to ensure better balance. We'll stick with the default split, which is a 75-25 Training-Test split.
 
 ```{r trainingtestsplit}
@@ -81,6 +82,7 @@ glimpse(ames_train)
 
 ```
 
+### Data pre-processing
 Now let's preprocess our data using the {recipes} package, also part of the {tidymodels} ecosystem. To do this, we'll first specify our formula and our data, and then iterate the preprocessing steps we want. To demonstrate a wide range of things that can be done with {recipes}, let's first log transform our dependent variable (Sale_Price), then remove variables containing "_Qual" or "Condition" (which are subjective ratings on the part of the appraiser made on or after the sale, we want to predict Sale_Price before sale!), remove any near-zero variance predictors, create dummy variables out of our factor variables, center and scale our predictors, then run PCA on the 13 different variables that contain "SF" or "Area" to enough components to capture 75% of the variation in these variables. This all sounds like a lot, but the recipes package makes this pre-processing almost self-documenting!
 
 ```{r recipe}
@@ -89,7 +91,7 @@ ames_rec <- recipe(
   Sale_Price ~ .,
   data = ames_train
 ) %>% 
-  step_log(Sale_Price, base = 10) %>% 
+  step_log(Sale_Price, base = 10) %>%
   step_rm(matches("Qual"), matches("Cond")) %>% 
   step_dummy(all_nominal()) %>% 
   step_center(all_predictors()) %>% 
@@ -123,64 +125,249 @@ ames_rec_trained %>%
 
 Not bad, we've reduced 13 variables down to 7. This probably wasn't the best use case of PCA, but it provides a good example of some advanced preprocessing made simple in {recipes}.
 
+### Modeling
 Now let's specify our model. We're going to go with a Lasso model with a penalty of 0.001 using the {parsnip} package.
 
 To do this, we're first going to specify our model as a linear regression using linear_reg(), set the mixture to 1 for full L1 regularization (the Lasso), and the penalty/Lambda to 0.001. Then we'll set the engine to "glmnet",as opposed to "lm", "stan", "spark", or "keras" as alternative options. The beauty of {parsnip} is that it unifies the interface for model specifications so that you don't need to remember dozens of different interfaces for each implementation of a model.
 
 ```{r lasso}
 
-ames_mod <- linear_reg(penalty = 0.001, mixture = 1) %>% 
+ames_lasso <- linear_reg(penalty = 0.001, mixture = 1) %>% 
   set_engine("glmnet")
 
 ```
 
-Now we have our recipe and our model, we can create our workflow, which is just the preprocessing and model.
+Now we have our recipe and our model, we can create our "workflow", which packages up our the preprocessing steps and model. Using workflows, we don't need to go through the prep() and juice() steps we went through earlier, we can simply define our recipe and specify our model as we do below.
 
 ```{r workflow}
 
-ames_wfl <- workflow() %>% 
-  add_recipe(ames_rec_trained) %>% 
-  add_model(ames_mod)
+ames_lasso_wfl <- workflow() %>% 
+  add_recipe(ames_rec) %>% 
+  add_model(ames_lasso)
+
+ames_lasso_wfl
 
 ```
 
+Nonetheless, being able to prep() our data can be useful for when our preprocessing requires training that we might want to save, and being able to juice() our data can be useful for being able to inspect our processed data as we did earlier.
 
+With our workflow designed, fitting our model is as simple as passing our training data and workflow to the fit() function.
 
+```{r fitting}
 
-How does it perform on our training set vs our test set? We would *never* want to do this right away without exploring other improvements first, but for demonstration's sake let's find out anyway using bake() from the {recipes} package and metrics from the {yardstick} package. We'll use three metrics: Root Mean Squared Error (RMSE), $R^2$, and the concordance correlation coefficient.
+ames_lasso_fit <- fit(ames_lasso_wfl, ames_train)
 
-First we'll set our three metrics, then we'll generate predictions using the juice()ed 
+```
+
+And getting predictions is as simple as passing out fitted model and the data we want predictions for to the predict() function.
+
+```{r predict}
+
+predict(ames_lasso_fit, ames_train) %>% slice(1:5)
+
+```
+
+### Model evaluation
+How does our model perform on our training set? Let's find out using metrics from the {yardstick} package. We'll use three metrics: Root Mean Squared Error (RMSE), $R^2$, and the concordance correlation coefficient (ccc).
+
+First we'll set our three metrics, then we'll generate predictions, back-transform them to the original scale, and compare those back-transformed predictions to the true values.
 
 ```{r yardstick}
-ames_fit <- fit(
-  ames_mod,
-  Sale_Price ~ .,
-  data = juice(ames_rec_trained)
-)
-
-
 perf_metrics <- metric_set(rmse, rsq, ccc)
 
-perf_lasso_training <- ames_fit %>% 
-  predict(juice(ames_rec_trained)) %>% 
+perf_lasso <- ames_lasso_fit %>% 
+  predict(ames_train) %>% 
   bind_cols(juice(ames_rec_trained)) %>% 
   perf_metrics(truth = Sale_Price, estimate = .pred)
 
-perf_lasso_test <- ames_fit %>% 
-  predict(bake(ames_rec_trained, )) %>% 
-  bind_cols(bake(ames_rec_trained, new_data = ames_test)) %>% 
-  perf_metrics(truth = Sale_Price, estimate = .pred)
+perf_lasso %>% 
+  arrange(.metric)
 
 ```
 
-
-
-Let's say we want to go further than evaluate our training set models using cross-validation. {rsample} also makes that easy, so let's create 10-fold cross-validation sets for evaluating our training set models.
+Looks great! But of course, this is all in-sample. Perhaps we want to know what kind of out-of-sample performance we can expect from our model using cross-validation. {rsample} also makes that easy, so let's create 10-fold cross-validation sets for evaluating our training set models using vfold_cv(), which defaults to creating 10 folds.
 
 ```{r tenfoldcv}
 cv_splits <- vfold_cv(ames_train)
-
 cv_splits
+
+```
+
+Now we'll take our workflow and use it to fit 10 models on these 10 splits using the fit_resamples() function from the {tune} package (also a part of the tidymodels ecosystem), as well as tell it to compute the performance metrics we set earlier.
+
+```{r cvfit}
+cv_eval <- fit_resamples(ames_lasso_wfl, resamples = cv_splits, metrics = perf_metrics)
+cv_eval
+```
+
+Now let's compare the in-sample performance we just checked to our cross-validated performance, which is as easy as passing the above fit_samples() object to the collect_metrics() function!
+
+```{r cveval}
+collect_metrics(cv_eval)
+
+perf_lasso %>% 
+  arrange(.metric)
+```
+
+Not bad at all! Our cross-validated performance is fairly close to our in-sample performance, it doesn't seem like we're overfitting here.
+
+But I think we can do better. We've already used the {tune} package to fit across these resamples, but as the package name suggests, its real power comes in allowing us to easily tune the hyperparameters in our model.
+
+### Model tuning
+Recall that we set our regularization penalty to 0.001 and we chose to use L1 regularization. Both those decisions were relatively arbitrary. Let's use the {tune} package to explore other penalty values and regularization mixtures using cross validation performance to decide what values these parameters should be.
+
+We'll start by defining a new model, ames_mixture, which will not take specific specific values for penalty and mixture and will instead leave these as variables to be tuned.
+
+```{r mixturemodel}
+
+ames_mixture <- linear_reg(penalty = tune(), mixture = tune()) %>% 
+  set_engine("glmnet")
+
+```
+
+Next, we will define a parameter space to search. {tune} allows you to perform either grid search (where the candidate values are pre-defined) or iterative search (ex: Bayesian optimization) where the results of the previous model are used to select the next parameter values to try.
+
+There are pros/cons to each. A big plus of grid search is that it allows you to take advantage of parallel processing to speed up your search, while iterative search is, by construction, sequential. A big plus of iterative search is that it can quickly rule out areas of parameter space which can be efficient when covering many values of a high dimensional parameter space (where a grid may require many, many models to comfortably cover the entire parameter space, where many of them may turn out to be redundant).
+
+For this post, we're going to stick with grid search. The simplest form of grid search uses regular grids, where you provide a vector of values for each parameter and the grid is composed of every possible value combination.
+
+{tune} provides useful defaults for searching parameter spaces, for example, creating grids for the "penalty" parameter in log-10 space. We can simply specify the parameters, pass these to grid_regular(), and specify that we want 5 levels of penalization and 5 levels of mixture.
+
+```{r regulargrids}
+mixture_param <- parameters(penalty(), mixture())
+
+regular_grid <- grid_regular(mixture_param, levels = c(5, 5))
+
+regular_grid %>% 
+  ggplot(aes(x = mixture, y = penalty)) +
+  geom_point() +
+  scale_y_log10()
+
+```
+
+{tune} also provides ways to create non-regular grids as well.
+* Random grids generated using grid_random() will uniformly sample the parameter space.
+* Space-filling designs (SFD) generated using grid_max_entropy() will try to keep candidate values away from one another in order to more efficiently cover the parameter space.
+
+```{r sfdgrids}
+
+sfd_grid <- grid_max_entropy(mixture_param, size = 25)
+
+sfd_grid
+
+sfd_grid %>% 
+  ggplot(aes(x = mixture, y = penalty)) +
+  geom_point() +
+  scale_y_log10()
+
+```
+
+For simplicity's sake, we'll stick with the regular grid we generated. Let's start tuning.
+
+First, lets register the 6 cores on my laptop.
+
+```{r parallelization}
+
+library(doParallel)
+
+all_cores <- parallel::detectCores(logical = FALSE)
+
+cl <- makePSOCKcluster(all_cores)
+registerDoParallel(cl)
+
+clusterEvalQ(cl, {library(tidymodels)})
+
+```
+
+Now we're going to create our tuning object, which will take our recipe, our model, our resamples, and our metrics, to fit our 25 models over 10 resamples and compute our performance metrics, then stop our parallelization.
+
+```{r tuning}
+
+ames_tune <- tune_grid(
+  ames_rec,
+  model = ames_mixture,
+  resamples = cv_splits,
+  grid = regular_grid,
+  metrics = perf_metrics
+)
+
+stopCluster(cl)
+
+# Naive Lasso performance
+collect_metrics(cv_eval)
+
+# Best tuned models
+show_best(ames_tune, "ccc")
+show_best(ames_tune, "rmse", maximize = FALSE)
+show_best(ames_tune, "rsq")
+```
+
+Our results suggest that our original model parameters choices definitely had room for improvement. A much smaller penalty and going with L2 regularization seems to perform better on this data. The improvements are relatively modest (RMSE: 0.0686 --> 0.0682, $R^2$: 0.847 --> 0.849), but when tuning is this easy, why leave money on the table?
+
+The plot below nicely visualizes the performance of each grid candidate nicely, along with a dotted line to indicate where our original model would've been.
+
+```{r tuningplot}
+collect_metrics(ames_tune) %>% 
+  filter(.metric == "rmse") %>%
+  mutate(mixture = format(mixture)) %>% 
+  ggplot(aes(x = penalty, y = mean, col = mixture)) +
+  geom_line() +
+  geom_point() +
+  scale_x_log10() +
+  geom_vline(xintercept = 0.001, color = "purple", lty = "dotted")
+
+```
+
+Now let's select our best grid candidate and finalize our model.
+
+```{r selectbest}
+
+best_mixture <- select_best(ames_tune, metric = "rmse", maximize = FALSE)
+best_mixture
+
+ames_mixture_final <- finalize_model(ames_mixture, best_mixture)
+```
+
+And finally, let's create our workflow using this finalized model and fit our model
+
+```{r mixtureworkflow}
+
+ames_mixture_wfl <- workflow() %>% 
+  add_recipe(ames_rec) %>% 
+  add_model(ames_mixture_final)
+
+ames_mixture_fit <- fit(ames_mixture_wfl, ames_train)
+```
+
+And we're done! We now have a fitted, tuned, regularized mixtured model (allbeit, the mixture is 100% L2 regularization, but we got there via tuning!)
+
+*Finally* we get to the fun part. What variables turned out to be the most important in predicting sale price?
+
+```{r varimportance}
+tidy_coefs <- ames_mixture_fit$fit$fit %>% 
+  broom::tidy() %>% 
+  filter(term != "(Intercept)") %>% 
+  select(-step, -dev.ratio)
+
+delta <- abs(tidy_coefs$lambda - best_mixture$penalty)
+lambda_opt <- tidy_coefs$lambda[which.min(delta)]
+
+label_coefs <- tidy_coefs %>% 
+  mutate(abs_estimate = abs(estimate)) %>% 
+  filter(abs_estimate >= 0.01) %>% 
+  distinct(term) %>% 
+  inner_join(tidy_coefs, by = "term") %>% 
+  filter(lambda == lambda_opt)
+
+label_coefs
+
+tidy_coefs %>% 
+  ggplot(aes(x = lambda, y = estimate, group = term, col = term, label = term)) +
+  geom_vline(xintercept = lambda_opt, lty = 3) +
+  geom_line(alpha = .4) +
+  theme(legend.position = "none") +
+  scale_x_log10() +
+  ggrepel::geom_text_repel(data = label_coefs)
 
 ```
 
