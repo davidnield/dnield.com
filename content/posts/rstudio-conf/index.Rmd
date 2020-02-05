@@ -6,7 +6,7 @@ date: 2020-02-02
 output:
   blogdown::html_page:
     toc: true
-categories: ["rstats"]
+categories: ["Data Science"]
 tags: ["rstats", "data science", "machine learning"]
 ---
 

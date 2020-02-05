@@ -7,7 +7,7 @@ date: 2019-11-19
 output:
   blogdown::html_page:
     toc: true
-categories: ["Kaggle"]
+categories: ["Data Science"]
 tags: ["survey analysis", "data visualization", "data science"]
 ---
 
