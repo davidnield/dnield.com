@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>machine learning | David Nield</title>
-    <link>/tags/machine-learning/</link>
-      <atom:link href="/tags/machine-learning/index.xml" rel="self" type="application/rss+xml" />
-    <description>machine learning</description>
+    <title>Data Science | David Nield</title>
+    <link>/categories/data-science/</link>
+      <atom:link href="/categories/data-science/index.xml" rel="self" type="application/rss+xml" />
+    <description>Data Science</description>
     <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© David Nield, 2020</copyright><lastBuildDate>Wed, 05 Feb 2020 00:00:00 +0000</lastBuildDate>
     <image>
       <url>/img/portrait.jpg</url>
-      <title>machine learning</title>
-      <link>/tags/machine-learning/</link>
+      <title>Data Science</title>
+      <link>/categories/data-science/</link>
     </image>
     
     <item>

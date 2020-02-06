@@ -5,7 +5,7 @@
     <link>/posts/</link>
       <atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
     <description>Posts</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© David Nield, 2020</copyright><lastBuildDate>Sun, 02 Feb 2020 00:00:00 +0000</lastBuildDate>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© David Nield, 2020</copyright><lastBuildDate>Wed, 05 Feb 2020 00:00:00 +0000</lastBuildDate>
     <image>
       <url>/img/portrait.jpg</url>
       <title>Posts</title>
@@ -13,9 +13,9 @@
     </image>
     
     <item>
-      <title>What I learned at rstudio::conf(2020)</title>
+      <title>Introduction to the {tidymodels} Machine Learning Ecosystem</title>
       <link>/posts/rstudio-conf/</link>
-      <pubDate>Sun, 02 Feb 2020 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 05 Feb 2020 00:00:00 +0000</pubDate>
       <guid>/posts/rstudio-conf/</guid>
       <description>
 
