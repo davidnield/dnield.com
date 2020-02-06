@@ -247,8 +247,12 @@ regular_grid %>%
 ```
 
 {tune} also provides ways to create non-regular grids as well.
+
 * Random grids generated using grid_random() will uniformly sample the parameter space.
+
 * Space-filling designs (SFD) generated using grid_max_entropy() will try to keep candidate values away from one another in order to more efficiently cover the parameter space.
+
+The below shows how to create a SFD grid and plots 25 candidate values.
 
 ```{r sfdgrids}
 
@@ -267,7 +271,7 @@ For simplicity's sake, we'll stick with the regular grid we generated. Let's sta
 
 First, we'll set up our parallelization.
 
-```{r parallelization, echo=FALSE, message=FALSE, results = 'hide'}
+```{r parallelization, message=FALSE, results = 'hide'}
 
 library(doParallel)
 

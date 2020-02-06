@@ -1433,11 +1433,11 @@ ames_rec&lt;/code&gt;&lt;/pre&gt;
   add_model(ames_lasso)
 
 ames_lasso_wfl&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## ══ Workflow ════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+&lt;pre&gt;&lt;code&gt;## ══ Workflow ══════════════════════════════════════════════════════════════════════════════════════════════════════
 ## Preprocessor: Recipe
 ## Model: linear_reg()
 ## 
-## ── Preprocessor ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Preprocessor ──────────────────────────────────────────────────────────────────────────────────────────────────
 ## 7 Recipe Steps
 ## 
 ## ● step_log()
@@ -1448,7 +1448,7 @@ ames_lasso_wfl&lt;/code&gt;&lt;/pre&gt;
 ## ● step_pca()
 ## ● step_nzv()
 ## 
-## ── Model ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Model ─────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## Linear Regression Model Specification (regression)
 ## 
 ## Main Arguments:
@@ -1561,10 +1561,13 @@ regular_grid %&amp;gt;%
   ggplot(aes(x = mixture, y = penalty)) +
   geom_point() +
   scale_y_log10()&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/rstudio-conf/index_files/figure-html/regulargrids-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;{tune} also provides ways to create non-regular grids as well.
-* Random grids generated using grid_random() will uniformly sample the parameter space.
-* Space-filling designs (SFD) generated using grid_max_entropy() will try to keep candidate values away from one another in order to more efficiently cover the parameter space.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/posts/tidymodels-intro/index_files/figure-html/regulargrids-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;{tune} also provides ways to create non-regular grids as well.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Random grids generated using grid_random() will uniformly sample the parameter space.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Space-filling designs (SFD) generated using grid_max_entropy() will try to keep candidate values away from one another in order to more efficiently cover the parameter space.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The below shows how to create a SFD grid and plots 25 candidate values.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;sfd_grid &amp;lt;- grid_max_entropy(mixture_param, size = 25)
 
 sfd_grid&lt;/code&gt;&lt;/pre&gt;
@@ -1586,9 +1589,17 @@ sfd_grid&lt;/code&gt;&lt;/pre&gt;
   ggplot(aes(x = mixture, y = penalty)) +
   geom_point() +
   scale_y_log10()&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/rstudio-conf/index_files/figure-html/sfdgrids-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/posts/tidymodels-intro/index_files/figure-html/sfdgrids-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;For simplicity’s sake, we’ll stick with the regular grid we generated. Let’s start tuning.&lt;/p&gt;
 &lt;p&gt;First, we’ll set up our parallelization.&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(doParallel)
+
+all_cores &amp;lt;- parallel::detectCores(logical = FALSE)
+
+cl &amp;lt;- makePSOCKcluster(all_cores)
+registerDoParallel(cl)
+
+clusterEvalQ(cl, {library(tidymodels)})&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Now we’re going to create our tuning object, which will take our recipe, our model, our resamples, and our metrics, to fit our 25 models over 10 resamples and compute our performance metrics, then we’ll stop our parallelization.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ames_tune &amp;lt;- tune_grid(
   ames_rec,
@@ -1646,7 +1657,7 @@ show_best(ames_tune, &amp;quot;ccc&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
   geom_point() +
   scale_x_log10() +
   geom_vline(xintercept = 0.001, color = &amp;quot;purple&amp;quot;, lty = &amp;quot;dotted&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/rstudio-conf/index_files/figure-html/tuningplot-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/posts/tidymodels-intro/index_files/figure-html/tuningplot-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;Now let’s select our best grid candidate, finalize our workflow, and fit our model.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;best_mixture &amp;lt;- select_best(ames_tune, metric = &amp;quot;rmse&amp;quot;, maximize = FALSE)
 best_mixture&lt;/code&gt;&lt;/pre&gt;
@@ -1695,7 +1706,7 @@ label_coefs&lt;/code&gt;&lt;/pre&gt;
   theme(legend.position = &amp;quot;none&amp;quot;) +
   scale_x_log10() +
   ggrepel::geom_text_repel(data = label_coefs)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/rstudio-conf/index_files/figure-html/varimportance-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/posts/tidymodels-intro/index_files/figure-html/varimportance-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;The above shows the coefficient estimates plotted against lambda, the dotted line indicating the optimal lambda that we selected during our tuning. Nice to see that one of our principal components ended up being important!&lt;/p&gt;
 &lt;p&gt;With that all said and done, let’s finally see how our model did against our test set.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ames_mixture_final %&amp;gt;% 
