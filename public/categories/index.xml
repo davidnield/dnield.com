@@ -2,29 +2,29 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories | David Nield</title>
-    <link>/categories/</link>
-      <atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
+    <link>https://dnield.com/categories/</link>
+      <atom:link href="https://dnield.com/categories/index.xml" rel="self" type="application/rss+xml" />
     <description>Categories</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© David Nield, 2020</copyright><lastBuildDate>Wed, 05 Feb 2020 00:00:00 +0000</lastBuildDate>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© David Nield, 2021</copyright><lastBuildDate>Wed, 05 Feb 2020 00:00:00 +0000</lastBuildDate>
     <image>
-      <url>/img/portrait.jpg</url>
+      <url>https://dnield.com/img/portrait.jpg</url>
       <title>Categories</title>
-      <link>/categories/</link>
+      <link>https://dnield.com/categories/</link>
     </image>
     
     <item>
       <title>Data Science</title>
-      <link>/categories/data-science/</link>
+      <link>https://dnield.com/categories/data-science/</link>
       <pubDate>Wed, 05 Feb 2020 00:00:00 +0000</pubDate>
-      <guid>/categories/data-science/</guid>
+      <guid>https://dnield.com/categories/data-science/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Kaggle</title>
-      <link>/categories/kaggle/</link>
+      <link>https://dnield.com/categories/kaggle/</link>
       <pubDate>Tue, 10 Dec 2019 00:00:00 +0000</pubDate>
-      <guid>/categories/kaggle/</guid>
+      <guid>https://dnield.com/categories/kaggle/</guid>
       <description></description>
     </item>
     

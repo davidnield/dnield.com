@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>data visualization | David Nield</title>
-    <link>/tags/data-visualization/</link>
-      <atom:link href="/tags/data-visualization/index.xml" rel="self" type="application/rss+xml" />
+    <link>https://dnield.com/tags/data-visualization/</link>
+      <atom:link href="https://dnield.com/tags/data-visualization/index.xml" rel="self" type="application/rss+xml" />
     <description>data visualization</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© David Nield, 2020</copyright><lastBuildDate>Tue, 10 Dec 2019 00:00:00 +0000</lastBuildDate>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© David Nield, 2021</copyright><lastBuildDate>Tue, 10 Dec 2019 00:00:00 +0000</lastBuildDate>
     <image>
-      <url>/img/portrait.jpg</url>
+      <url>https://dnield.com/img/portrait.jpg</url>
       <title>data visualization</title>
-      <link>/tags/data-visualization/</link>
+      <link>https://dnield.com/tags/data-visualization/</link>
     </image>
     
     <item>
       <title>The State of Data Science (Part 2)</title>
-      <link>/posts/kaggle-survey/pt-two/</link>
+      <link>https://dnield.com/posts/kaggle-survey/pt-two/</link>
       <pubDate>Tue, 10 Dec 2019 00:00:00 +0000</pubDate>
-      <guid>/posts/kaggle-survey/pt-two/</guid>
+      <guid>https://dnield.com/posts/kaggle-survey/pt-two/</guid>
       <description>&lt;div id=&#34;TOC&#34;&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;#demographics&#34;&gt;Demographics&lt;/a&gt;&lt;ul&gt;
@@ -45,17 +45,17 @@
 &lt;h1&gt;Demographics&lt;/h1&gt;
 &lt;div id=&#34;the-data-field-today-is-as-disproportionately-male-as-its-ever-been.&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;The data field today is as disproportionately male as its ever been.&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-two_files/figure-html/gender-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dnield.com/posts/kaggle-survey/pt-two_files/figure-html/gender-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;Perhaps unsurprising given how disportionately male we found the field to be in &lt;a href=&#34;https://dnield.com/posts/kaggle-survey/pt-one/&#34;&gt;part 1&lt;/a&gt;, but there appears to be no trend towards increasing gender diversity among data professionals.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;no-clear-trend-in-age-composition&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;No clear trend in age composition&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-two_files/figure-html/age-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dnield.com/posts/kaggle-survey/pt-two_files/figure-html/age-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;Survey data doesn’t seem to show a clear trend in the age composition of data professionals. This isn’t to say that the composition is stable or unchanging. As always, it should be noted that this survey is a not a random sample of data professionals, but a voluntary response sample survey of Kaggle users, so the composition may change widely based on how Kaggle chooses to promote the survey.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;the-increasingly-educated-data-workforce&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;The increasingly educated data workforce&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-two_files/figure-html/education-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dnield.com/posts/kaggle-survey/pt-two_files/figure-html/education-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;The plot above shows the highest education attainment of respondents to all three years’ surveys. The number of data professionals holding a Master’s degree shocked me in part 1, but the data show that this has been an ongoing trend, while the percent of data professionals holding professional degrees, or only some college education or a high school diploma is near zero. Whether this trend towards a more educated data workforce is due to former Bachelor’s holders seeking and attaining higher education or due to new hires disporportionately coming out of grad school is unclear.&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -63,14 +63,14 @@
 &lt;h1&gt;Titles and Compensation&lt;/h1&gt;
 &lt;div id=&#34;the-ascendency-of-the-data-scientist-title&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;The ascendency of the “data scientist” title&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-two_files/figure-html/jobtitles-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dnield.com/posts/kaggle-survey/pt-two_files/figure-html/jobtitles-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;The proportion of data professionals on Kaggle with the job title “data scientist” has increased 30% relative to 2017: from 30% to 40%. And this doesn’t seem to be simple title changing from former “data analysts”, who also have increased as a proportion of employed Kaggle respondents.&lt;/p&gt;
 &lt;p&gt;The greatest decline in relative share of the data workforce are among engineers (which include all titles with “engineer” in their title, from data engineers to SWEs) and researchers (which include all titles with “research” in their title, with the exception of research assistants, which were excluded because these positions are typically not careers).&lt;/p&gt;
 &lt;p&gt;More difficult to see here is the relative decline in the “Statistician” title, which started at a barely registerable 3.3%, but has since fallen to 2.4%.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;data-scientists-compensation-has-increased-even-as-the-title-has-become-more-widespread&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Data scientists’ compensation has increased even as the title has become more widespread&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-two_files/figure-html/income-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dnield.com/posts/kaggle-survey/pt-two_files/figure-html/income-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;The above plot reports the typical (median) compensation of respondents with each job title. The responses are an ordinal factor so the data is an idomatic median: arrange by the ordered factor, and take the median value. Given a vector of even length and the middle two values are two different categories (e.g. $80,000-89,999 and $90,000-99,999), the lower value will be used.&lt;/p&gt;
 &lt;p&gt;The function for this implementation is below, &lt;a href=&#34;https://stackoverflow.com/questions/7925102/idiomatic-method-of-finding-the-median-of-an-ordinal&#34;&gt;with credit to Hong Ooi and Richie Cotton from StackOverflow.&lt;/a&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;median.ordered &amp;lt;- function(x) {
@@ -88,7 +88,7 @@
 &lt;h1&gt;Languages&lt;/h1&gt;
 &lt;div id=&#34;pythons-meteoric-rise&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Python’s meteoric rise&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-two_files/figure-html/languages-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dnield.com/posts/kaggle-survey/pt-two_files/figure-html/languages-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;About two-thirds of data professionals who program today are using Python, this is a 50% increase relative to the proportion using Python in 2017. Likewise, SQL use has increased 30% during the same time, while R use has remained fairly stable at about 33% and all other languages stable at about 10%.&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -107,9 +107,9 @@
     
     <item>
       <title>The State of Data Science (Part 1)</title>
-      <link>/posts/kaggle-survey/pt-one/</link>
+      <link>https://dnield.com/posts/kaggle-survey/pt-one/</link>
       <pubDate>Tue, 19 Nov 2019 00:00:00 +0000</pubDate>
-      <guid>/posts/kaggle-survey/pt-one/</guid>
+      <guid>https://dnield.com/posts/kaggle-survey/pt-one/</guid>
       <description>&lt;div id=&#34;TOC&#34;&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;#demographics&#34;&gt;Demographics&lt;/a&gt;&lt;ul&gt;
@@ -143,26 +143,26 @@
 &lt;h1&gt;Demographics&lt;/h1&gt;
 &lt;div id=&#34;three-quarters-of-data-professionals-are-men&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Three-quarters of data professionals are men&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-one_files/figure-html/gender-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dnield.com/posts/kaggle-survey/pt-one_files/figure-html/gender-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;I’m not surprised that the majority of data professionals are men, but I was shocked at how stark the split is. At Callisto (my company), our R&amp;amp;D team (which includes analysts and engineers) is almost exactly evenly split, which I knew is an outlier in the Data industry, but I didn’t realize by how much.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;data-professionals-are-fairly-young&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Data professionals are fairly young&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-one_files/figure-html/age-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dnield.com/posts/kaggle-survey/pt-one_files/figure-html/age-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;As one might expect from a field that itself is relatively young, data professionals themselves are fairly young, with the modal data professional being age 25 to 29. I, myself, am turning 25 next month, so I’m pretty much modal here.&lt;/p&gt;
 &lt;p&gt;Be wary here, as the bin widths of these ages are changing across the x-axis. Unfortunately, this is as specific as the data get.&lt;/p&gt;
 &lt;p&gt;One alternative explanation for these data is that many Kagglers are early career data professionals who use or used Kaggle to build a professional portfolio for the job market. Older data professionals may be underrepresented here.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;underrepresentation-of-women-persists-across-cohort&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Underrepresentation of women persists across cohort&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-one_files/figure-html/agebygender-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dnield.com/posts/kaggle-survey/pt-one_files/figure-html/agebygender-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;I expected there to be underrepresentation of women in the Data industry, but I would’ve expected the divide to be much less stark among younger cohorts of data professionals than older ones. The above plots show that this doesn’t appear to be the case.&lt;/p&gt;
 &lt;p&gt;The top panel shows a representation of a contingency table, that is, the percent of respondents that identify as male or female that fall into each age category. Women are clearly underrepresented at every age.&lt;/p&gt;
 &lt;p&gt;The bottom two panels break this plot into its marginals. The left panel shows the percent of data professionals of each gender that fall into each age category. It shows the same broad pattern for both men and women, with female data professionals skewing just a bit younger. The right shows the gender split of each age category. It shows that the gender split of data professionals hovers around 75% for almost every cohort except those over 60 years old. Clearly the underrepresentation of women in the data industry is not something that will go away as a result of retiring older cohorts.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;the-majority-of-data-professionals-have-an-advanced-degree&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;The majority of data professionals have an advanced degree&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-one_files/figure-html/education-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dnield.com/posts/kaggle-survey/pt-one_files/figure-html/education-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;Unsurprisingly, data professionals are an educated bunch. Surprising to me, however, was the number of Master’s degree holders and the relative sparsity of PhDs and professional degree holders. Coming from academia, I expected the data industry to be primarily comprised of: 1) non-CS Bachelor’s and MBA holders building reports and dashboards, 2) CS/Engineering Bachelor’s holders building and maintaining data infrastructure, and 3) PhDs who left academia due to the job market or lured by mobility and money in private industry. I did not expect to see that &lt;em&gt;half&lt;/em&gt; of all data professionals are Master’s holders!&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -170,13 +170,13 @@
 &lt;h1&gt;Titles, Compensation, Experience, and Roles&lt;/h1&gt;
 &lt;div id=&#34;my-name-is-scientist-data-scientist&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;“My Name is Scientist, Data Scientist”&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-one_files/figure-html/jobtitle-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dnield.com/posts/kaggle-survey/pt-one_files/figure-html/jobtitle-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;Another shocking finding to me was sheer amount of data scientists in the survey relative to all other roles. I have a pretty strong Bayesian prior that there aren’t 2.5x as many data scientists as there are data analysts in the data industry, so this is definitely a reality check that this survey should &lt;em&gt;not&lt;/em&gt; be considered a representative survey of the industry.&lt;/p&gt;
 &lt;p&gt;Additionally, the sheer number of students represented in the survey seems consistent with my hypothesis that many Kagglers may be on the platform to build up an data analysis portfolio for the job market. The percentage (3.6%) of “Not Employed” respondents seems consistent with this as well.&lt;a href=&#34;#fn1&#34; class=&#34;footnote-ref&#34; id=&#34;fnref1&#34;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/a&gt; I suspect the true unemployment rate for data professionals is, in reality, lower than the national unemployment rate (3.7% as of this writing), not almost identical to it.&lt;a href=&#34;#fn2&#34; class=&#34;footnote-ref&#34; id=&#34;fnref2&#34;&gt;&lt;sup&gt;2&lt;/sup&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;data-scientists-make-the-big-bucks&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Data scientists make the big bucks&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-one_files/figure-html/compensation-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dnield.com/posts/kaggle-survey/pt-one_files/figure-html/compensation-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;The 2019 Kaggle ML &amp;amp; DS Survey reports annual compensation in brackets. I’m interested in the median income of data professionals by title, but obviously taking the median of categorical data isn’t something R takes kindly to!&lt;/p&gt;
 &lt;p&gt;However, since this factor is ordinal, it is possible to take an idomatic median: just arrange by the ordered factor, and take the median value. The hitch is when you have a vector of even length and the middle two values are two different categories (e.g. $80,000-89,999 and $90,000-99,999). Strictly speaking, I prefer to just take the cutpoint between the two categories ($90,000) or an interval with the cutpoint as the center point as the value. However, for this quick and dirty exploration, I’m just going to take the lower of the two categories as the winner of the tie.&lt;/p&gt;
 &lt;p&gt;The function for this implementation is below, &lt;a href=&#34;https://stackoverflow.com/questions/7925102/idiomatic-method-of-finding-the-median-of-an-ordinal&#34;&gt;with credit to Hong Ooi and Richie Cotton from StackOverflow.&lt;/a&gt;&lt;/p&gt;
@@ -193,12 +193,12 @@
 &lt;/div&gt;
 &lt;div id=&#34;data-professionals-team-sizes-are-highly-bimodal&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Data professionals’ team sizes are highly bimodal&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-one_files/figure-html/teamsize-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dnield.com/posts/kaggle-survey/pt-one_files/figure-html/teamsize-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;Almost 40% of business have data science teams of less than five while another 40% have data science teams of over twenty! That’s quite the bimodality. Hard to think of an explanation about why this would be, although my intuition is that this is due to how young the field is combined with restricted&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;data-professionals-most-common-important-role-is-informing-business-decisions&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Data professionals’ most common important role is informing business decisions&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-one_files/figure-html/roles-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dnield.com/posts/kaggle-survey/pt-one_files/figure-html/roles-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;I’m a bit disappointed in the possible multiple-choice answers here. Machine learning spans three of the five possible roles, however building, improving, and researching machine learning models, I would argue, is something that more generalist data professionals engage in, even when they have the skills, meanwhile “influence business decisions” and “build or run data infrastructure” are so broad as to be almost uninformative, while the distinction between “building” and “improving” ML models seems much less useful than knowing the type of models being used (predictive or forecasting models vs classification models vs generative models).&lt;/p&gt;
 &lt;p&gt;I would have liked to see response options broken out into “building and/or maintaining periodic reports or dashboards”, “experimental design”, “forecasting”, etc.&lt;/p&gt;
 &lt;p&gt;Nonetheless, the key finding here is that the most common important role of data professionals appears to be informing business decisions.&lt;/p&gt;
@@ -208,33 +208,33 @@
 &lt;h1&gt;Languages and Tools&lt;/h1&gt;
 &lt;div id=&#34;python-is-king&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Python is King&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-one_files/figure-html/languages-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dnield.com/posts/kaggle-survey/pt-one_files/figure-html/languages-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;Unfortunately, Julia wasn’t offered as an option on this survey, and I’m not sure why. It was asked about in previous iterations of this survey, and Julia has continued to mature as a language.&lt;/p&gt;
 &lt;p&gt;Much to my chagrin as an R user, Python dominates as the most coding language used by data professionals. SQL comes next, followed by R, then Java, followed by a long tail of other languages.&lt;/p&gt;
 &lt;p&gt;I’m surprised by the proliference of Java. I’ve always thought of the modal data professional toolkit as: SQL for querying databases, R/Python for modeling and prototyping, and C++ for production code. I don’t know of any data scientists using Java. I’ll be curious to dig into this more.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;the-majority-of-data-professionals-on-kaggle-are-relatively-new-to-writing-code-for-data-analysis.&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;The majority of data professionals on Kaggle are relatively new to writing code for data analysis.&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-one_files/figure-html/coding_experience-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dnield.com/posts/kaggle-survey/pt-one_files/figure-html/coding_experience-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;The majority of data professionals have less than five years of experience writing code for data analysis, which is consistent with the broadly young age distribution of data professionals. Like with age, my four years experience writing code for analysis make me pretty modal here as well.&lt;/p&gt;
 &lt;p&gt;I’m curious about the typical experience levels of the job titles earlier. Let’s taking the same idiomatic median we used earlier to compute median income to see what the median experience category is for each job title.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-one_files/figure-html/codingexpbytitle-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dnield.com/posts/kaggle-survey/pt-one_files/figure-html/codingexpbytitle-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;Perhaps unsurprisingly, data scientists, research scientists, data engineers, and statisticians clock in as the most experience writing code to analyze data, while students are the least experienced. It appears that my level of coding experience is typical for my job title among Kagglers.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;theres-a-shocking-amount-of-experienced-machine-learning-practitioners&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;There’s a shocking amount of experienced machine learning practitioners!&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-one_files/figure-html/mlexp-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dnield.com/posts/kaggle-survey/pt-one_files/figure-html/mlexp-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;First, it should be noted that this question was only asked of those that said they had experience coding data analysis. I should note that I &lt;em&gt;believe&lt;/em&gt; that the “&amp;lt; 1 years” category includes data professionals with less than a year of ML experience with those with none. Kaggle offered the survey schema and question wording for this survey, but did not provide a list of all of the possible responses to each multiple-choice question. In previous years of this survey, “I have never studied machine learning but plan to learn in the future” was an offered response option. However, not a single response among the over 17,000 respondents in the 2019 survey indicates no experience, which seems unlikely to happen if no experience was an option.&lt;a href=&#34;#fn3&#34; class=&#34;footnote-ref&#34; id=&#34;fnref3&#34;&gt;&lt;sup&gt;3&lt;/sup&gt;&lt;/a&gt; It seems more likely that “less than 1 years experience” captures both respondents with no experience and those with less than some number of months experience.&lt;/p&gt;
 &lt;p&gt;Nonetheless, even discounting this to the maximum extent possible (that all &amp;lt; 1 year responses indicate zero experience), the amount of ML experience in the community surprised me quite a bit.&lt;/p&gt;
 &lt;p&gt;First of all, there’s no reason ex-ante that data analysis should entail fitting a model to data. Plenty of (I’d argue most) excellent analysis can be done through simple graphs and tables so there’s no strong reason to need it.&lt;/p&gt;
 &lt;p&gt;Secondly, I would be surprised if every single Kaggler has the training (formal or informal) necessary for the application and interpretation of even simple machine learning models such as linear regression, nevermind more complex “black box” models like neural networks and support vector machines.&lt;/p&gt;
 &lt;p&gt;Thirdly, the very definition of what counts as “machine learning” is contentious. Does linear regression even count? My gut says no, only the related linear model selection algorithms like MARS, lasso, and ridge regression count, but linear regression is considered to be a machine learning algorithm by many others&lt;a href=&#34;#fn4&#34; class=&#34;footnote-ref&#34; id=&#34;fnref4&#34;&gt;&lt;sup&gt;4&lt;/sup&gt;&lt;/a&gt; and is listed as a machine learning algorithm in this survey. By my own definition, I only have 2 years of machine learning experience, but if linear regression counts then I have 4 years experience, which, according this data, makes me a veteran!&lt;/p&gt;
 &lt;p&gt;Luckily, another question asks respondents which machine learning algorithms they use on a regular basis, helping us to dig into this a bit more.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-one_files/figure-html/mlalgs-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dnield.com/posts/kaggle-survey/pt-one_files/figure-html/mlalgs-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;As expected, linear and logistic regression top the charts as the algorithms used on a regular basis by the most data professionals. Still, I’m surprised by how popular decision tree models and gradient boosting machines are. Perhaps a testament to how easy out-of-the-box versions of these algorithms have become to deploy due to the maturity of packages like sklearn, xgboost, caret, ranger, randomForest, among others.&lt;/p&gt;
 &lt;p&gt;The ecology of machine learning platforms has developed to the degree that the practioners dilemma seems to be deciding &lt;em&gt;which&lt;/em&gt; of the numerous high quality frameworks and packages to use.&lt;/p&gt;
 &lt;p&gt;Luckily, we have data on this as well!&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/kaggle-survey/pt-one_files/figure-html/mlframeworks-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dnield.com/posts/kaggle-survey/pt-one_files/figure-html/mlframeworks-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;With Python dominance comes sklearn dominance. Luckily for R users, TensorFlow and Keras remain the dominant framework for building neural networks. I expect PyTorch to continue to grow, but if it ever overtakes TensorFlow, I expect R implementations and interfaces to have matured by then.&lt;/p&gt;
 &lt;p&gt;I also expect that the &lt;a href=&#34;https://www.tidyverse.org/blog/2018/08/tidymodels-0-0-1/&#34;&gt;&lt;em&gt;tidymodels&lt;/em&gt;&lt;/a&gt; framework, developed by Max Kuhn, the author of “caret”, and other authors in the tidyverse to succeed &lt;em&gt;caret&lt;/em&gt; to begin emerging as a leading machine learning framework for R users in 2020 as the ecosystem continues to mature.&lt;/p&gt;
 &lt;/div&gt;

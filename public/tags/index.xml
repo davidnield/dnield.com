@@ -2,77 +2,77 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags | David Nield</title>
-    <link>/tags/</link>
-      <atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <link>https://dnield.com/tags/</link>
+      <atom:link href="https://dnield.com/tags/index.xml" rel="self" type="application/rss+xml" />
     <description>Tags</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© David Nield, 2020</copyright><lastBuildDate>Wed, 05 Feb 2020 00:00:00 +0000</lastBuildDate>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© David Nield, 2021</copyright><lastBuildDate>Wed, 05 Feb 2020 00:00:00 +0000</lastBuildDate>
     <image>
-      <url>/img/portrait.jpg</url>
+      <url>https://dnield.com/img/portrait.jpg</url>
       <title>Tags</title>
-      <link>/tags/</link>
+      <link>https://dnield.com/tags/</link>
     </image>
     
     <item>
       <title>data science</title>
-      <link>/tags/data-science/</link>
+      <link>https://dnield.com/tags/data-science/</link>
       <pubDate>Wed, 05 Feb 2020 00:00:00 +0000</pubDate>
-      <guid>/tags/data-science/</guid>
+      <guid>https://dnield.com/tags/data-science/</guid>
       <description></description>
     </item>
     
     <item>
       <title>machine learning</title>
-      <link>/tags/machine-learning/</link>
+      <link>https://dnield.com/tags/machine-learning/</link>
       <pubDate>Wed, 05 Feb 2020 00:00:00 +0000</pubDate>
-      <guid>/tags/machine-learning/</guid>
+      <guid>https://dnield.com/tags/machine-learning/</guid>
       <description></description>
     </item>
     
     <item>
       <title>rstats</title>
-      <link>/tags/rstats/</link>
+      <link>https://dnield.com/tags/rstats/</link>
       <pubDate>Wed, 05 Feb 2020 00:00:00 +0000</pubDate>
-      <guid>/tags/rstats/</guid>
+      <guid>https://dnield.com/tags/rstats/</guid>
       <description></description>
     </item>
     
     <item>
       <title>data visualization</title>
-      <link>/tags/data-visualization/</link>
+      <link>https://dnield.com/tags/data-visualization/</link>
       <pubDate>Tue, 10 Dec 2019 00:00:00 +0000</pubDate>
-      <guid>/tags/data-visualization/</guid>
+      <guid>https://dnield.com/tags/data-visualization/</guid>
       <description></description>
     </item>
     
     <item>
       <title>survey analysis</title>
-      <link>/tags/survey-analysis/</link>
+      <link>https://dnield.com/tags/survey-analysis/</link>
       <pubDate>Tue, 10 Dec 2019 00:00:00 +0000</pubDate>
-      <guid>/tags/survey-analysis/</guid>
+      <guid>https://dnield.com/tags/survey-analysis/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Source Themes</title>
-      <link>/tags/source-themes/</link>
+      <link>https://dnield.com/tags/source-themes/</link>
       <pubDate>Sun, 07 Apr 2019 00:00:00 +0000</pubDate>
-      <guid>/tags/source-themes/</guid>
+      <guid>https://dnield.com/tags/source-themes/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Deep Learning</title>
-      <link>/tags/deep-learning/</link>
+      <link>https://dnield.com/tags/deep-learning/</link>
       <pubDate>Wed, 27 Apr 2016 00:00:00 +0000</pubDate>
-      <guid>/tags/deep-learning/</guid>
+      <guid>https://dnield.com/tags/deep-learning/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Demo</title>
-      <link>/tags/demo/</link>
+      <link>https://dnield.com/tags/demo/</link>
       <pubDate>Wed, 27 Apr 2016 00:00:00 +0000</pubDate>
-      <guid>/tags/demo/</guid>
+      <guid>https://dnield.com/tags/demo/</guid>
       <description></description>
     </item>
     

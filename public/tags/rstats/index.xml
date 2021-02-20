@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>rstats | David Nield</title>
-    <link>/tags/rstats/</link>
-      <atom:link href="/tags/rstats/index.xml" rel="self" type="application/rss+xml" />
+    <link>https://dnield.com/tags/rstats/</link>
+      <atom:link href="https://dnield.com/tags/rstats/index.xml" rel="self" type="application/rss+xml" />
     <description>rstats</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© David Nield, 2020</copyright><lastBuildDate>Wed, 05 Feb 2020 00:00:00 +0000</lastBuildDate>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><copyright>© David Nield, 2021</copyright><lastBuildDate>Wed, 05 Feb 2020 00:00:00 +0000</lastBuildDate>
     <image>
-      <url>/img/portrait.jpg</url>
+      <url>https://dnield.com/img/portrait.jpg</url>
       <title>rstats</title>
-      <link>/tags/rstats/</link>
+      <link>https://dnield.com/tags/rstats/</link>
     </image>
     
     <item>
       <title>Introduction to the {tidymodels} Machine Learning Ecosystem</title>
-      <link>/posts/tidymodels-intro/</link>
+      <link>https://dnield.com/posts/tidymodels-intro/</link>
       <pubDate>Wed, 05 Feb 2020 00:00:00 +0000</pubDate>
-      <guid>/posts/tidymodels-intro/</guid>
+      <guid>https://dnield.com/posts/tidymodels-intro/</guid>
       <description>
 
 &lt;div id=&#34;TOC&#34;&gt;
@@ -1468,7 +1468,7 @@ regular_grid %&amp;gt;%
   ggplot(aes(x = mixture, y = penalty)) +
   geom_point() +
   scale_y_log10()&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/tidymodels-intro/index_files/figure-html/regulargrids-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dnield.com/posts/tidymodels-intro/index_files/figure-html/regulargrids-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;{tune} also provides ways to create non-regular grids as well.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;Random grids generated using grid_random() will uniformly sample the parameter space.&lt;/p&gt;&lt;/li&gt;
@@ -1496,7 +1496,7 @@ sfd_grid&lt;/code&gt;&lt;/pre&gt;
   ggplot(aes(x = mixture, y = penalty)) +
   geom_point() +
   scale_y_log10()&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/tidymodels-intro/index_files/figure-html/sfdgrids-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dnield.com/posts/tidymodels-intro/index_files/figure-html/sfdgrids-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;For simplicity’s sake, we’ll stick with the regular grid we generated. Let’s start tuning.&lt;/p&gt;
 &lt;p&gt;First, we’ll set up our parallelization.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(doParallel)
@@ -1564,7 +1564,7 @@ show_best(ames_tune, &amp;quot;ccc&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
   geom_point() +
   scale_x_log10() +
   geom_vline(xintercept = 0.001, color = &amp;quot;purple&amp;quot;, lty = &amp;quot;dotted&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/tidymodels-intro/index_files/figure-html/tuningplot-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dnield.com/posts/tidymodels-intro/index_files/figure-html/tuningplot-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;Now let’s select our best grid candidate, finalize our workflow, and fit our model.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;best_mixture &amp;lt;- select_best(ames_tune, metric = &amp;quot;rmse&amp;quot;, maximize = FALSE)
 best_mixture&lt;/code&gt;&lt;/pre&gt;
@@ -1613,7 +1613,7 @@ label_coefs&lt;/code&gt;&lt;/pre&gt;
   theme(legend.position = &amp;quot;none&amp;quot;) +
   scale_x_log10() +
   ggrepel::geom_text_repel(data = label_coefs)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;/posts/tidymodels-intro/index_files/figure-html/varimportance-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dnield.com/posts/tidymodels-intro/index_files/figure-html/varimportance-1.png&#34; width=&#34;672&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;The above shows the coefficient estimates plotted against lambda, the dotted line indicating the optimal lambda that we selected during our tuning. Nice to see that one of our principal components ended up being important!&lt;/p&gt;
 &lt;p&gt;With that all said and done, let’s finally see how our model did against our test set.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;ames_mixture_final %&amp;gt;% 
