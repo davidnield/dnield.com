@@ -18,15 +18,15 @@ date_format = "Jan 2006"
 #   Leave `date_end` empty if it's your current employer.
 #   Begin/end multi-line descriptions with 3 quotes `"""`.
 [[experience]]
-  title = "Associate Data Scientist"
+  title = "Data Scientist"
   company = "Callisto Media"
   company_url = "callistomedia.com"
   location = "Emeryville, California"
   date_start = "2019-07-01"
   date_end = ""
   description = """
-  * Building forecasts and models
-  * Identifying book production opportunities
+  * Building revenue forecasts and other predictive models
+  * Designing and analyzing e-Commerce A/B tests
   * Developing KPIs, data workflows, and infrastructure
   """
 
