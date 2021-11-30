@@ -20,7 +20,7 @@ name: David Nield
 organizations:
 - name: Callisto Media
   url: "https://www.callistomedia.com/"
-role: Associate Data Scientist
+role: Data Scientist
 social:
 - icon: envelope
   icon_pack: fas
@@ -42,4 +42,4 @@ user_groups:
 
 I am a data scientist at Callisto Media, a data-driven book publishing company based in the San Francisco Bay Area. I identify product opportunities and develop predictive models, KPIs, research workflows, and data infrastructure.
 
-Previously, I was a PhD student in Political Science at the University of California, Berkeley, where I conducted research on topics ranging from "small world" network dynamics, campaign finance networks, and prejudice against Muslim-Americans.
+Previously, I was a PhD student in Political Science at the University of California, Berkeley, where I conducted research on topics ranging from political misinformation, "small world" network dynamics, campaign finance networks, and prejudice against Muslim-Americans.
